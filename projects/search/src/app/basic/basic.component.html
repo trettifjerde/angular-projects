@@ -1,0 +1,9 @@
+<img class="logo" src="assets/google.png">
+<form action="https://google.com/search" class="form">
+    <input type="text" class="search-field" name="q">
+    <input *ngIf="isImage()" type="hidden" name="tbm" value="isch">
+    <div class="btn-group">
+        <button type="submit" class="btn">{{ submitBtnName }}</button>
+        <a><button type="button" class="btn">I'm Feeling Lucky</button></a>
+    </div>
+</form>
