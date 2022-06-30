@@ -1,0 +1,4 @@
+<header [ngClass]="{'links-only': !isAdvanced(), 'links-logo': isAdvanced()}">
+    <img *ngIf="isAdvanced()" class="logo-mini" src="/assets/google.png">
+    <a *ngFor="let link of links" routerLink="/{{link.href}}" (click)="onLinkClicked(link.href)">{{link.text}}</a>
+</header>

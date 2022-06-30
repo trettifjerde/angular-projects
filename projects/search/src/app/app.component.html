@@ -1,5 +1,2 @@
-<header [ngClass]="{'links-only': isBasic(), 'links-logo': !isBasic()}">
-  <img *ngIf="!isBasic()" class="logo-mini" src="/assets/google.png">
-  <a *ngFor="let a of headerLinks" routerLink="/{{a.href}}">{{a.text}}</a>
-</header>
+<app-header></app-header>
 <router-outlet></router-outlet>

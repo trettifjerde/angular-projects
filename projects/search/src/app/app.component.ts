@@ -1,5 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+
+export interface link {
+  href: string,
+  text: string,
+  leads: string[]
+}
+
+export const LINKS: {[id:string]: link} = {
+  '': {href: '', text: 'Google Search', leads: ['image', 'advanced']},
+  'image': {href: 'image', text: 'Google Image', leads: ['', 'advanced']},
+  'advanced': {href: 'advanced', text: 'Advanced Search', leads: ['']}
+};
 
 @Component({
   selector: 'app-root',
@@ -8,8 +19,7 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-
-  constructor(private router: Router) {
+  constructor() {
   }
 
   ngOnInit() : void {
