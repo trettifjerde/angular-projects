@@ -10,8 +10,13 @@ h2 {
   max-width: 1000px;
 
   /* flexbox */
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-content: flex-start;
   align-items: flex-start;
@@ -45,5 +50,5 @@ a {
 }
 
 a:hover {
-  background-color: #000;
+  background-color: black;
 }
