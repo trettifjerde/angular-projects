@@ -1,0 +1,19 @@
+<h2>Add a new hero</h2>
+<form [hidden]="submitted" (submit)="onSubmit()" #heroForm="ngForm">
+    <div>
+        <label>Name:</label>
+        <input name="name" [(ngModel)]="model.name" #name="ngModel" required>
+        <p [hidden]="name.valid || name.pristine">Name is required.</p>
+    </div>
+    <div>
+        <label>Power:</label>
+        <select name="powers" [(ngModel)]="model.power" required>
+            <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
+        </select>
+    </div>
+    <div>
+        <label>Alter Ego:</label>
+        <input name="alterEgo" [(ngModel)]="model.alterEgo">
+    </div>
+    <button type="submit" [disabled]="!heroForm.valid">Submit</button>
+</form>

@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, OnInit, Output } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
 import { MessageService } from "./message.service";
 
 @Injectable({
@@ -12,19 +11,33 @@ import { MessageService } from "./message.service";
 })
 export class HeroService {
 
-  httpOptions = {
+  private httpOptions = {
     headers: new HttpHeaders({'ContentType': 'application/json'})
   };
   private heroesUrl = 'api/heroes';
+  heroes = new Subject<Hero[]>();
+  heroesCash: Hero[] = [];
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService) { 
+      this.log('Heroes component initialized');
+      this.updateHeroes();
+    }
+
+  updateHeroes(): void {
+    this.getHeroes().subscribe(heroes => {
+      this.heroesCash = heroes;
+      this.heroes.next(heroes)
+    });
+  }
 
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
-        tap(_ => this.log('fetched heroes')),
+        tap(heroes => {
+          this.log(`fetched ${heroes.length} heroes`)
+        }),
         catchError(this.handleError<Hero[]>('getHeroes', []))
       );
   }
@@ -39,24 +52,32 @@ export class HeroService {
 
   updateHero(hero: Hero): Observable<any> {
     return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
-      tap(_ => this.log(`hero id=${hero.id} info updated`)),
+      tap(_ => {
+        this.updateHeroes();
+        this.log(`hero id=${hero.id} info updated`);
+      }),
       catchError(this.handleError<any>('updateHero'))
     )
   }
   
-  addHero(hero: Hero): Observable<Hero> {
-    return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
-      tap((newHero:Hero) => this.log(`hero ${hero.name.toUpperCase()} with id=${newHero.id} is created`)),
+  addHero(hero: Hero): void {
+    this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
+      tap((newHero:Hero) => {
+        this.log(`hero ${hero.name.toUpperCase()} with id=${newHero.id} is created`);
+        this.updateHeroes();
+      }),
       catchError(this.handleError<Hero>('addHero'))
-    )
+    ).subscribe();
   }
 
-  deleteHero(id: number): Observable<Hero> {
+  deleteHero(id: number): void {
     const url = `${this.heroesUrl}/${id}`;
-    return this.http.delete<Hero>(url, this.httpOptions).pipe(
-      tap(_ => this.log(`deleted id=${id}`)),
-      catchError(this.handleError<Hero>('deleteHero'))
-    )
+    this.http.delete(url, this.httpOptions).pipe(
+      tap(_ => {
+        this.log(`deleted id=${id}`);
+        this.updateHeroes();
+      }),
+      catchError(this.handleError<Hero>('deleteHero'))).subscribe();
   }
 
   searchHeroes(term: string) : Observable<Hero[]> {
@@ -80,7 +101,7 @@ export class HeroService {
     }
   }
 
-  private log(message: string) {
+  log(message: string) {
     this.messageService.add(`HeroService: ${message}`);
   }
 }

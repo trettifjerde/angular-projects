@@ -1,0 +1,59 @@
+$form-width: 30rem;
+$label-width: calc($form-width / 3);
+$field-width: calc($form-width / 3 * 2);
+$field-height: 2.5rem;
+$field-padding: 0.5rem 1rem;
+
+%field-shared {
+    padding: $field-padding;
+    height: $field-height;
+    width: $field-width;
+}
+
+h2 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: $form-width;
+    margin: 1rem auto;
+
+    div {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0.5rem 0;
+
+        label {
+            margin: 0.5rem 0;
+            width: 10rem;
+        }
+    
+        input, select {
+            @extend %field-shared;
+            border: 1px solid gray;
+        }
+
+        p {
+            @extend %field-shared;
+            color: white;
+            background-color: #e6a2a0;
+        }
+
+        .ng-valid[required],
+        .ng-valid.required {
+            border-left: 5px solid #42A948;
+            /* green */
+        }
+
+        .ng-invalid {
+            border-left: 5px solid #a94442;
+            /* red */
+        }
+    }
+
+    button[type=submit] {
+        margin: 0;
+    }
+}
