@@ -1,5 +1,31 @@
-.links-only {
-    
+%links {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+
+	a {
+		margin: 15px 10px;
+		color: black;
+		font-size: 13px;
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
 }
 
-.links-logo {}
+.links-only {
+	@extend %links;
+	justify-content: right;
+}
+
+.links-logo {
+	@extend %links;
+	justify-content: space-between;
+}
+
+.logo-mini {
+	margin: 12px;
+	width: 75px;
+}

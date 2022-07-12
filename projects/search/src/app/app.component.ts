@@ -1,16 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
-export interface link {
-  href: string,
-  text: string,
-  leads: string[]
-}
-
-export const LINKS: {[id:string]: link} = {
-  '': {href: '', text: 'Google Search', leads: ['image', 'advanced']},
-  'image': {href: 'image', text: 'Google Image', leads: ['', 'advanced']},
-  'advanced': {href: 'advanced', text: 'Advanced Search', leads: ['']}
-};
+import { AdvancedComponent } from './advanced/advanced.component';
+import { BasicComponent } from './basic/basic.component';
+import { link, LINKS } from './links';
 
 @Component({
   selector: 'app-root',
@@ -18,12 +11,15 @@ export const LINKS: {[id:string]: link} = {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  currentLink: link = {} as link;
 
-  constructor() {
-  }
+  constructor(private router: Router) { }
 
-  ngOnInit() : void {
+  ngOnInit() {  }
 
+  onActivate(component: BasicComponent | AdvancedComponent) {
+    this.currentLink = LINKS[this.router.url.slice(1)];
+    component.setLink(this.currentLink);
   }
 
 }

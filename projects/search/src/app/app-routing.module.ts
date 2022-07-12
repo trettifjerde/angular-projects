@@ -5,7 +5,7 @@ import { BasicComponent } from './basic/basic.component';
 
 const routes: Routes = [
   {path: '', component: BasicComponent},
-  {path: 'image', component: BasicComponent},
+  {path: 'images', component: BasicComponent},
   {path: 'advanced', component: AdvancedComponent}
 ];
 

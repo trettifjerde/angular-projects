@@ -1,26 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { link, LINKS } from '../app.component';
+import { Observer } from 'rxjs';
+import { link, LINKS } from '../links';
 
 @Component({
   selector: 'app-basic',
   templateUrl: './basic.component.html',
   styleUrls: ['./basic.component.scss']
 })
-export class BasicComponent implements OnInit {
+export class BasicComponent {
+  currentLink: link = {} as link;
 
-  curPath: string;
-  curLink: link;
+  constructor() {   }
 
-  constructor(private router: Router) {
-    this.curPath = this.router.url === '/' ? '' : this.router.url.slice(1);
-    this.curLink = LINKS[this.curPath];
-   }
-
-  ngOnInit(): void {}
-
-  isImage() : boolean {
-    return this.curPath === 'image';
+  setLink(link: link) {
+    this.currentLink = link;
   }
 
+  isImage(): boolean {
+    return this.currentLink.href === 'images';
+  }
 }

@@ -30,9 +30,7 @@
               "projects/search/src/favicon.ico",
               "projects/search/src/assets"
             ],
-            "styles": [
-              "projects/search/src/styles.scss"
-            ],
+            "styles": [],
             "scripts": []
           },
           "configurations": {

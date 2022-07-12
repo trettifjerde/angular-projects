@@ -1,9 +1,14 @@
-<img class="logo" src="assets/google.png">
+
+<app-header [class]="'links-only'" [showMiniLogo]="false" [pathNames]="currentLink.leads"></app-header>
+<div class="logo-container">
+    <img src="assets/google.png">
+    <span *ngIf="isImage()" class="images-span">images</span>
+</div>
 <form action="https://google.com/search" class="form">
     <input type="text" class="search-field" name="q">
     <input *ngIf="isImage()" type="hidden" name="tbm" value="isch">
-    <div class="btn-group">
-        <button type="submit" class="btn">{{ curLink.text }}</button>
-        <a><button type="button" class="btn">I'm Feeling Lucky</button></a>
+    <div>
+        <button type="submit" class="btn">{{ currentLink.text }}</button>
+        <a *ngIf="!isImage()"><button type="button" class="btn">I'm Feeling Lucky</button></a>
     </div>
 </form>
