@@ -1,4 +1,4 @@
 <header [ngClass]="class">
-    <a routerLink="/"><img *ngIf="showMiniLogo" class="logo-mini" src="/assets/google.png"></a>
+    <a routerLink="/"><img *ngIf="showMiniLogo" class="logo-mini" src="assets/google.png"></a>
     <a *ngFor="let link of links" routerLink="/{{link.href}}">{{link.text}}</a>
 </header>
