@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {  }
 
   onActivate(component: BasicComponent | AdvancedComponent) {
+    console.log(this.router.url.slice(1));
     this.currentLink = LINKS[this.router.url.slice(1)];
     component.setLink(this.currentLink);
   }
