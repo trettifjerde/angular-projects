@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/web50-ng/search",
+            "outputPath": "dist/web50ng/search",
             "index": "projects/search/src/index.html",
             "main": "projects/search/src/main.ts",
             "polyfills": "projects/search/src/polyfills.ts",
@@ -121,7 +121,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/web50-ng/wiki",
+            "outputPath": "dist/web50ng/wiki",
             "index": "projects/wiki/src/index.html",
             "main": "projects/wiki/src/main.ts",
             "polyfills": "projects/wiki/src/polyfills.ts",
