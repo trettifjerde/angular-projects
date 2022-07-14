@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/search",
+            "outputPath": "dist/web50-ng/search",
             "index": "projects/search/src/index.html",
             "main": "projects/search/src/main.ts",
             "polyfills": "projects/search/src/polyfills.ts",
@@ -30,7 +30,7 @@
               "projects/search/src/favicon.ico",
               "projects/search/src/assets"
             ],
-            "styles": [],
+            "styles": ["projects/search/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -121,7 +121,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/wiki",
+            "outputPath": "dist/web50-ng/wiki",
             "index": "projects/wiki/src/index.html",
             "main": "projects/wiki/src/main.ts",
             "polyfills": "projects/wiki/src/polyfills.ts",
