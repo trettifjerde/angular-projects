@@ -1,0 +1,16 @@
+<h3>{{ mailbox.name | titlecase }}</h3>
+<div>{{ errorMsg }}</div>
+<div>
+    <div *ngFor="let entry of mailbox.emails" [ngClass]="{'entry': true, 'read': entry.read}" (click)="onEntryClick(entry.id)">
+        <div>
+            <span class="sender">{{ entry.sender }}</span>
+            <span>{{ entry.subject }}</span>
+        </div>
+        <div class="timestamp">
+            <span>{{entry.timestamp}}</span>
+            <button *ngIf="mailbox.name !== 'sent'" class="archive" type="button" (click)="onArchive(entry.id, $event)">
+                {{ mailbox.name === 'archived' ? 'Unarchive' : 'Archive'}}
+            </button>
+        </div>
+    </div>
+</div>

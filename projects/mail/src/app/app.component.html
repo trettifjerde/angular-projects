@@ -1,0 +1,13 @@
+<h2>{{ username }}</h2>
+
+<div class="row mg-v-1">
+	<button id="inbox" (click)="openMailbox('inbox')">Inbox</button>
+	<button id="compose" (click)="openCompose()">Compose</button>
+	<button id="sent" (click)="openMailbox('sent')">Sent</button>
+	<button id="archived" (click)="openMailbox('archived')">Archived</button>
+	<a class="btn" href="#">Log Out</a>
+</div>
+
+<app-mailbox [hidden]="currentTab !== 1" [(mailbox)]="mailbox" (emailOpenEvent)="openEmail($event)"></app-mailbox>
+<app-mailform [hidden]="currentTab !== 2" [info]="formInfo" (mailboxChange)="openMailbox('sent')"></app-mailform>
+<app-mailview [hidden]="currentTab !== 3" [email]="email" (replyEvent)="reply($event)"></app-mailview>

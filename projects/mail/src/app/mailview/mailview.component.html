@@ -1,0 +1,23 @@
+<div id="email-header">
+    <div>
+        <p>
+            <span class="b">From: </span>
+            <span id="email-from">{{ email.sender }}</span>
+        </p>
+        <p>
+            <span class="b">To: </span>
+            <span id="email-to">{{ email.recipients }}</span>
+        </p>
+        <p>
+            <span class="b">Subject: </span>
+            <span id="email-subject"> {{ email.subject }}</span>
+        </p>
+        <p>
+            <span class="b">Sent: </span>
+            <span id="email-date">{{ email.timestamp }}</span>
+        </p>
+    </div>
+    <button type="button" class="mg-v-1" (click)="onReply(email.id)">Reply</button>		
+</div>
+<hr>
+<div id="email-body">{{ email.body }}</div> 
