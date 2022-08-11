@@ -1,12 +1,11 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { FormInfo } from '../interfaces';
 import { MailService } from '../mail.service';
 
 @Component({
   selector: 'app-mailform',
-  templateUrl: './mailform.component.html',
-  styleUrls: ['./mailform.component.scss']
+  templateUrl: './mailform.component.html'
 })
 export class MailformComponent implements AfterViewInit, OnChanges {
 
@@ -18,10 +17,9 @@ export class MailformComponent implements AfterViewInit, OnChanges {
   constructor(private mailService: MailService) {   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
     if (changes['info'] && ! changes['info'].firstChange) {
       this.form.form.markAsPristine();
-      setTimeout(()=> {
+      setTimeout(()=>{
         this.textarea.nativeElement.selectionEnd = 0;
         this.textarea.nativeElement.focus();
       }, 100);

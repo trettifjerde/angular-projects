@@ -1,8 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, map } from 'rxjs';
 import { DbService } from './db.service';
 import { Mailbox, Email, EmailEntry, FormInfo } from './interfaces';
+import { MailboxComponent } from './mailbox/mailbox.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,20 +19,18 @@ export class MailService {
   }
 
   openMailbox(name: string) : Observable<Mailbox> {
-    const emails = this.dbService.getEmailEntries(name, this.userEmail)
-    return of({name: name, emails: emails})
-      .pipe(catchError(this.handleError<Mailbox>(`error opening '${name}'`, {name: name} as Mailbox)));
+    return of(this.dbService.getEmailEntries(name, this.userEmail))
+      .pipe(
+        map(emails => {return {name: name, emails: emails} as Mailbox}),
+        catchError(this.handleError<Mailbox>(`error opening '${name}'`, {name: name} as Mailbox))
+      );
   }
 
-  archiveEmail(emailId: number) : Observable<Mailbox> {
-    return of(this.dbService.archiveEmail(emailId))
-      .pipe(catchError(this.handleError<any>('error (un)archiving email')))
-      .pipe(() => this.openMailbox('inbox'));
-  }
-
-  getEmail(emailId: number) : Observable<Email> {
-    return of(this.dbService.getEmail(emailId))
-      .pipe(catchError(this.handleError<Email>('error getting email from db')));
+  archiveEmail(emailId: number, archived: boolean) : Observable<Mailbox> {
+    return of(this.dbService.archiveEmail(emailId, archived, this.userEmail))
+      .pipe(
+        map(emails => {return {name: 'inbox', emails: emails} as Mailbox}),
+        catchError(this.handleError<any>('error (un)archiving email')));
   }
 
   openEmail(emailId: number) : Observable<Email> {

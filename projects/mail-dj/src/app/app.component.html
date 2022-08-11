@@ -5,7 +5,7 @@
 	<button id="compose" (click)="openCompose()">Compose</button>
 	<button id="sent" (click)="openMailbox('sent')">Sent</button>
 	<button id="archived" (click)="openMailbox('archived')">Archived</button>
-	<a class="btn" href="#">Log Out</a>
+	<a class="btn" href="#" onclick="logout()">Log Out</a>
 </div>
 
 <app-mailbox [hidden]="currentTab !== 1" [(mailbox)]="mailbox" (emailOpenEvent)="openEmail($event)"></app-mailbox>

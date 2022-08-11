@@ -47,37 +47,80 @@ export class DbService {
       read: true,
       archived: false
     },
+    {      
+      id: 5,
+      sender: 'paddy@hg.me',
+      recipients: 'moony@hg.me, prongs@hg.me',
+      subject: 'hey guys',
+      body: 'hey ho',
+      timestamp: '08/08/77 06:30',
+      read: true,
+      archived: false
+    }
   ];
 
   constructor() { }
 
   getEmailEntries(mailbox: string, userEmail: string): EmailEntry[] {
     let entries: EmailEntry[] = [];
-    let dbCheckF : (email: Email) => boolean;
+    let checkF : (email: Email) => boolean;
+    let formatF : (email: Email) => EmailEntry;
   
     switch(mailbox) {
       case 'inbox':
-        dbCheckF = (email) => { return email.recipients.includes(userEmail) && ! email.archived};
+        checkF = (email) => { return email.recipients.includes(userEmail) && ! email.archived};
+        formatF = (email) => { return {
+          id: email.id,
+          user: email.sender,
+          extra: 0,
+          subject: email.subject,
+          timestamp: email.timestamp,
+          read: email.read
+        }}
         break;
       case 'sent':
-        dbCheckF = (email) => { return email.sender === userEmail };
+        checkF = (email) => { return email.sender === userEmail };
+        formatF = (email) => { return {
+          id: email.id,
+          user: email.recipients.split(',')[0],
+          extra: email.recipients.split(',').length - 1,
+          subject: email.subject,
+          timestamp: email.timestamp,
+          read: email.read
+        }}
         break;
       case 'archived':
-        dbCheckF = (email) => { return email.recipients.includes(userEmail) && email.archived};
+        checkF = (email) => { return email.recipients.includes(userEmail) && email.archived};
+        formatF = (email) => { return {
+          id: email.id,
+          user: email.sender,
+          extra: 0,
+          subject: email.subject,
+          timestamp: email.timestamp,
+          read: email.read
+        }}
         break;
       default:
-        dbCheckF = (_) => false;
+        checkF = (_) => false;
+        formatF = (_) => { return {} as EmailEntry};
     }
+
     for (let email of this.DB) {
-      if (dbCheckF(email))
-        entries.push(email as EmailEntry);
+      if (checkF(email))
+        entries.push(formatF(email));
     }
+
+    console.log(entries);
+
+
     return entries;
   }
 
-  archiveEmail(emailId : number) {
+  archiveEmail(emailId : number, archived: boolean, userEmail: string) : EmailEntry[] {
     const i = this.DB.findIndex(email => email.id === emailId);
-    this.DB[i].archived = !(this.DB[i].archived);
+    this.DB[i].archived = archived;
+
+    return this.getEmailEntries('inbox', userEmail);
   }
 
   markAsRead(emailIndex: number) {
@@ -106,7 +149,5 @@ export class DbService {
       read: true,
       archived: false
     });
-
-    console.log(this.DB);
   }
 }

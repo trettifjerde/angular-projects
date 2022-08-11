@@ -11,7 +11,8 @@ export interface Email {
 
 export interface EmailEntry {
     id: number,
-    sender: string,
+    user: string,
+    extra: number,
     subject: string,
     timestamp: string,
     read: boolean

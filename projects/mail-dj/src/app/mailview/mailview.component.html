@@ -6,7 +6,7 @@
         </p>
         <p>
             <span class="b">To: </span>
-            <span id="email-to">{{ email.recipients }}</span>
+            <span id="email-to">{{ email.recipients? email.recipients.join(', ') : '' }}</span>
         </p>
         <p>
             <span class="b">Subject: </span>
