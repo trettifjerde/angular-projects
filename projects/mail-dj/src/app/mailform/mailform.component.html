@@ -1,5 +1,6 @@
 <h3>New Email</h3>
 <form (submit)="onSubmit()" #emailForm="ngForm" autocomplete="off">
+    <p class="error-msg">{{ errorMsg }}</p>
     <div class="row">
         <span class="b">From:</span>
         <input type="text" disabled value="{{ info.sender }}" />

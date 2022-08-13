@@ -13,11 +13,13 @@ export class MailformComponent implements AfterViewInit, OnChanges {
   @Output() mailboxChange = new EventEmitter();
   @ViewChild('emailForm') form!: NgForm;
   @ViewChild('textarea') textarea!: ElementRef;
+  errorMsg = ''
 
   constructor(private mailService: MailService) {   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['info'] && ! changes['info'].firstChange) {
+      this.errorMsg = '';
       this.form.form.markAsPristine();
       setTimeout(()=>{
         this.textarea.nativeElement.selectionEnd = 0;
@@ -29,7 +31,7 @@ export class MailformComponent implements AfterViewInit, OnChanges {
   ngAfterViewInit(): void { }
 
   onSubmit(): void {
-    this.mailService.sendEmail(this.info).subscribe(_ => this.mailboxChange.emit());
+    this.mailService.sendEmail(this.info).subscribe(error => error ? this.errorMsg = error : this.mailboxChange.emit());
   }
 
 }

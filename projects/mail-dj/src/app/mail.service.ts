@@ -46,11 +46,11 @@ export class MailService {
       );
   }
 
-  sendEmail(info: FormInfo) : Observable<any> {
-    return this.http.post<FormInfo>(this.emailsUrl, info)
+  sendEmail(info: FormInfo) : Observable<string|null> {
+    return this.http.post<{'message': string}>(this.emailsUrl, info)
       .pipe(
-        tap(response => console.log(response)),
-        catchError(this.handleError<any>('error saving email into db'))
+        map(response => null),
+        catchError(err => of(err.error.error))
       );
   }
 
