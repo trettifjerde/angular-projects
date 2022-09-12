@@ -4,8 +4,7 @@ import { Mailbox } from '../interfaces';
 
 @Component({
   selector: 'app-mailbox',
-  templateUrl: './mailbox.component.html',
-  styleUrls: ['./mailbox.component.scss']
+  templateUrl: './mailbox.component.html'
 })
 export class MailboxComponent {
 

@@ -211,7 +211,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "css"
         }
       },
       "root": "projects/mail",
@@ -232,7 +232,7 @@
               "projects/mail/src/assets"
             ],
             "styles": [
-              "projects/mail/src/styles.scss"
+              "projects/mail-dj/src/styles.css"
             ],
             "scripts": []
           },
@@ -311,7 +311,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "css"
         }
       },
       "root": "projects/mail-dj",
@@ -332,7 +332,7 @@
               "projects/mail-dj/src/assets"
             ],
             "styles": [
-              "projects/mail-dj/src/styles.scss"
+              "projects/mail-dj/src/styles.css"
             ],
             "scripts": []
           },

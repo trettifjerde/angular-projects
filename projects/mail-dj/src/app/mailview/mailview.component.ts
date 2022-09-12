@@ -16,4 +16,10 @@ export class MailviewComponent {
     this.replyEvent.emit();
   }
 
+  parseBody() : string {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return this.email.body?.replace(urlRegex, (url: string) => { return `<a href="${url}">${url}</a>`} );
+  }
+
 }

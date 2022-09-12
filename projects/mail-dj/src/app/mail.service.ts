@@ -46,11 +46,11 @@ export class MailService {
       );
   }
 
-  sendEmail(info: FormInfo) : Observable<string|null> {
-    return this.http.post<{'message': string}>(this.emailsUrl, info)
+  sendEmail(info: FormInfo) : Observable<Mailbox | string> {
+    return this.http.post<Email[]>(this.emailsUrl, info)
       .pipe(
-        map(response => null),
-        catchError(err => of(err.error.error))
+        map(emails => { return {name: 'sent', entries: emailToEntries(emails, 'sent')} as Mailbox}),
+        catchError(err => of(err.error.error as string))
       );
   }
 

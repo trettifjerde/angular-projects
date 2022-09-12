@@ -4,8 +4,7 @@ import { MailService } from '../mail.service';
 
 @Component({
   selector: 'app-mailview',
-  templateUrl: './mailview.component.html',
-  styleUrls: ['./mailview.component.scss']
+  templateUrl: './mailview.component.html'
 })
 export class MailviewComponent {
 
@@ -16,6 +15,12 @@ export class MailviewComponent {
   
   onReply() {
     this.replyEvent.emit();
+  }
+
+  parseBody() : string {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return this.email.body?.replace(urlRegex, (url: string) => { return `<a href="${url}">${url}</a>`} );
   }
 
 }

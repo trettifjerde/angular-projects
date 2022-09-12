@@ -2,19 +2,19 @@
 <div>{{ errorMsg }}</div>
 <div>
     <div *ngFor="let entry of mailbox.emails" [ngClass]="{'entry': true, 'read': entry.read}" (click)="onEntryClick(entry.id)">
-        <div>
+        <div class="info">
             <span class="sender">
                 {{ entry.user }}
-                <span *ngIf="entry.extra > 0" class="extra-recip">+{{ entry.extra}}</span>
+                <span *ngIf="entry.extra > 0" class="extra-recip">+{{ entry.extra }}</span>
             </span>
-            <span>{{ entry.subject }}</span>
+            <span class="subject">{{ entry.subject }}</span>
+            <span class="timestamp">{{entry.timestamp}}</span>
         </div>
-        <div class="timestamp">
-            <span>{{entry.timestamp}}</span>
-            <button *ngIf="mailbox.name !== 'sent'" class="archive" type="button" 
-                (click)="onArchive(entry.id, mailbox.name === 'inbox', $event)">
-                {{ mailbox.name === 'archived' ? 'Unarchive' : 'Archive'}}
-            </button>
-        </div>
+        <button *ngIf="mailbox.name !== 'sent'" class="btn archive" type="button" 
+            (click)="onArchive(entry.id, mailbox.name === 'inbox', $event)">
+            {{ mailbox.name === 'inbox' ? 'Archive' : 'Unarchive'}}
+        </button>
     </div>
+    <div *ngIf="mailbox.emails.length === 0">No entries yet</div>
+
 </div>

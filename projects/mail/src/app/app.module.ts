@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { MailboxComponent } from './mailbox/mailbox.component';
 import { MailformComponent } from './mailform/mailform.component';
 import { MailviewComponent } from './mailview/mailview.component';
+import { ParseEmailBodyDirective } from './parse-email-body.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     MailboxComponent,
     MailformComponent,
-    MailviewComponent
+    MailviewComponent,
+    ParseEmailBodyDirective
   ],
   imports: [
     BrowserModule,
