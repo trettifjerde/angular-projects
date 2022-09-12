@@ -8,10 +8,10 @@ import { MailService } from './mail.service';
 })
 export class AppComponent implements OnInit {
   title = 'mail';
-  username = 'paddy@hg.me';
+  username = '';
 
   mailbox = {name: '', entries: []} as Mailbox;
-  formInfo = {sender : this.username } as FormInfo;
+  formInfo = {sender : '' } as FormInfo;
   email = {} as Email;
   errorMsg = '';
 
@@ -50,6 +50,8 @@ export class AppComponent implements OnInit {
 
     if (reply)
       this.formInfo = emailToReplyFormInfo(this.username, this.email);
+    else
+      this.formInfo = {sender: this.username} as FormInfo;
   }
 
   openEmail(emailId: number) {
