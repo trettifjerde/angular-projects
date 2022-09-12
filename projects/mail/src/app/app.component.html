@@ -10,7 +10,8 @@
 	<button class="btn" id="archived" (click)="openMailbox('archived')">Archived</button>
 </div>
 <hr>
+<div class="error-msg">{{ errorMessage }}</div>
 
 <app-mailbox [hidden]="currentTab !== 1" [(mailbox)]="mailbox" (emailOpenEvent)="openEmail($event)"></app-mailbox>
 <app-mailform [hidden]="currentTab !== 2" [info]="formInfo" (mailboxChange)="openMailbox('sent')"></app-mailform>
-<app-mailview [hidden]="currentTab !== 3" [email]="email" (replyEvent)="openCompose(true)"></app-mailview>
+<app-mailview [hidden]="currentTab !== 3" [email]="email" (replyEvent)="openCompose(true)" (deleteEvent)="deleteEmail($event)"></app-mailview>

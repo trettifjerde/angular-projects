@@ -5,8 +5,7 @@ import { MailService } from '../mail.service';
 
 @Component({
   selector: 'app-mailform',
-  templateUrl: './mailform.component.html',
-  styleUrls: ['./mailform.component.scss']
+  templateUrl: './mailform.component.html'
 })
 export class MailformComponent implements AfterViewInit, OnChanges {
 

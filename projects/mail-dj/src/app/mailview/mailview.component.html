@@ -15,7 +15,10 @@
         <span class="b">Sent: </span>
         <span id="email-date">{{ email.timestamp }}</span>
     </p>
-    <button type="button" class="btn" (click)="onReply()">Reply</button>		
+    <p>
+        <button type="button" class="btn" (click)="onReply()">Reply</button>
+        <button type="button" class="btn" (click)="onDelete()">Delete</button>
+    </p>		
 </div>
 <hr>
 <div id="email-body" [appParseEmail]="email.body"></div> 

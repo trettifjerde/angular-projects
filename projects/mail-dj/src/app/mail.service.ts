@@ -49,9 +49,17 @@ export class MailService {
   sendEmail(info: FormInfo) : Observable<Mailbox | string> {
     return this.http.post<Email[]>(this.emailsUrl, info)
       .pipe(
-        map(emails => { return {name: 'sent', entries: emailToEntries(emails, 'sent')} as Mailbox}),
+        map(emails => {return {name: 'sent', entries: emailToEntries(emails, 'sent')} as Mailbox}),
         catchError(err => of(err.error.error as string))
       );
+  }
+
+  deleteEmail(emailId: number)  {
+    return this.http.post(this.emailsUrl + 'delete', {id: emailId})
+      .pipe(
+        map(_ => true),
+        catchError(this.handleError<Boolean>('error deleting email', false))
+      )
   }
 
   handleError<T>(message: string, fallback? : T)

@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   mailbox = {name: '', entries: []} as Mailbox;
   formInfo = {sender : this.username } as FormInfo;
   email = {} as Email;
-  errorMsg : string|null = null;
+  errorMsg = '';
 
   btns! : NodeListOf<HTMLButtonElement>;
   currentTab! : number;
@@ -34,16 +34,9 @@ export class AppComponent implements OnInit {
     this.btns.forEach(btn => btn.disabled = ! btn.disabled);
   }
 
-  clearData(mailboxName: string) {
-    this.mailbox = {name: mailboxName, entries: []} as Mailbox;
-    this.formInfo = {sender : this.username } as FormInfo;
-    this.email = {} as Email;
-    this.errorMsg = '';
-  }
-
   openMailbox(name: string) : void {
     this.toggleMenuBtns();
-    this.clearData(name);
+    this.errorMsg = '';
     this.currentTab = 1;
     this.mailService.openMailbox(name).subscribe(mailbox => {
       this.mailbox = mailbox;
@@ -52,8 +45,8 @@ export class AppComponent implements OnInit {
   }
 
   openCompose(reply=false) : void {
-    this.currentTab = 2;
     this.errorMsg = '';
+    this.currentTab = 2;
 
     if (reply)
       this.formInfo = emailToReplyFormInfo(this.username, this.email);
@@ -61,7 +54,7 @@ export class AppComponent implements OnInit {
 
   openEmail(emailId: number) {
     this.toggleMenuBtns();
-    this.clearData('');
+    this.errorMsg = '';
     this.currentTab = 3;
     this.mailService.openEmail(emailId).subscribe(email => {
       this.email = email;
@@ -71,15 +64,26 @@ export class AppComponent implements OnInit {
 
   sendEmail(info: FormInfo) {
     this.toggleMenuBtns();
+    this.errorMsg = '';
     this.mailService.sendEmail(info).subscribe(response => {
       if (typeof(response) === 'string') {
         this.errorMsg = response; 
       } else {
-        this.clearData('sent');
         this.currentTab = 1;
         this.mailbox = response;
       }
       this.toggleMenuBtns();
     });
+  }
+
+  deleteEmail(emailId: number) {
+    this.mailService.deleteEmail(emailId).subscribe(
+      result => {
+        if (result)
+          this.openMailbox(this.mailbox.name);
+        else 
+          this.errorMsg = 'Error deleting email';
+      }
+    );
   }
 }

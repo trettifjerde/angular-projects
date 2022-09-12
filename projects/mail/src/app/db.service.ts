@@ -150,4 +150,9 @@ export class DbService {
       archived: false
     });
   }
+
+  deleteEmail(emailId: number) {
+      const emailIndex = this.DB.findIndex(email => email.id === emailId);
+      this.DB.splice(emailIndex, 1);
+  }
 }

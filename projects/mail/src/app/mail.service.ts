@@ -43,6 +43,13 @@ export class MailService {
       .pipe(catchError(this.handleError<any>('error saving email into db')));
   }
 
+  deleteEmail(emailId: number) : Observable<Boolean> {
+    return of(this.dbService.deleteEmail(emailId))
+      .pipe(
+        map(_ => true),
+        catchError(this.handleError<Boolean>('error deleting email in db', false)));
+  }
+
   handleError<T>(message: string, fallback? : T)
   {
     return (error: any) : Observable<T> => {

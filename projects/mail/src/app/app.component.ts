@@ -13,6 +13,7 @@ export class AppComponent {
   mailbox = {} as Mailbox;
   formInfo = {sender : this.username } as FormInfo;
   email = {} as Email;
+  errorMessage = '';
 
   currentTab! : number;
 
@@ -22,11 +23,13 @@ export class AppComponent {
   }
 
   openMailbox(name: string) : void {
+    this.emptyErrorMessage();
     this.currentTab = 1;
     this.mailService.openMailbox(name).subscribe(mailbox => this.mailbox = mailbox);
   }
 
   openCompose(reply=false) : void {
+    this.emptyErrorMessage();
     this.currentTab = 2;
     if (reply)
       this.formInfo = emailToReplyFormInfo(this.username, this.email);
@@ -35,7 +38,23 @@ export class AppComponent {
   }
 
   openEmail(emailId: number) {
+    this.emptyErrorMessage();
     this.currentTab = 3;
     this.mailService.openEmail(emailId).subscribe(email => this.email = email);
+  }
+
+  deleteEmail(emailId: number) {
+    this.mailService.deleteEmail(emailId).subscribe(
+      result => {
+        if (!result)
+          this.openMailbox(this.mailbox.name);
+        else 
+          this.errorMessage = 'Error occured. Try again later';
+      }
+    );
+  }
+
+  emptyErrorMessage() {
+    this.errorMessage = '';
   }
 }

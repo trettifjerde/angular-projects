@@ -9,11 +9,16 @@ export class MailviewComponent {
 
   @Input() email = {} as Email;
   @Output() replyEvent = new EventEmitter();
+  @Output() deleteEvent = new EventEmitter();
 
   constructor() { }
   
   onReply() {
     this.replyEvent.emit();
+  }
+
+  onDelete() {
+    this.deleteEvent.emit(this.email.id);
   }
 
   parseBody() : string {
