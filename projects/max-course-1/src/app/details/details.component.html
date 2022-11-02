@@ -1,0 +1,14 @@
+<div class="row row-cols-2">
+    <div class="col">
+        <button 
+            class="btn btn-outline-primary"
+            [innerText]="getButtonText()"
+            (click)="toggleDetails()">
+        </button>
+        <p [ngClass]="{'hidden': !detailsShown}" [innerText]="secretDetails"></p>
+    </div>
+    <div class="col">
+        <p *ngFor="let click of clicks; let i = index" 
+        [ngClass]="{'blue': i > 4 }">Click #{{ click }}</p>
+    </div>
+</div>

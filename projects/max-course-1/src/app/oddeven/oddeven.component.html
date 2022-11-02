@@ -1,0 +1,9 @@
+<app-controller (onNewNumber)="onNewNumberEmit($event)"></app-controller>
+<div class="row row-cols-2">
+    <div>
+        <app-odd *ngFor="let n of oddNumbers" [n]="n"></app-odd>
+    </div>
+    <div>
+        <app-even *ngFor="let n of evenNumbers" [n]="n"></app-even>
+    </div>
+</div>

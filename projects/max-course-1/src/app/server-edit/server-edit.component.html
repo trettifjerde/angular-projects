@@ -1,0 +1,13 @@
+<div class="row row-cols-auto align-items-center mb-4">
+    <label class="col">New Server Name</label>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" #newServerName/>
+    </div>
+    <button 
+        type="button"
+        class="col btn btn-outline-primary" 
+        [disabled]="!createAllowed"
+        (click)="onCreateServer()">Add new server
+    </button>
+</div>
+<div [ngClass]="{visible: serverCreatedMessage}" class="message">{{ serverCreatedMessage }}</div>

@@ -1,0 +1,6 @@
+<div class="row">
+    <button 
+    class="col-4 btn" 
+        [ngClass]="{'btn-success': !timer, 'btn-warning': timer}"
+        (click)="toggleTimer()">{{ timer ? 'Stop' : 'Start'}}</button>
+</div>

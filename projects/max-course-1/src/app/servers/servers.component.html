@@ -1,0 +1,12 @@
+<div class="container">
+    <app-server-edit [createAllowed]="allowNewServer" (serverCreated)="onServerCreated($event)"></app-server-edit>
+</div>
+
+<div class="container">
+    <div class="row row-cols-auto">
+        <app-server *ngFor="let server of servers" [server]="server"></app-server>
+    </div>
+</div>
+
+
+
