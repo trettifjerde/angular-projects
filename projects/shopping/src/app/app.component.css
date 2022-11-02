@@ -1,0 +1,7 @@
+.dropdown-menu {
+    min-width: unset;
+}
+
+.dropdown-menu-end {
+    right: 0;
+}

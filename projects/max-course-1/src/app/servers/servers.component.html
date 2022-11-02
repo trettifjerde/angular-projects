@@ -1,11 +1,15 @@
 <div class="container">
     <app-server-edit [createAllowed]="allowNewServer" (serverCreated)="onServerCreated($event)"></app-server-edit>
 </div>
+<div class="mb-4">
+    <button class="btn btn-primary" (click)="toggleOfflineServers()">{{ offlineHidden ? 'Show offline servers' : 'Hide offline servers' }}</button>
+</div>
 
-<div class="container">
-    <div class="row row-cols-auto">
-        <app-server *ngFor="let server of servers" [server]="server"></app-server>
+<div class="row row-cols-auto">
+    <div *ngFor="let server of servers">
+        <app-server *appUnless="offlineHidden && !server.status" [server]="server"></app-server>
     </div>
+    
 </div>
 
 

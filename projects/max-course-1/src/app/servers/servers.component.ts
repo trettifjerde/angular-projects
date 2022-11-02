@@ -10,6 +10,7 @@ export class ServersComponent implements OnInit {
     new Server('SolidGames 1', true)
   ];
   allowNewServer = true;
+  offlineHidden = false;
 
   constructor() { }
 
@@ -18,6 +19,10 @@ export class ServersComponent implements OnInit {
 
   onServerCreated(serverName: string) {
     this.servers.push(new Server(serverName, false));
+  }
+
+  toggleOfflineServers() {
+    this.offlineHidden = !this.offlineHidden;
   }
 
 }

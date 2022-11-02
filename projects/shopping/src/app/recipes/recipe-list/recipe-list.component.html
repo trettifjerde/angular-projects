@@ -4,7 +4,7 @@
     </div>
 </div>
 <div class="mb-4">
-    <app-recipe-item *ngFor="let recipe of recipes" [recipe]="recipe" (onRecipeSelect)="selectRecipe($event)"></app-recipe-item >
+    <app-recipe-item *ngFor="let recipe of recipes" [recipe]="recipe" (onRecipeSelect)="selectRecipe(recipe)"></app-recipe-item >
 </div>
 
         

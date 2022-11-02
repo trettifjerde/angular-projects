@@ -1,3 +1,9 @@
-<p [ngClass]="{'online': server.status, 'offline': !server.status}" class="server">
+<p 
+    [ngClass]="{'online': server.status, 'offline': !server.status}" 
+    class="server" 
+    appBasicHighlight 
+        [defaultColor]="" 
+        [highlightColor]="'lightblue'"
+>
     Server #{{ server.name }} is {{ getServerStatus() }}
 </p>

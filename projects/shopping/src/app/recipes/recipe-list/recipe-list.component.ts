@@ -12,11 +12,11 @@ export class RecipeListComponent implements OnInit {
         new Recipe('Paella', 'Nourishing', 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2012/07/paella-9174.jpg')
     ];
 
-    selectRecipe(name: string) {
-        this.onRecipeSelect.emit(this.recipes.find(r => r.name === name));
+    selectRecipe(recipe: Recipe) {
+        this.onRecipeSelect.emit(recipe);
     }
 
     ngOnInit(): void {
-        this.selectRecipe(this.recipes[0].name);
+        this.selectRecipe(this.recipes[0]);
     }
 }

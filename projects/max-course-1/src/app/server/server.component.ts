@@ -7,7 +7,7 @@ import { Server } from "../server.model";
     styles: [`
     .online {background-color: lightgreen;}
     .offline {background-color: #faaec7;}
-    .server { padding: 1rem; }
+    .server { padding: 1rem; transition: all .3s ease-in-out; cursor: pointer;}
     `]
 })
 export class ServerComponent implements OnInit {

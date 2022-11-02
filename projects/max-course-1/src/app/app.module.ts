@@ -5,6 +5,7 @@ import { SuccessAlertComponent } from './alerts/success-alert.component';
 import { WarningAlertComponent } from './alerts/warning-alert.component';
 
 import { AppComponent } from './app.component';
+import { BasicHighlightDirective } from './directives/basic-highlight.directive';
 import { DetailsComponent } from './details/details.component';
 import { GameControllerComponent } from './oddeven/controller.component';
 import { EvenComponent } from './oddeven/even.component';
@@ -13,6 +14,7 @@ import { OddEvenComponent } from './oddeven/oddeven.component';
 import { ServerEditComponent } from './server-edit/server-edit.component';
 import { ServerComponent } from './server/server.component';
 import { ServersComponent } from './servers/servers.component';
+import { UnlessDirective } from './directives/unless.directive';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ServersComponent } from './servers/servers.component';
     OddEvenComponent,
     OddComponent,
     EvenComponent,
-    GameControllerComponent
+    GameControllerComponent,
+    BasicHighlightDirective,
+    UnlessDirective
   ],
   imports: [
     BrowserModule,

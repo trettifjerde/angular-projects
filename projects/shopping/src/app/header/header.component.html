@@ -11,14 +11,14 @@
                 <a class="nav-link" href="#" (click)="onLinkClicked(1)">Shopping List</a>
             </li>
         </ul>
-        <div class="navbar-nav">
-            <div class="dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" (click)="toggleDropdown($event)">Manage</a>
-                <div class="dropdown-menu" [ngClass]="{'show': dropdownOpen}">
+        <ul class="navbar-nav">
+            <li class="dropdown nav-item" appDropdown>
+                <a class="nav-link dropdown-toggle" href="#" role="button">Manage</a>
+                <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item nav-link" href="#">Save Data</a>
                     <a class="dropdown-item nav-link" href="#">Fetch Data</a>
                 </div>
-            </div>
-        </div>
+            </li>
+        </ul>
     </div>
 </nav>
