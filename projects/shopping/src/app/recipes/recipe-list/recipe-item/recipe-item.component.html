@@ -1,10 +1,10 @@
 <div class="card p-2 mb-2" (click)="loadDetails()">
-    <div class="row g-0">
-        <div class="col-md-8 card-body">
+    <div class="row row-cols-auto g-0">
+        <div class="card-body">
             <h4 class="card-title">{{ recipe.name }}</h4>
             <div class="card-text">{{ recipe.description }}</div>
         </div>
-        <div class="col-md-4">
+        <div class="">
             <img [src]="recipe.imagePath" class="img-fluid" style="max-height: 100px;">
         </div>
     </div>

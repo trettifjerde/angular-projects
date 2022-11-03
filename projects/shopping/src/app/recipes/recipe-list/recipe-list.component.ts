@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { RecipesService } from "../../services/recipes.service";
 import { Recipe } from "../recipe.model";
 
 @Component({
@@ -6,17 +7,24 @@ import { Recipe } from "../recipe.model";
     templateUrl: './recipe-list.component.html'
 })
 export class RecipeListComponent implements OnInit {
-    @Output() onRecipeSelect = new EventEmitter<Recipe>();
-    recipes: Recipe[] = [
-        new Recipe('Taco', 'Fresh and savoury', 'https://img.buzzfeed.com/tasty-app-user-assets-prod-us-east-1/recipes/9ca9adfae4a04ecf8ac3275fcef25e7b.png'),
-        new Recipe('Paella', 'Nourishing', 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2012/07/paella-9174.jpg')
-    ];
+    recipes: Recipe[] = [];
 
-    selectRecipe(recipe: Recipe) {
-        this.onRecipeSelect.emit(recipe);
-    }
+    constructor(private recipeService: RecipesService) {}
 
     ngOnInit(): void {
-        this.selectRecipe(this.recipes[0]);
+        this.recipes = this.recipeService.getRecipes();
+        this.recipeService.recipesUpdated.subscribe(
+            (recipes) => this.recipes = recipes
+        )
+    }
+
+    addNewRecipe() {
+        const rec = new Recipe(
+            'Spaghetti', 
+            'Tasty and easy to make!', 
+            'https://veganwithgusto.com/wp-content/uploads/2021/05/speedy-spaghetti-arrabbiata-featured-e1649949762421.jpg',
+            []
+        );
+        this.recipeService.addRecipe(rec);
     }
 }
