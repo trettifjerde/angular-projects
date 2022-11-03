@@ -1,9 +1,8 @@
-<app-header (linkClick)="onLinkClicked($event)"></app-header>
+<app-header></app-header>
 <div class="container">
     <div class="row">
         <div class="col">
-            <app-recipes *ngIf="currentTab === 0"></app-recipes>
-            <app-shopping-list *ngIf="currentTab === 1"></app-shopping-list>
+            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

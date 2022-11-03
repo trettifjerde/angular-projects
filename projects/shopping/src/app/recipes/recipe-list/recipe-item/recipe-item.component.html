@@ -1,4 +1,4 @@
-<div class="card p-2 mb-2" (click)="loadDetails()">
+<div class="card p-2 mb-2" [routerLink]="['/recipes', id]">
     <div class="row row-cols-auto g-0">
         <div class="card-body">
             <h4 class="card-title">{{ recipe.name }}</h4>

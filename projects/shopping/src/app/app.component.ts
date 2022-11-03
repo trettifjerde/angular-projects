@@ -8,10 +8,4 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class AppComponent {
   title = 'shopping';
-  currentTab = 0;
-  
-  onLinkClicked(n: number) {
-    this.currentTab = n;
-  }
-
 }

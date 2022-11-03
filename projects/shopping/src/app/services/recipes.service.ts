@@ -27,8 +27,9 @@ export class RecipesService {
                 new Ingredient('Shrimp', 10)
             ])
     ];
-    recipeSelected = new EventEmitter<Recipe>();
     recipesUpdated = new EventEmitter<Recipe[]>();
+
+    selectedRecipe: Recipe;
 
     constructor(private listService: ShoppingListService) {}
 
@@ -41,9 +42,8 @@ export class RecipesService {
         return this.recipes.slice();
     }
     
-    selectRecipe(recipe: Recipe) {
-        this.recipeSelected.emit(recipe);
-        console.log('Recipe select emited');
+    getRecipe(id: number): Recipe {
+        return this.recipes[id];
     }
 
     toShoppingList(ingredients: Ingredient[]) {
