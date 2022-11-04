@@ -5,10 +5,4 @@ import { Recipe } from "./recipe.model";
     selector: 'app-recipes',
     templateUrl: './recipes.component.html'
 })
-export class RecipesComponent {
-    recipe: Recipe;
-    
-    selectRecipe(r: Recipe) {
-        this.recipe = r;
-    }
-}
+export class RecipesComponent {}
