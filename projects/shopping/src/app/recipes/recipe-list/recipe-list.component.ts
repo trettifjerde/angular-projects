@@ -4,7 +4,10 @@ import { Recipe } from "../recipe.model";
 
 @Component({
     selector: 'app-recipe-list',
-    templateUrl: './recipe-list.component.html'
+    templateUrl: './recipe-list.component.html',
+    styles: [`
+    .r-c { overflow: auto; max-height: 75vh;}
+    `]
 })
 export class RecipeListComponent implements OnInit {
     recipes: Recipe[] = [];

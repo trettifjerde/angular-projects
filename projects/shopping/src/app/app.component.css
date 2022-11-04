@@ -5,3 +5,8 @@
 .dropdown-menu-end {
     right: 0;
 }
+
+.dropdown-item {
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}

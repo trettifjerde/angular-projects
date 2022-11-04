@@ -4,4 +4,13 @@
 }
 .card:hover {
     background-color: rgba(191, 255, 176, 0.351);
+    color: black;
 }
+
+.card.active, .card.active:hover {
+    background-color: #40e96f17;
+    border-color: #198754;
+    color: #198754;
+    cursor: default;
+}
+
