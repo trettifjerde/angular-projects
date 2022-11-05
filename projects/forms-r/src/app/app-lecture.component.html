@@ -1,0 +1,49 @@
+<div class="container">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="row row-cols-2">
+        <div formGroupName="userData" class="col">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              class="form-control">
+            <span class="form-text" *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched">
+              <span *ngIf="signupForm.get('userData.username').errors['nameForbidden']">This name is forbidden</span>
+              <span *ngIf="signupForm.get('userData.username').errors['required']">Cannot be empty</span>
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="email">email</label>
+            <input
+              type="text"
+              id="email"
+              formControlName="email"
+              class="form-control">
+            <span class="form-text" *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched">
+              Enter a valid email
+            </span>
+          </div>
+          <div class="radio" *ngFor="let gender of genders">
+            <label>
+              <input
+                type="radio"
+                formControlName="gender"
+                [value]="gender">{{ gender }}
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit" [disabled]="!signupForm.valid">Submit</button>
+        </div>
+        <div formArrayName="hobbies" class="col">
+          <div class="row row-cols-auto">
+            <h4>Your hobbies</h4>
+            <button class="btn btn-outline-primary mb-2" type="button" (click)="onAddHobby()">Add hobby</button>
+          </div>
+          <div class="form-group mb-2" *ngFor="let hobbyControl of getHobbies(); let index = index">
+            <input type="text" class="form-control" [formControlName]="index">
+          </div>
+        </div>
+      </div>
+    </form>
+</div>
