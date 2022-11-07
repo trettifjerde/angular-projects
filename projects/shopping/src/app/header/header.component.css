@@ -1,4 +1,16 @@
-.nav-link.active {
-    border: 1px solid #198754;
+.nav-link {
+    margin: 0 0.2rem;
+}
+
+.nav-link.active, .nav-link.active:hover {
+    border: 1px solid white;
+    background-color: #198754;
+    color: white;
+    cursor: default;
+}
+
+.nav-link:active, .nav-link:hover {
+    border-color: #198754;
+    background-color: transparent;
     color: #198754;
 }

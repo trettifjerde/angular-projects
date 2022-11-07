@@ -1,2 +1,38 @@
-<div *ngIf="!editMode">New recipe</div>
-<div *ngIf="editMode">Edit mode</div>
+<h3>{{ id === null ? 'Add recipe' : 'Edit recipe'}}</h3>
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control" formControlName="name">
+    </div>
+    <hr>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" formControlName="description"></textarea>
+    </div>
+    <hr>
+    <div class="form-group">
+        <label for="imagePath">Image URL</label>
+        <input type="text" class="form-control" formControlName="imagePath">
+    </div>
+    <hr>
+    <div class="form-group" formArrayName="ingredients">
+        <label>Ingredients</label>
+        <div class="row row-cols-auto align-items-center" *ngFor="let ingredient of getFormIngredients(); let i = index" [formGroupName]="i">
+            <div class="col-8">
+                <input type="text" class="form-control" formControlName="name">
+            </div>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="amount">
+            </div>
+            <div class="col-1">
+                <button class="btn btn-outline-danger" type="button" (click)="deleteIngredient(i)">X</button>
+            </div>            
+        </div>
+        <button type="button" class="btn btn-outline-success mt-2" (click)="addNewIngredientToForm(recipeForm)">
+            Add new ingredient
+        </button>
+    </div>
+    <hr>
+    <button class="btn btn-success w-100" type="submit" [disabled]="!recipeForm.valid || recipeForm.pristine">Submit</button>
+    
+</form>

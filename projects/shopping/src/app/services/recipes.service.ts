@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Recipe } from "../recipes/recipe.model";
 import { Ingredient } from "../shared/ingredient.model";
 import { ShoppingListService } from "./shopping-list.service";
@@ -27,12 +28,14 @@ export class RecipesService {
                 new Ingredient('Shrimp', 10)
             ])
     ];
-    selectedRecipe: Recipe;
+    recipesUpdated = new Subject<Recipe[]>();
 
     constructor(private listService: ShoppingListService) {}
 
-    addRecipe(recipe: Recipe) {
+    addRecipe(recipe: Recipe) : number {
         this.recipes.push(recipe);
+        this.recipesUpdated.next(this.getRecipes());
+        return this.recipes.length - 1;
     }
 
     getRecipes() {
@@ -43,8 +46,19 @@ export class RecipesService {
         return this.recipes[id];
     }
 
+    updateRecipe(id: number, recipe: Recipe) {
+        this.recipes[id] = recipe;
+        this.recipesUpdated.next(this.getRecipes());
+    }
+
     toShoppingList(ingredients: Ingredient[]) {
         this.listService.addIngredients(ingredients);
     }
 
+    isUniqueName(name: string, id: number | null) : boolean{
+        const result = this.recipes.findIndex(r => r.name === name);
+        if (result < 0) return true;
+        else if (result === id) return true;
+        else return false;
+    }
 }

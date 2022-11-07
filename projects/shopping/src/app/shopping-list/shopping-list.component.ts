@@ -5,7 +5,8 @@ import { Ingredient } from "../shared/ingredient.model";
 
 @Component({
     selector: 'app-shopping-list',
-    templateUrl: './shopping-list.component.html'
+    templateUrl: './shopping-list.component.html',
+    styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
     ingredients: Ingredient[] = [];
@@ -22,5 +23,16 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.ingredientsSubscription.unsubscribe();
+    }
+
+    deleteItem(i: number) {
+        if (confirm('Delete item?'))
+        {
+            this.listService.deleteIngredient(i);
+        }
+    }
+
+    editItem(i: number) {
+        this.listService.startEditting(i);
     }
 }

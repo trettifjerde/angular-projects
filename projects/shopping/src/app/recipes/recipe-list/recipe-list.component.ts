@@ -6,26 +6,22 @@ import { Recipe } from "../recipe.model";
 @Component({
     selector: 'app-recipe-list',
     templateUrl: './recipe-list.component.html',
-    styles: [`
-    .r-c { overflow: auto; max-height: 75vh;}
-    `]
+    styleUrls: ['./recipe-list.component.css']
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
     recipes: Recipe[] = [];
+    recipesUpdateSubsc: Subscription;
 
     constructor(private recipeService: RecipesService) {}
 
     ngOnInit(): void {
         this.recipes = this.recipeService.getRecipes();
+        this.recipesUpdateSubsc = this.recipeService.recipesUpdated.subscribe(
+            (recipes) => this.recipes = recipes
+        );
     }
 
-    addNewRecipe() {
-        const rec = new Recipe(
-            'Spaghetti', 
-            'Tasty and easy to make!', 
-            'https://veganwithgusto.com/wp-content/uploads/2021/05/speedy-spaghetti-arrabbiata-featured-e1649949762421.jpg',
-            []
-        );
-        this.recipeService.addRecipe(rec);
+    ngOnDestroy(): void {
+        this.recipesUpdateSubsc.unsubscribe();
     }
 }

@@ -3,11 +3,13 @@
         <app-shopping-edit></app-shopping-edit>
         <hr>
         <div class="list-group">
-            <a
-                class="list-group-item"
-                *ngFor="let ingred of ingredients">
-                {{ ingred.name }} ({{ ingred.amount}})
-            </a>
+            <div class="list-group-item ingredient" *ngFor="let ingred of ingredients; let i = index">
+                <div>{{ ingred.name }} ({{ ingred.amount}})</div>
+                <div class="btn-group-sm">
+                    <button class="btn btn-warning" (click)="editItem(i)">Edit</button>
+                    <button class="btn btn-danger" (click)="deleteItem(i)">Delete</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,0 +1,17 @@
+.ingredient {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3rem;
+}
+.btn-group-sm {
+    display: none;
+}
+
+.btn-group-sm > * {
+    margin: 0 0.2rem;
+}
+
+.ingredient:hover .btn-group-sm {
+    display: block;
+}

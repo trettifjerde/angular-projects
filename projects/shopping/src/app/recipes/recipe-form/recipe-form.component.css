@@ -1,0 +1,14 @@
+.recipe-form .form-control {
+    margin: 0.3rem 0;
+}
+
+.recipe-form textarea {
+    min-height: 200px;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-image: linear-gradient(to left, #257d54bb, #198754, #257d54bb);
+    margin: 1.5rem 0;
+}
