@@ -1,13 +1,23 @@
 <h3>{{ id === null ? 'Add recipe' : 'Edit recipe'}}</h3>
 <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
     <div class="form-group">
-        <label for="name">Name</label>
+        <div class="label-row">
+            <label for="name">Name</label>
+            <div *ngIf="name.touched && !name.valid">
+                <p class="form-text text-danger" *ngIf="name.hasError('required')">Name is required</p>
+                <p class="form-text text-danger" *ngIf="name.hasError('recipeNameExists')">Recipe with such name already exists</p>
+            </div>
+        </div>
         <input type="text" id="name" class="form-control" formControlName="name">
     </div>
     <hr>
     <div class="form-group">
-        <label for="description">Description</label>
+        <div class="label-row">
+            <label for="description">Description</label>
+            <p class="form-text text-danger" *ngIf="description.touched && !description.valid">Description is required</p>
+        </div>
         <textarea class="form-control" formControlName="description"></textarea>
+        
     </div>
     <hr>
     <div class="form-group">
@@ -16,23 +26,32 @@
     </div>
     <hr>
     <div class="form-group" formArrayName="ingredients">
-        <label>Ingredients</label>
-        <div class="row row-cols-auto align-items-center" *ngFor="let ingredient of getFormIngredients(); let i = index" [formGroupName]="i">
-            <div class="col-8">
+        <div class="label-row">
+            <label>Ingredients</label>
+            <p class="form-text text-danger" *ngIf="ingredients.touched && !ingredients.valid">
+                Ingredient info is required
+            </p>
+        </div>
+        <div class="row row-cols-auto align-items-center justify-content-between g-2" 
+            *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+            <div class="col-auto flex-grow-1">
                 <input type="text" class="form-control" formControlName="name">
             </div>
             <div class="col-3">
-                <input type="text" class="form-control" formControlName="amount">
+                <input type="number" class="form-control" formControlName="amount">
             </div>
             <div class="col-1">
                 <button class="btn btn-outline-danger" type="button" (click)="deleteIngredient(i)">X</button>
             </div>            
         </div>
-        <button type="button" class="btn btn-outline-success mt-2" (click)="addNewIngredientToForm(recipeForm)">
+        <button type="button" class="btn btn-outline-success mt-2" (click)="addIngredientGroup()">
             Add new ingredient
         </button>
     </div>
     <hr>
-    <button class="btn btn-success w-100" type="submit" [disabled]="!recipeForm.valid || recipeForm.pristine">Submit</button>
+    <div class="row justify-content-evenly">
+        <button class="btn btn-success col-5" type="submit" [disabled]="recipeForm.pristine || !recipeForm.valid">Submit</button>
+        <button class="btn btn-outline-success col-5" type="button" (click)="cancelEdit()">Cancel</button>
+    </div>
     
 </form>

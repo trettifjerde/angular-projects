@@ -1,8 +1,11 @@
+<button class="btn btn-success mb-4" routerLink="new">New Recipe</button>
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-4 side">
         <app-recipe-list></app-recipe-list>
     </div>
-    <div class="col-md-7">
-        <router-outlet></router-outlet>
+    <div class="col-md-8">
+        <div>
+            <router-outlet></router-outlet>
+        </div>
     </div>
 </div>

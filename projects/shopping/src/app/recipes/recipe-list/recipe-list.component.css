@@ -1,6 +1,4 @@
 .r-c { 
-    overflow: auto; 
-    max-height: 100%;
     display: flex;
     flex-direction: column-reverse;
 }

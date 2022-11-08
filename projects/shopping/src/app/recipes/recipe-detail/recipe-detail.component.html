@@ -1,31 +1,29 @@
-<div class="row">
-    <div class="col-xs-12">
-        <img [src]="recipe.getImagePath()" [alt]="recipe.name" class="img-fluid">
-    </div>
-</div>
-<div class="row mt-2 mb-2 row-cols-auto align-items-center justify-content-between">
-    <div class="col">
-        <h1>{{ recipe.name }}</h1>
-    </div>
-    <div class="col">
-        <div class="dropdown" appDropdown>
-            <button class="btn btn-success dropdown-toggle">
-                Manage Recipe
-            </button>
-            <div class="dropdown-menu">
-                <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
-                <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
-                <div class="dropdown-item">Delete Recipe</div>
+<div>
+    <img [src]="recipe.getImagePath()" [alt]="recipe.name" class="img-fluid">
+    <div class="row mt-2 mb-2 row-cols-auto align-items-center justify-content-between">
+        <div class="col">
+            <h1>{{ recipe.name }}</h1>
+        </div>
+        <div class="col">
+            <div class="dropdown" appDropdown>
+                <button class="btn btn-success dropdown-toggle">
+                    Manage Recipe
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
+                    <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
+                    <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-xs-12">
-        <p>Ingredients:</p>
-        <ul class="list-group">
-            <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.name}} ({{ing.amount}})</li>
-        </ul>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>Ingredients:</p>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.name}} ({{ing.amount}})</li>
+            </ul>
 
+        </div>
     </div>
 </div>

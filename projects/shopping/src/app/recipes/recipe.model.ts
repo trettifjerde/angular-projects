@@ -6,14 +6,14 @@ export class Recipe {
     public imagePath: string;
     public ingredients: Ingredient[];
 
-    constructor(name='', desc='', iPath='', ingredients=[]) {
+    constructor({name, description, imagePath, ingredients}) {
         this.name = name;
-        this.description = desc;
-        this.imagePath = iPath;
+        this.description = description;
+        this.imagePath = imagePath;
         this.ingredients = ingredients;
     }
 
     getImagePath() {
-        return this.imagePath ? this.imagePath : 'https://post.healthline.com/wp-content/uploads/2020/09/healthy-eating-ingredients-732x549-thumbnail.jpg';
+        return this.imagePath ? this.imagePath : 'https://t4.ftcdn.net/jpg/04/00/24/31/360_F_400243185_BOxON3h9avMUX10RsDkt3pJ8iQx72kS3.jpg';
     }
 }

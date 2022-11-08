@@ -1,11 +1,11 @@
 <div class="card p-2 mb-2" [routerLink]="[id]" routerLinkActive="active">
-    <div class="row row-cols-auto g-0">
-        <div class="card-body">
+    <div class="row g-0">
+        <div class="card-body col-7">
             <h4 class="card-title">{{ recipe.name }}</h4>
             <div class="card-text">{{ recipe.description }}</div>
         </div>
-        <div class="">
-            <img [src]="recipe.getImagePath()" class="img-fluid" style="max-height: 100px;">
+        <div class="col-5">
+            <img [src]="recipe.getImagePath()" class="img-fluid" style="max-height: 150px;">
         </div>
     </div>
 </div>

@@ -27,7 +27,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     ShoppingListComponent,
     ShoppingEditComponent,
     EmptyComponent,
-    DropdownDirective
+    DropdownDirective,
   ],
   imports: [
     BrowserModule,
