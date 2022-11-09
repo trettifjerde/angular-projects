@@ -1,10 +1,8 @@
-<div>
+<div class="pb-2">
     <img [src]="recipe.getImagePath()" [alt]="recipe.name" class="img-fluid">
-    <div class="row mt-2 mb-2 row-cols-auto align-items-center justify-content-between">
-        <div class="col">
-            <h1>{{ recipe.name }}</h1>
-        </div>
-        <div class="col">
+    <div class="detail-header mb-3">
+        <h1>{{ recipe.name }}</h1>
+        <div>
             <div class="dropdown" appDropdown>
                 <button class="btn btn-success dropdown-toggle">
                     Manage Recipe
@@ -17,13 +15,14 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <p>Ingredients:</p>
-            <ul class="list-group">
-                <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.name}} ({{ing.amount}})</li>
-            </ul>
-
-        </div>
+    <div class="mb-3">
+        <h5>Description</h5>
+        <div>{{ recipe.description }}</div>
+    </div>
+    <div class="mb-3">
+        <h5>Ingredients</h5>
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.name}} ({{ing.amount}})</li>
+        </ul>
     </div>
 </div>

@@ -1,0 +1,36 @@
+.recipes {
+    min-height: 80vh;
+}
+
+.side, .main {
+    overflow: auto;
+    max-height: 83vh;
+    position: relative;
+}
+
+@media (max-width: 700px) {
+    .main{
+        max-height: unset;
+    }
+}
+
+.input-cont {
+    position: relative;
+}
+
+.input-cont button {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility .3s, opacity .3s;
+}
+.input-cont input:focus ~ button {
+    visibility: visible;
+    opacity: 1;
+}
+
+.input-cont input {
+    padding-right: 2.5rem; 
+}

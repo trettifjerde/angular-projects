@@ -3,8 +3,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 
 @Component({
     selector: 'app-empty',
-    templateUrl: './empty.component.html',
-    styleUrls: ['./empty.component.css']
+    templateUrl: './empty.component.html'
 })
 export class EmptyComponent {
     message: string;

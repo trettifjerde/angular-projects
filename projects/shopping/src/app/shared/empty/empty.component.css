@@ -1,7 +1,0 @@
-.empty-component {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    max-height: 100vh;
-}

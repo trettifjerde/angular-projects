@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { RecipesService } from "../../services/recipes.service";
 import { Recipe } from "../recipe.model";
@@ -9,6 +9,7 @@ import { Recipe } from "../recipe.model";
     styleUrls: ['./recipe-list.component.css']
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
+    @Input('filterString') filterString: string;
     recipes: Recipe[] = [];
     recipesUpdateSubsc: Subscription;
 

@@ -31,7 +31,7 @@ export class RecipesService {
         }),
         new Recipe({
             name: 'Burger', 
-            description: 'Will make you full for a whole day!', 
+            description: 'Will make you full for a whole day! Lorem will make you full for a whole day! Lorem will make you full for a whole day! Lorem will make you full for a whole day!', 
             imagePath: 'https://assets.epicurious.com/photos/5c745a108918ee7ab68daf79/5:4/w_3129,h_2503,c_limit/Smashburger-recipe-120219.jpg',
             ingredients: [
                 new Ingredient('Patty', 1),
@@ -42,7 +42,43 @@ export class RecipesService {
                 new Ingredient('Salat', 1),
                 new Ingredient('Ketchup', 1)
             ]
-        })
+        }),
+        new Recipe({
+            name: 'Paella2', 
+            description: 'Nourishing', 
+            imagePath: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2012/07/paella-9174.jpg',
+            ingredients: [
+                new Ingredient('Onion', 1),
+                new Ingredient('Garlic', 1),
+                new Ingredient('Tomato', 5),
+                new Ingredient('Bell pepper', 2),
+                new Ingredient('Shrimp', 10)
+            ]
+        }),
+        new Recipe({
+            name: 'Paella3', 
+            description: 'Nourishing', 
+            imagePath: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2012/07/paella-9174.jpg',
+            ingredients: [
+                new Ingredient('Onion', 1),
+                new Ingredient('Garlic', 1),
+                new Ingredient('Tomato', 5),
+                new Ingredient('Bell pepper', 2),
+                new Ingredient('Shrimp', 10)
+            ]
+        }),
+        new Recipe({
+            name: 'Paella4', 
+            description: 'Nourishing', 
+            imagePath: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2012/07/paella-9174.jpg',
+            ingredients: [
+                new Ingredient('Onion', 1),
+                new Ingredient('Garlic', 1),
+                new Ingredient('Tomato', 5),
+                new Ingredient('Bell pepper', 2),
+                new Ingredient('Shrimp', 10)
+            ]
+        }),
     ];
     recipesUpdated = new Subject<Recipe[]>();
 

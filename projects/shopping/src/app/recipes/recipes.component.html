@@ -1,11 +1,17 @@
-<button class="btn btn-success mb-4" routerLink="new">New Recipe</button>
-<div class="row">
-    <div class="col-md-4 side">
-        <app-recipe-list></app-recipe-list>
+<div class="row mb-2">
+    <div class="col-auto">
+        <button class="btn btn-success mb-2" routerLink="new">New Recipe</button>
     </div>
-    <div class="col-md-8">
-        <div>
-            <router-outlet></router-outlet>
-        </div>
+    <div class="col input-cont">
+        <input type="text" class="form-control" [(ngModel)]="filterString" placeholder="Type for a recipe...">
+        <button type="button" class="btn btn-danger" (click)="clearFilter()">X</button>
+    </div>
+</div>
+<div class="row recipes">
+    <div class="col-md-5 side">
+        <app-recipe-list [filterString]="filterString"></app-recipe-list>
+    </div>
+    <div class="col-md-7 main">
+        <router-outlet></router-outlet>
     </div>
 </div>
