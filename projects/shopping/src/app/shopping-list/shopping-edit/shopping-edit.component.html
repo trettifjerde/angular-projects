@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col">
-        <form (ngSubmit)="addIngredient()" #form="ngForm">
+        <form (ngSubmit)="saveIngredient()" #form="ngForm">
             <div class="row mb-2">
                 <div class="col-5 form-group">
                     <label for="name">Name</label>
@@ -13,7 +13,7 @@
             </div>
             <div class="row row-cols-auto mg-2 g-2">
                 <div class="col">
-                    <button type="submit" class="btn-success btn" [disabled]="!form.valid">{{ ingredientId === null ? 'Add' : 'Edit'}}</button>
+                    <button type="submit" class="btn-success btn" [disabled]="!form.valid">{{ i === null ? 'Add' : 'Edit'}}</button>
                 </div>
                 <div class="col">
                     <button type="button" class="btn-primary btn" (click)="clearForm()">Clear</button>

@@ -2,8 +2,8 @@
     <div class="col-xs-10">
         <app-shopping-edit></app-shopping-edit>
         <hr>
-        <div class="list-group">
-            <div class="list-group-item ingredient" *ngFor="let ingred of ingredients; let i = index">
+        <div class="list-group" *ngIf="isFetched" #ingredientsCont>
+            <div class="list-group-item ingredient interactive" *ngFor="let ingred of ingredients; let i = index">
                 <div>{{ ingred.name }} ({{ ingred.amount}})</div>
                 <div class="btn-group-sm">
                     <button class="btn btn-warning" (click)="editItem(i)">Edit</button>
@@ -11,5 +11,7 @@
                 </div>
             </div>
         </div>
+        <div *ngIf="ingredients.length === 0 && isFetched">No ingredients in the list</div>
+        <div *ngIf="!isFetched">Loading...</div>
     </div>
 </div>

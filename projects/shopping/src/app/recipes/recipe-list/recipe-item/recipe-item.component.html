@@ -5,7 +5,7 @@
             <div class="card-text">{{ recipe.description | shorten:30 }}</div>
         </div>
         <div class="col-5">
-            <img [src]="recipe.getImagePath()" class="img-fluid" style="max-height: 150px;">
+            <img [src]="recipe.imagePath" class="img-fluid" style="max-height: 150px;">
         </div>
     </div>
 </div>

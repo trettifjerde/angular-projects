@@ -1,6 +1,4 @@
 import { Component } from "@angular/core";
-import { NgModel } from "@angular/forms";
-import { RecipesService } from "../services/recipes.service";
 
 @Component({
     selector: 'app-recipes',
@@ -8,7 +6,7 @@ import { RecipesService } from "../services/recipes.service";
     styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent {
-    constructor(private recipeService: RecipesService) {}
+    constructor() {}
     filterString = '';
 
     clearFilter() {

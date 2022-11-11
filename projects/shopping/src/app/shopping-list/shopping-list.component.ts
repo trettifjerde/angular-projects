@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ShoppingListService } from "../services/shopping-list.service";
-import { Ingredient } from "../shared/ingredient.model";
+import { Ingredient } from "../shared/ingredient.interface"; 
 
 @Component({
     selector: 'app-shopping-list',
@@ -11,14 +11,19 @@ import { Ingredient } from "../shared/ingredient.model";
 export class ShoppingListComponent implements OnInit, OnDestroy {
     ingredients: Ingredient[] = [];
     ingredientsSubscription: Subscription;
+    isFetched = false;
+    @ViewChild('ingredientsCont') ingredientsCont: ElementRef;
 
-    constructor(private listService: ShoppingListService) {}
+    constructor(private listService: ShoppingListService, private renderer: Renderer2) {}
 
     ngOnInit(): void {
-        this.ingredients = this.listService.getIngredients();
         this.ingredientsSubscription = this.listService.ingredientsUpdated.subscribe(
-            (ings) => this.ingredients = ings
+            (ings) => {
+                this.ingredients = ings;
+                this.isFetched = true;
+            }
         );
+        this.listService.pokeIngredients();
     }
 
     ngOnDestroy(): void {
@@ -28,7 +33,9 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     deleteItem(i: number) {
         if (confirm('Delete item?'))
         {
-            this.listService.deleteIngredient(i);
+            const el = this.ingredientsCont.nativeElement.querySelectorAll('.ingredient')[i];
+            this.renderer.removeClass(el, 'interactive');
+            this.listService.deleteIngredient(i).subscribe();
         }
     }
 

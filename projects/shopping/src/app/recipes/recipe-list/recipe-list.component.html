@@ -1,7 +1,7 @@
 <div class="r-c">
     <app-recipe-item 
-        *ngFor="let recipe of recipes|recipeFilter:filterString; let index = index" 
-        [id]="index"
+        *ngFor="let recipe of recipes|recipeFilter:filterString;" 
+        [id]="recipe.id" [recipe]="recipe.recipe"
     ></app-recipe-item >
 </div>
 <div *ngIf="(recipes|recipeFilter:filterString).length === 0" class="empty">No recipes found</div>

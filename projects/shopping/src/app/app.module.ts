@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,6 +11,7 @@ import { RecipeFormComponent } from './recipes/recipe-form/recipe-form.component
 import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
 import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
 import { RecipesComponent } from './recipes/recipes.component';
+import { DBInterseptorService } from './services/db-interseptor.service';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { EmptyComponent } from './shared/empty/empty.component';
 import { FilterPipe } from './shared/filter.pipe';
@@ -38,8 +40,11 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     FormsModule,
     AppRouterModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: DBInterseptorService, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

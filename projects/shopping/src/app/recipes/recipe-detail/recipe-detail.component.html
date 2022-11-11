@@ -1,5 +1,5 @@
 <div class="pb-2">
-    <img [src]="recipe.getImagePath()" [alt]="recipe.name" class="img-fluid">
+    <img [src]="recipe.imagePath" [alt]="recipe.name" class="img-fluid">
     <div class="detail-header mb-3">
         <h1>{{ recipe.name }}</h1>
         <div>
@@ -7,7 +7,7 @@
                 <button class="btn btn-success dropdown-toggle">
                     Manage Recipe
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu" [ngClass]="{'disabled': manageBtnDisabled}">
                     <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
                     <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
                     <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>

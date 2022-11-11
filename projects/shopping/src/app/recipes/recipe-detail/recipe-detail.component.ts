@@ -10,14 +10,15 @@ import { Recipe } from "../recipe.model";
 })
 export class RecipeDetailComponent implements OnInit {
     recipe: Recipe;
-    id: number;
+    id: string;
+    manageBtnDisabled = false;
 
     constructor(private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
 
     ngOnInit(): void {
         this.route.params.subscribe(
-            (params) => {
-                this.id = +params['id']
+            params => {
+                this.id = params['id'];
                 this.recipe = this.recipeService.getRecipe(this.id);
             }
         )
@@ -30,8 +31,11 @@ export class RecipeDetailComponent implements OnInit {
 
     deleteRecipe() {
         if (confirm('Delete recipe?')) {
-            this.recipeService.deleteRecipe(this.id);
-            this.router.navigate(['/recipes']);
+            this.manageBtnDisabled = true;
+            this.recipeService.deleteRecipe(this.id).subscribe(
+                () => this.router.navigate(['/recipes'])
+            );
+            
         }
     }
 }
