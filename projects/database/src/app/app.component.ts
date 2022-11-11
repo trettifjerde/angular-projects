@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { Post, PostRaw } from './post.interface';
+import { PostService } from './post.service';
 
 @Component({
   selector: 'app-root',
@@ -8,42 +8,47 @@ import { map } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  loadedPosts = [];
-  url = 'https://academind34-default-rtdb.europe-west1.firebasedatabase.app';
+  isLoading = false;
+  loadedPosts: Post[] = [];
+  error: {status: number, statusText: string} | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private postService: PostService) {}
 
   ngOnInit() {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: {title: string, content: string}) {
-    this.http.post(this.url + '/posts.json', postData)
-    .subscribe(
-      (res) => {
-        console.log(res);
-      }
+  onCreatePost(postData: PostRaw) {
+    this.postService.createPost(postData).subscribe(
+      (res) => this.loadedPosts.push({id: res.name, title: postData.title, content: postData.content} as Post)
     );
   }
 
   onFetchPosts() {
-    // Send Http request
+    this.fetchPosts();
   }
 
   onClearPosts() {
     // Send Http request
+    this.postService.clearPosts().subscribe(() => this.loadedPosts = []);
   }
 
   private fetchPosts() {
-    this.http.get(this.url + '/posts.json')
-      .pipe(
-        map(res => Object.entries(res).reduce(
-          (acc, [key, value]) => {
-            value.id = key;
-            acc.push(value);
-            return acc;
-        }, []))
-      )
-      .subscribe(r => console.log(r));
+    this.isLoading = true;
+    this.postService.fetchPosts()
+      .subscribe({
+        next: posts => {
+          console.log('success!')
+            this.isLoading = false;
+            this.loadedPosts = posts
+          },
+        error: error => {
+          console.log('error! :c');
+          this.isLoading = false;
+          this.error = error;
+        }
+      });
   }
+
+
 }

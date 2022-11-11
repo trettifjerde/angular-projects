@@ -51,7 +51,16 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
-      <p>No posts available!</p>
+      <div class="list-group" *ngIf="!isLoading">
+        <div *ngFor="let post of loadedPosts" class="list-group-item">
+          <h4>{{ post.title }}</h4>
+          <span>{{ post.id }}</span>
+          <p>{{ post.content }}</p>
+        </div>
+      </div>
+      <p *ngIf="!isLoading && loadedPosts.length === 0">No posts available!</p>
+      <p *ngIf="isLoading">Loading...</p>
     </div>
   </div>
+  <div *ngIf="error" class="alert alert-danger">{{ error.status }} : {{ error.statusText}}</div>
 </div>
