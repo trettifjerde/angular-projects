@@ -7,12 +7,13 @@ export class FilterPipe implements PipeTransform {
         if (Object.keys(items).length === 0)
             return [];
 
-        const recipeString = searchString.toLowerCase();
-        const res = Object
-            .entries(items)
-            .filter(([key, recipe]) => recipe.name.toLocaleLowerCase().includes(recipeString))
-            .map(([key, value]) => { return {id: key, recipe: value}})
-        console.log(res);
-        return res;
+        else {
+            const recipeString = searchString.toLowerCase();
+            const res = Object
+                .entries(items)
+                .filter(([key, recipe]) => recipe.name.toLocaleLowerCase().includes(recipeString))
+                .map(([key, value]) => { return {id: key, recipe: value}})
+            return res;
+        }
     }
 }

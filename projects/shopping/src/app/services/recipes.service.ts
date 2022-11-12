@@ -13,9 +13,13 @@ export class RecipesService {
 
     constructor(private http: HttpClient, private listService: ShoppingListService) {}
 
+    makeUrl(path: string) : string {
+        return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/${path}.json`;
+    }
+
     fetchRecipes() : Observable<RecipeDict> | RecipeDict {
         if (!this.isFetched) {
-            return this.http.get<RecipeDict>('recipes').pipe(
+            return this.http.get<RecipeDict>(this.makeUrl('recipes')).pipe(
                 map(recs => {
                     if (recs === null) 
                         return {} as RecipeDict;
@@ -53,7 +57,7 @@ export class RecipesService {
     }
 
     addRecipe(recipe: Recipe) : Observable<string> {
-        return this.http.post<{name: string}>('recipes', recipe).pipe(
+        return this.http.post<{name: string}>(this.makeUrl('recipes'), recipe).pipe(
             map(idObj => {
                 const id = idObj.name;
                 this.recipes[id] = new Recipe(recipe);
@@ -64,7 +68,7 @@ export class RecipesService {
     }
 
     updateRecipe(id: string, recipe: Recipe) {
-        return this.http.put<Recipe>('recipes/' + id, recipe).pipe(
+        return this.http.put<Recipe>(this.makeUrl('recipes/' + id), recipe).pipe(
             tap(res => {
                 this.recipes[id] = res;
                 this.announceRecipesUpdate();
@@ -73,7 +77,7 @@ export class RecipesService {
     }
 
     deleteRecipe(id: string) : Observable<null> {
-        return this.http.delete<null>('recipes/' + id).pipe(
+        return this.http.delete<null>(this.makeUrl('recipes/' + id)).pipe(
             tap(() => {
                 delete this.recipes[id];
                 this.announceRecipesUpdate();

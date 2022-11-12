@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-xs-12 col-md-6 m-auto">
+        <h2>Sign {{isSignUpMode? 'up' : 'in'}}</h2>
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm" *ngIf="!isLoading">
+            <div class="form-group mb-2">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" name="email" id="email" email ngModel required #email="ngModel">
+                <p *ngIf="email.touched && email.hasError('required')" class="text-danger form-text">Required.</p>
+                <p *ngIf="email.touched && email.hasError('email')" class="text-danger form-text">Must be valid email.</p>
+            </div>
+            <div class="form-group mb-2">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" 
+                ngModel minlength="6" required #password="ngModel">
+                <p *ngIf="password.touched && password.hasError('required')" class="text-danger form-text">Required.</p>
+                <p *ngIf="password.touched && password.hasError('minlength')" class="text-danger form-text">
+                    Must be at least 6 characters.
+                </p>
+            </div>
+            <div class="row justify-content-between g-0">
+                <button type="submit" class="btn btn-success col-3" [disabled]="!form.valid">
+                    Sign {{isSignUpMode ? 'up' : 'in'}}
+                </button> 
+                <button class="btn btn-outline-success col-3" type="button" (click)="toggleForm()">
+                    Switch to {{isSignUpMode ? 'sign in' : 'sign up'}}
+                </button>
+            </div>
+
+        </form>
+
+        <div class="mt-3 alert alert-danger" *ngIf="error">{{ error }}</div>
+
+        <div class="row align-center justify-content-center">
+            <app-spinner *ngIf="isLoading"></app-spinner>
+        </div>
+        
+    </div>
+</div>

@@ -1,12 +1,15 @@
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
+import { DBInterseptorService } from "../services/db-interseptor.service";
 import { ShoppingListService } from "../services/shopping-list.service";
 import { Ingredient } from "../shared/ingredient.interface"; 
 
 @Component({
     selector: 'app-shopping-list',
     templateUrl: './shopping-list.component.html',
-    styleUrls: ['./shopping-list.component.css']
+    styleUrls: ['./shopping-list.component.css'],
+    providers: [{provide: HTTP_INTERCEPTORS, useClass: DBInterseptorService, multi: true}]
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
     ingredients: Ingredient[] = [];

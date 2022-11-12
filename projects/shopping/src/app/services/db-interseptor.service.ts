@@ -1,12 +1,26 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { exhaustMap, Observable, take } from "rxjs";
+import { AuthService } from "../auth/auth.service";
 
+@Injectable()
 export class DBInterseptorService implements HttpInterceptor {
-    url = 'https://academind34-default-rtdb.europe-west1.firebasedatabase.app/';
+
+    constructor(private authService: AuthService) {}
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const modReq = req.clone({
-            url: this.url + req.url + '.json'
-        })
-        return next.handle(modReq);
+        return this.authService.user.pipe(
+            take(1),
+            exhaustMap(user => {
+                if (!user) 
+                    return next.handle(req);
+                    
+                const modReq = req.clone({
+                    params: new HttpParams().set('auth', user.token)
+                });
+                return next.handle(modReq);
+            })
+        )
+
     }
 }

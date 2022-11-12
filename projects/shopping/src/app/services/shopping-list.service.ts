@@ -1,25 +1,32 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, Subject, tap } from "rxjs";
+import { catchError, exhaustMap, map, Observable, Subject, take, tap } from "rxjs";
+import { AuthService } from "../auth/auth.service";
 import { Ingredient, IngredientRaw } from "../shared/ingredient.interface";
 
-@Injectable({providedIn: 'root'})
+@Injectable({
+    providedIn: 'root'
+})
 export class ShoppingListService {
     private ingredients: Ingredient[] = [];
     private fetched = false;
     ingredientsUpdated = new Subject<Ingredient[]>();
     ingredientBeingEditted = new Subject<[number, Ingredient]>();
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private authService: AuthService) {}
+
+    makeUrl(path: string): string {
+        return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/${path}.json`;
+    }
 
     private _addIngredient(ing: IngredientRaw): Observable<{name: string}> {
-        return this.http.post<{name: string}>('list', ing).pipe(
+        return this.http.post<{name: string}>(this.makeUrl('list'), ing).pipe(
             tap(nameObj => this.ingredients.push({id: nameObj.name, ...ing}))
         );
     }
 
     private _updateIngredient(id: string, ing: IngredientRaw): Observable<IngredientRaw> {
-        return this.http.put<IngredientRaw>('list/' + id, ing);
+        return this.http.put<IngredientRaw>(this.makeUrl('list/' + id), ing);
     }
 
     addIngredient(ingRaw: IngredientRaw, announce=true) {
@@ -55,7 +62,7 @@ export class ShoppingListService {
     }
 
     fetchIngredients(): Observable<Ingredient[]> {
-        return this.http.get<{[id: string]: IngredientRaw}>('list').pipe(
+        return this.http.get<{[id: string]: IngredientRaw}>(this.makeUrl('list')).pipe(
             map(ingreds => {
                 if (ingreds === null) 
                     return [];
@@ -73,8 +80,7 @@ export class ShoppingListService {
                 console.log(error);
                 return [];
             })
-        );
-    }
+    )}
 
     getIngredient(i: number): Ingredient {
         return {...this.ingredients[i]};
@@ -103,7 +109,7 @@ export class ShoppingListService {
 
     deleteIngredient(i: number): Observable<null> {
         const id = this.ingredients[i].id;
-        return this.http.delete<null>('list/' + id).pipe(
+        return this.http.delete<null>(this.makeUrl('list/' + id)).pipe(
             tap(() => {
                 this.ingredients.splice(i, 1);
                 this.announceIngredientsUpdate();

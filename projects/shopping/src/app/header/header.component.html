@@ -7,17 +7,14 @@
             <li class="nav-item">
                 <a class="nav-link btn" routerLink="recipes" routerLinkActive="active">Recipes</a>
             </li>
-            <li class="nav-item">
+            <li *ngIf="user" class="nav-item">
                 <a class="nav-link btn" routerLink="list" routerLinkActive="active">Shopping List</a>
             </li>
         </ul>
         <ul class="navbar-nav">
-            <li class="dropdown nav-item" appDropdown>
-                <button class="btn nav-link dropdown-toggle">Manage</button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item nav-link">Save Data</a>
-                    <a class="dropdown-item nav-link">Fetch Data</a>
-                </div>
+            <li class="nav-item">
+                <a *ngIf="!user" class="nav-link btn" routerLink="login" routerLinkActive="active">Sign in</a>
+                <a *ngIf="user" class="nav-link btn" (click)="logout()">Log out</a>
             </li>
         </ul>
     </div>

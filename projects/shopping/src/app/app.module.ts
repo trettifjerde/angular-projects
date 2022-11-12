@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRouterModule } from './app-router.module';
 
 import { AppComponent } from './app.component';
+import { AuthComponent } from './auth/auth.component';
 import { HeaderComponent } from './header/header.component';
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 import { RecipeFormComponent } from './recipes/recipe-form/recipe-form.component';
@@ -15,6 +16,7 @@ import { DBInterseptorService } from './services/db-interseptor.service';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { EmptyComponent } from './shared/empty/empty.component';
 import { FilterPipe } from './shared/filter.pipe';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { ShortenPipe } from './shared/shorten.pipe';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
@@ -22,6 +24,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 @NgModule({
   declarations: [
     AppComponent,
+    AuthComponent,
     HeaderComponent,
     RecipesComponent,
     RecipeListComponent,
@@ -33,7 +36,8 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     EmptyComponent,
     DropdownDirective,
     ShortenPipe,
-    FilterPipe
+    FilterPipe,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
