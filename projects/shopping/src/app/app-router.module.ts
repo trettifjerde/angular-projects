@@ -13,12 +13,13 @@ const appRoutes: Route[] = [
     { path: '', redirectTo: '/recipes', pathMatch: 'full' },
     { path: 'recipes', component: RecipesComponent, resolve: {recipes: RecipeListResolver}, children: [
         { path: '', pathMatch: 'full', component: EmptyComponent, data: { message: 'No recipe selected' }},
-        { path: 'new', component: RecipeFormComponent, canActivate: [AuthGuard] },
-        { path: ':id', component: RecipeDetailComponent},
-        { path: ':id/edit', component: RecipeFormComponent, canActivate: [AuthGuard] }
+        { path: 'new', component: RecipeFormComponent, resolve: {recipe: RecipeResolver}, canActivate: [AuthGuard] },
+        { path: ':id', component: RecipeDetailComponent, resolve: {recipe: RecipeResolver}},
+        { path: ':id/edit', component: RecipeFormComponent, resolve: {recipe: RecipeResolver}, canActivate: [AuthGuard] }
     ] },
     { path: 'list', component: ShoppingListComponent, canActivate: [AuthGuard] },
-    { path: 'login', component: AuthComponent }
+    { path: 'login', component: AuthComponent },
+    { path: '**', redirectTo: '/recipes'}
 ];
 @NgModule({
     imports: [RouterModule.forRoot(appRoutes)],

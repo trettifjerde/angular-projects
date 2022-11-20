@@ -1,4 +1,4 @@
-<h3>{{ id === null ? 'Add recipe' : 'Edit recipe'}}</h3>
+<h3>{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
 <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
     <div class="form-group">
         <div class="label-row">

@@ -1,15 +1,15 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, Subject, tap } from "rxjs";
-import { Recipe, RecipeDict } from "../recipes/recipe.model";
+import { catchError, map, Observable, of, Subject, tap } from "rxjs";
+import { Recipe, RecipeRaw } from "../recipes/recipe.model";
 import { Ingredient } from "../shared/ingredient.interface"; 
 import { ShoppingListService } from "./shopping-list.service";
 
 @Injectable({providedIn: 'root'})
 export class RecipesService {
-    private recipes: RecipeDict;
+    private recipes: Recipe[];
     private isFetched = false;
-    recipesUpdated = new Subject<RecipeDict>();
+    recipesUpdated = new Subject<Recipe[]>();
 
     constructor(private http: HttpClient, private listService: ShoppingListService) {}
 
@@ -17,71 +17,71 @@ export class RecipesService {
         return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/${path}.json`;
     }
 
-    fetchRecipes() : Observable<RecipeDict> | RecipeDict {
-        if (!this.isFetched) {
-            return this.http.get<RecipeDict>(this.makeUrl('recipes')).pipe(
-                map(recs => {
-                    if (recs === null) 
-                        return {} as RecipeDict;
-                    else 
-                        return recs;
-                }),
-                tap(
-                    recs => {
-                        this.isFetched = true;
-                        this.recipes = Object.entries(recs).reduce(
-                            (acc, [id, recipe]) => {
-                                acc[id] = new Recipe(recipe);
-                                return acc;
-                            }, {}
-                        )
-                    }
-                ),
-            )
-        }
-        else {
-            return this.recipes;
-        }
+    fetchRecipes() : Observable<Recipe[]> {
+        // Updates the global Recipe dict and returns a new portion of recipes
+        return this.http.get<{[id: string]: RecipeRaw}>(this.makeUrl('recipes')).pipe(
+            map(recipesDict => recipesDict ? Object.entries(recipesDict).reduce(
+                        (acc, [id, recipe]) => {
+                            acc.push(new Recipe({...recipe, id: id}));
+                            return acc;
+                        }, []) : []
+            ),
+            map(recipes => {
+                this.isFetched = true;
+                return this.updateRecipes(recipes);
+            })
+        )
     }
 
-    announceRecipesUpdate() {
-        this.recipesUpdated.next(this.getRecipes());
+    updateRecipes(newRecipes?: Recipe[], ...excludeRecipesIds: string[]) : Recipe[] {
+        let updatedRecipes = this.recipes ? [...this.recipes] : [];
+
+        if (excludeRecipesIds) 
+            updatedRecipes = updatedRecipes.filter(r => ! excludeRecipesIds.includes(r.id))
+        if (newRecipes) 
+            updatedRecipes.push(...newRecipes);
+
+        this.recipes = updatedRecipes;
+        this.recipesUpdated.next(updatedRecipes);
+
+        return updatedRecipes;
     }
 
-    getRecipes() {
-        return {...this.recipes};
+    getRecipes(): Observable<Recipe[]> {
+        return this.isFetched ? of([...this.recipes]) : this.fetchRecipes();
     }
 
-    getRecipe(id: string): Recipe {
-        return this.recipes[id];
+    getRecipe(id: string) : Observable<Recipe|null> {
+        return this.http.get<RecipeRaw>(this.makeUrl('recipes/' + id)).pipe(
+            map(r => new Recipe({...r, id: id}))
+        );
     }
 
-    addRecipe(recipe: Recipe) : Observable<string> {
+    loadMoreRecipes() {
+        this.fetchRecipes().subscribe();
+    }
+
+    addRecipe(recipe: RecipeRaw) : Observable<string> {
         return this.http.post<{name: string}>(this.makeUrl('recipes'), recipe).pipe(
             map(idObj => {
                 const id = idObj.name;
-                this.recipes[id] = new Recipe(recipe);
-                this.announceRecipesUpdate();
+                this.updateRecipes([new Recipe({...recipe, id: id})]);
                 return id;
             })
         )
     }
 
-    updateRecipe(id: string, recipe: Recipe) {
-        return this.http.put<Recipe>(this.makeUrl('recipes/' + id), recipe).pipe(
-            tap(res => {
-                this.recipes[id] = res;
-                this.announceRecipesUpdate();
-            })
+    updateRecipe(id: string, recipeRaw: RecipeRaw): Observable<Recipe> {
+        console.log('ID: ', id);
+        return this.http.put<RecipeRaw>(this.makeUrl('recipes/' + id), recipeRaw).pipe(
+            map(() => new Recipe({...recipeRaw, id: id})),
+            tap(recipe => this.updateRecipes([recipe], recipe.id))
         );
     }
 
     deleteRecipe(id: string) : Observable<null> {
         return this.http.delete<null>(this.makeUrl('recipes/' + id)).pipe(
-            tap(() => {
-                delete this.recipes[id];
-                this.announceRecipesUpdate();
-            })
+            tap(() => this.updateRecipes([], id))
         );
     }
 

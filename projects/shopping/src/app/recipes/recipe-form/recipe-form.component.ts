@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
 import { RecipesService } from "../../services/recipes.service";
 import { Ingredient } from "../../shared/ingredient.interface"; 
 import { Recipe } from "../recipe.model";
@@ -12,15 +11,15 @@ import { Recipe } from "../recipe.model";
     styleUrls: ['./recipe-form.component.css']
 })
 export class RecipeFormComponent {
-    id: string;
+    recipe: Recipe | null;
     recipeForm: FormGroup;
 
     constructor(private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit(): void {
-        this.route.params.subscribe(
-            params => {
-                this.id = params['id'] ? params['id'] : null;
+        this.route.data.subscribe(
+            data => {
+                this.recipe = data['recipe'];
                 this.createRecipeForm();
             }
         )
@@ -43,10 +42,9 @@ export class RecipeFormComponent {
         let description = '';
         let ingredients = [];
 
-        if (this.id !== null) {
-            const recipe = this.recipeService.getRecipe(this.id);
-            ({ name, description, imagePath } = recipe);
-            ingredients = recipe.ingredients.map(ing => this.createIngredientGroup(ing));
+        if (this.recipe) {
+            ({ name, description, imagePath } = this.recipe);
+            ingredients = this.recipe.ingredients.map(ing => this.createIngredientGroup(ing));
         }
         else
             ingredients.push(this.createIngredientGroup());
@@ -83,16 +81,14 @@ export class RecipeFormComponent {
     */
 
     onSubmit() {
-        if (this.id !== null) {
-            this.recipeService.updateRecipe(this.id, this.recipeForm.value).subscribe(
-                () => this.router.navigate(['/recipes', this.id])
+        if (this.recipe) {
+            this.recipeService.updateRecipe(this.recipe.id, this.recipeForm.value).subscribe(
+                () => this.router.navigate(['/recipes', this.recipe.id])
             );
         }
         else {
-            this.recipeService.addRecipe(this.recipeForm.value as Recipe).subscribe(
-                recipeI => {
-                    this.router.navigate(['/recipes', recipeI]);
-                }
+            this.recipeService.addRecipe(this.recipeForm.value).subscribe(
+                recipeId => this.router.navigate(['/recipes', recipeId])
             );
         }
     }
@@ -119,12 +115,7 @@ export class RecipeFormComponent {
     }
 
     cancelEdit() {
-        if (this.id === null) {
-            this.router.navigate(['/recipes']);
-        }
-        else {
-            this.router.navigate(['/recipes', this.id]);
-        }
+        this.recipe ? this.router.navigate(['/recipes', this.recipe.id]) : this.router.navigate(['/recipes']);
     }
 
 }

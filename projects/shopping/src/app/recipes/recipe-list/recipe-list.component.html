@@ -1,8 +1,8 @@
 <div class="r-c">
     <app-recipe-item 
-        *ngFor="let recipe of recipes|recipeFilter:filterString;" 
-        [id]="recipe.id" [recipe]="recipe.recipe"
+        *ngFor="let recipe of recipes|recipeFilter:filterString; let i = index" [key]="i" [recipe]="recipe"
     ></app-recipe-item >
+    <button type="button" class="btn btn-success" (click)="loadMoreRecipes()">Load more</button>
 </div>
 <div *ngIf="(recipes|recipeFilter:filterString).length === 0" class="empty">No recipes found</div>
 

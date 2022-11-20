@@ -5,9 +5,11 @@ export class Recipe {
     public description: string;
     public imagePath: string;
     public ingredients: Ingredient[];
+    public id: string;
 
-    constructor({name, description, imagePath, ingredients}) {
+    constructor({name, id, description, imagePath, ingredients}) {
         this.name = name;
+        this.id = id;
         this.description = description;
         this.imagePath = imagePath;
         this.ingredients = ingredients;
@@ -18,6 +20,9 @@ export class Recipe {
     }
 }
 
-export type RecipeDict = {
-    [id: string] : Recipe
+export interface RecipeRaw {
+    name: string;
+    description: string;
+    imagePath: string;
+    ingredients: Ingredient[];
 }

@@ -1,26 +1,35 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { Observable } from "rxjs";
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
+import { catchError, EMPTY, exhaustMap, map, Observable } from "rxjs";
 import { RecipesService } from "../services/recipes.service";
-import { Recipe, RecipeDict } from "./recipe.model";
+import { Recipe } from "./recipe.model";
 
 @Injectable({providedIn: 'root'})
-export class RecipeListResolver implements Resolve<RecipeDict> {
+export class RecipeListResolver implements Resolve<Recipe[]> {
     constructor(private recipeService: RecipesService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): RecipeDict | Observable<RecipeDict> | Promise<RecipeDict> {
-        return this.recipeService.fetchRecipes();
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Recipe[] | Observable<Recipe[]> | Promise<Recipe[]> {
+        return this.recipeService.getRecipes();
     }
 }
 
 @Injectable({providedIn: 'root'})
-export class RecipeResolver implements Resolve<[Recipe, string]> {
-    constructor(private recipeService: RecipesService) {}
+export class RecipeResolver implements Resolve<Recipe> {
+    constructor(private recipeService: RecipesService, private router: Router) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): [Recipe, string] | Observable<[Recipe, string]> | Promise<[Recipe, string]> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Recipe | Observable<Recipe> | Promise<Recipe> {
         const id = route.params['id'];
-        return [this.recipeService.getRecipe(route.params['id']), id];
+        if (id)
+            return this.recipeService.getRecipe(id).pipe(
+                catchError(() => {
+                    this.router.navigate(['/recipes']);
+                    return EMPTY;
+                })
+            );
+        else
+            return null;
     }
+    
 }
 
 
