@@ -1,28 +1,37 @@
-<div class="pb-2">
-    <img [src]="recipe.imagePath" [alt]="recipe.name" class="img-fluid">
-    <div class="detail-header mb-3">
-        <h1>{{ recipe.name }}</h1>
-        <div>
-            <div class="dropdown" appDropdown>
-                <button class="btn btn-success dropdown-toggle">
-                    Manage Recipe
-                </button>
-                <div class="dropdown-menu" [ngClass]="{'disabled': manageBtnDisabled}">
-                    <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
-                    <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
-                    <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>
+<div class="detail-cont" #cont>
+    <div class="detail-header">
+        <img [src]="recipe.imagePath" class="img-fluid">
+        <div class="detail-header-content">
+            <div class="detail-title">
+                <h1>{{ recipe.name }}</h1>
+                <div>
+                    <div *ngIf="user" class="dropdown" appDropdown>
+                        <button class="btn btn-outline-light dropdown-toggle">
+                            Manage Recipe
+                        </button>
+                        <div class="dropdown-menu" [ngClass]="{'disabled': manageBtnDisabled}">
+                            <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
+                            <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
+                            <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="detail-desc">
+                <div>{{ recipe.description }}</div>
             </div>
         </div>
     </div>
-    <div class="mb-3">
-        <h5>Description</h5>
-        <div>{{ recipe.description }}</div>
-    </div>
-    <div class="mb-3">
+    <div class="detail-block">
         <h5>Ingredients</h5>
         <ul class="list-group">
-            <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.name}} ({{ing.amount}})</li>
+            <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.amount}} {{ing.name}}</li>
         </ul>
+    </div>
+    <div class="detail-block">
+        <h5>Steps</h5>
+        <ol class="list-group list-group-flush list-group-numbered">
+            <li class="list-group-item" *ngFor="let step of recipe.steps">{{ step }}</li>
+        </ol>
     </div>
 </div>

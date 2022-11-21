@@ -1,23 +1,16 @@
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRouterModule } from './app-router.module';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { HeaderComponent } from './header/header.component';
-import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
-import { RecipeFormComponent } from './recipes/recipe-form/recipe-form.component';
-import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
-import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
-import { RecipesComponent } from './recipes/recipes.component';
+import { RecipesModule } from './recipes/recipes.module';
 import { DBInterseptorService } from './services/db-interseptor.service';
-import { DropdownDirective } from './shared/dropdown.directive';
-import { EmptyComponent } from './shared/empty/empty.component';
-import { FilterPipe } from './shared/filter.pipe';
+import { AlertComponent } from './shared/alert/alert.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
-import { ShortenPipe } from './shared/shorten.pipe';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 
@@ -26,25 +19,17 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     AppComponent,
     AuthComponent,
     HeaderComponent,
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeItemComponent,
-    RecipeDetailComponent,
-    RecipeFormComponent,
     ShoppingListComponent,
     ShoppingEditComponent,
-    EmptyComponent,
-    DropdownDirective,
-    ShortenPipe,
-    FilterPipe,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     AppRouterModule,
-    ReactiveFormsModule,
-    HttpClientModule
+    RecipesModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: DBInterseptorService, multi: true}

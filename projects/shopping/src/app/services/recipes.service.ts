@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, of, Subject, tap } from "rxjs";
+import { catchError, map, Observable, of, Subject, tap, throwError } from "rxjs";
 import { Recipe, RecipeRaw } from "../recipes/recipe.model";
 import { Ingredient } from "../shared/ingredient.interface"; 
 import { ShoppingListService } from "./shopping-list.service";
@@ -53,7 +53,10 @@ export class RecipesService {
 
     getRecipe(id: string) : Observable<Recipe|null> {
         return this.http.get<RecipeRaw>(this.makeUrl('recipes/' + id)).pipe(
-            map(r => new Recipe({...r, id: id}))
+            map(r => {
+                if (r === null) throw new Error('Recipe not found');
+                else return new Recipe({...r, id: id})
+            })
         );
     }
 

@@ -1,4 +1,4 @@
-<h3>{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
+<h3 #pageTop>{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
 <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
     <div class="form-group">
         <div class="label-row">
@@ -32,20 +32,42 @@
                 Ingredient info is required
             </p>
         </div>
-        <div class="row row-cols-auto align-items-center justify-content-between g-2" 
+        <div class="row align-items-center justify-content-between g-2 flex-nowrap" 
             *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+            <div class="col-2">
+                <input type="string" class="form-control" formControlName="amount" placeholder="10 g.">
+            </div>
             <div class="col-auto flex-grow-1">
-                <input type="text" class="form-control" formControlName="name">
+                <input type="text" class="form-control" formControlName="name" placeholder="Name">
             </div>
-            <div class="col-3">
-                <input type="number" class="form-control" formControlName="amount">
-            </div>
-            <div class="col-1">
+            <div class="col-auto">
                 <button class="btn btn-outline-danger" type="button" (click)="deleteIngredient(i)">X</button>
             </div>            
         </div>
         <button type="button" class="btn btn-outline-success mt-2" (click)="addIngredientGroup()">
             Add new ingredient
+        </button>
+    </div>
+    <hr>
+    <div class="form-group">
+        <div class="label-row">
+            <label>Steps</label>
+            <p class="form-text text-danger" *ngIf="steps.touched && !steps.valid">
+                Cooking instructions are required
+            </p>
+        </div>
+        <ol class="list-group list-group-flush list-group-numbered" formArrayName="steps">
+            <li class="list-group-item d-flex row align-items-center justify-content-between" *ngFor="let step of steps.controls; let i = index">
+                <div class="col-md-8 flex-grow-1">
+                    <textarea class="form-control" [formControlName]="i"></textarea>
+                </div>
+                <div class="col-auto g-0">
+                    <button class="btn btn-outline-danger" type="button" (click)="deleteStep(i)">X</button>      
+                </div>
+            </li>     
+        </ol>
+        <button type="button" class="btn btn-outline-success" (click)="addStepControl()">
+            Add new step
         </button>
     </div>
     <hr>

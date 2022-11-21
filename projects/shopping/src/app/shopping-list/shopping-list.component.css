@@ -4,19 +4,40 @@
     justify-content: space-between;
     height: 3rem;
     opacity: 0.5;
+    gap: 1rem;
 }
+
+.ingredient-text {
+    overflow: auto;
+    white-space: nowrap;
+}
+
 .btn-group-sm {
-    display: none;
+    white-space: nowrap;
 }
 
 .btn-group-sm > * {
-    margin: 0 0.2rem;
+    margin: 0 0.25rem;
 }
 
 .interactive {
     opacity: 1;
 }
+@media (max-width: 700px) {
+    .list-group-item {
+        padding-inline: 0.5rem;
+    }
+}
 
-.ingredient.interactive:hover .btn-group-sm {
-    display: block;
+@media (pointer: fine) {
+    .btn-group-sm {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity .2s ease-in-out, visibility .2s ease-in-out;
+    }
+
+    .ingredient.interactive:hover .btn-group-sm {
+        visibility: visible;
+        opacity: 1;
+    }
 }

@@ -2,11 +2,11 @@
     <div class="col">
         <form (ngSubmit)="saveIngredient()" #form="ngForm">
             <div class="row mb-2">
-                <div class="col-5 form-group">
+                <div class="col-8 form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" class="form-control" ngModel required>
                 </div>
-                <div class="col-2 form-group">
+                <div class="col-4 form-group">
                     <label for="amount">Amount</label>
                     <input type="number" id="amount" name="amount" class="form-control" ngModel required>
                 </div>
@@ -16,7 +16,7 @@
                     <button type="submit" class="btn-success btn" [disabled]="!form.valid">{{ i === null ? 'Add' : 'Edit'}}</button>
                 </div>
                 <div class="col">
-                    <button type="button" class="btn-primary btn" (click)="clearForm()">Clear</button>
+                    <button type="button" class="btn btn-outline-secondary" (click)="clearForm()">Clear</button>
                 </div>
             </div>
         </form>

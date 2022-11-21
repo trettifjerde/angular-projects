@@ -1,15 +1,15 @@
-.recipe-form .form-control {
-    margin: 0.3rem 0;
+h3 {
+    margin-block: 1.5rem;
 }
 
-.recipe-form textarea {
-    min-height: 200px;
+.recipe-form .form-control {
+    margin: 0.3rem 0;
 }
 
 hr {
     border: none;
     height: 1px;
-    background-image: linear-gradient(to left, #257d54bb, #198754, #257d54bb);
+    background-image: linear-gradient(to left, #257d54bb, var(--primary), #257d54bb);
     margin: 1.5rem 0;
 }
 
@@ -21,6 +21,15 @@ hr {
 
 .label-row .text-danger { margin: 0 }
 
+label { font-weight: 600;}
+
 .form-control.ng-invalid.ng-touched {
     border-color: red;
+}
+
+@media (max-width: 600px) {
+    .list-group-item .flex-grow-1 {
+        order: 1;
+        padding-inline: 0;
+    }
 }

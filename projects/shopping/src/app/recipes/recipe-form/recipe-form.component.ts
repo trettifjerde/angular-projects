@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RecipesService } from "../../services/recipes.service";
@@ -11,6 +11,7 @@ import { Recipe } from "../recipe.model";
     styleUrls: ['./recipe-form.component.css']
 })
 export class RecipeFormComponent {
+    @ViewChild('pageTop') pageTop: ElementRef;
     recipe: Recipe | null;
     recipeForm: FormGroup;
 
@@ -25,6 +26,10 @@ export class RecipeFormComponent {
         )
     }
 
+    ngAfterViewInit() {
+        this.pageTop.nativeElement.scrollIntoView(true);
+    }
+
     get name() {
         return this.recipeForm.get('name');
     }
@@ -36,24 +41,33 @@ export class RecipeFormComponent {
         return <FormArray>this.recipeForm.get('ingredients');
     }
 
+    get steps() {
+        return <FormArray>this.recipeForm.get('steps');
+    }
+
     createRecipeForm() {
         let name = '';
         let imagePath = '';
         let description = '';
         let ingredients = [];
+        let steps = [];
 
         if (this.recipe) {
             ({ name, description, imagePath } = this.recipe);
             ingredients = this.recipe.ingredients.map(ing => this.createIngredientGroup(ing));
+            steps = this.recipe.steps.map(step => this.createStep(step));
         }
-        else
+        else {
             ingredients.push(this.createIngredientGroup());
+            steps.push(this.createStep());
+        }
 
         this.recipeForm = new FormGroup({
             'name': new FormControl(name, [Validators.required]),
             'description': new FormControl(description, [Validators.required]),
             'imagePath': new FormControl(imagePath),
             'ingredients': new FormArray(ingredients, [Validators.required]),
+            'steps': new FormArray(steps, [Validators.required])
         });
     }
 
@@ -93,9 +107,13 @@ export class RecipeFormComponent {
         }
     }
 
+    createStep(step: string = '') : FormControl {
+        return new FormControl(step, [Validators.required, Validators.maxLength(1000)]);
+    }
+
     createIngredientGroup(ing?: Ingredient): FormGroup {
         let name = '';
-        let amount = 0;
+        let amount = '';
 
         if (ing) ({ name, amount } = ing);
 
@@ -106,12 +124,19 @@ export class RecipeFormComponent {
     }
 
     deleteIngredient(i: number) {
-        const ingredients = (<FormArray>this.recipeForm.get('ingredients'))
-        ingredients.removeAt(i);
+        (<FormArray>this.recipeForm.get('ingredients')).removeAt(i);
+    }
+
+    deleteStep(i: number ){
+        (<FormArray>this.recipeForm.get('steps')).removeAt(i);
     }
 
     addIngredientGroup() {
         this.ingredients.push(this.createIngredientGroup());
+    }
+
+    addStepControl() {
+        this.steps.push(this.createStep());
     }
 
     cancelEdit() {

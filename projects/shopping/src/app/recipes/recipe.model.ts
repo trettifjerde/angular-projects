@@ -5,14 +5,16 @@ export class Recipe {
     public description: string;
     public imagePath: string;
     public ingredients: Ingredient[];
+    public steps: string[];
     public id: string;
 
-    constructor({name, id, description, imagePath, ingredients}) {
+    constructor({name, id, description, imagePath, ingredients, steps}) {
         this.name = name;
         this.id = id;
         this.description = description;
         this.imagePath = imagePath;
         this.ingredients = ingredients;
+        this.steps = steps;
     }
 
     get imgSrc() {
@@ -25,4 +27,5 @@ export interface RecipeRaw {
     description: string;
     imagePath: string;
     ingredients: Ingredient[];
+    steps: string[];
 }

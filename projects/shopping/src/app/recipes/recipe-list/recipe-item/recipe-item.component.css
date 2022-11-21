@@ -9,8 +9,16 @@
 
 .card.active, .card.active:hover {
     background-color: #40e96f17;
-    border-color: #198754;
-    color: #198754;
+    border-color: var(--primary);
+    color: var(--primary);
     cursor: default;
+}
+
+.card-text {
+    font-size: 0.8rem;
+}
+
+.card img {
+    border-radius: 3px;
 }
 

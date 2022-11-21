@@ -1,3 +1,18 @@
+:root {
+    --primary: #198754 !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 5px;
+    border-radius: 5px;
+    background-color: rgba(65, 111, 77, 0.4);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 5px;
+}
 .dropdown-menu {
     min-width: unset;
 }
@@ -17,4 +32,9 @@
     justify-content: center;
     height: 100%;
     max-height: 100vh;
+}
+
+.btn {
+    white-space: nowrap;
+    min-width: 2rem;
 }

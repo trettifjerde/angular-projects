@@ -1,5 +1,8 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { AuthService } from "../../auth/auth.service";
+import { User } from "../../auth/user.model";
 import { RecipesService } from "../../services/recipes.service";
 import { Recipe } from "../recipe.model";
 
@@ -12,16 +15,34 @@ export class RecipeDetailComponent implements OnInit {
     recipe: Recipe;
     id: string;
     manageBtnDisabled = false;
+    authSubscription: Subscription;
+    user: User = null;
 
-    constructor(private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
+    constructor(private authService: AuthService, private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
+
+    @ViewChild('cont') cont: ElementRef;
 
     ngOnInit(): void {
+        this.authSubscription = this.authService.user.subscribe(
+            user => this.user = user
+        );
         this.route.params.subscribe(
             params => this.id = params['id']
         );
         this.route.data.subscribe(
-            data => this.recipe = data['recipe']
+            data => {
+                this.recipe = data['recipe'];
+                this.cont.nativeElement.scrollIntoView();
+            }
         )
+    }
+
+    ngAfterViewInif() {
+        this.cont.nativeElement.scrollIntoView(true);
+    }
+
+    ngOnDestroy() {
+        this.authSubscription.unsubscribe();
     }
 
     toShoppingList() {

@@ -1,10 +1,10 @@
-<div class="card p-2 mb-2" [routerLink]="[recipe.id]" routerLinkActive="active">
-    <div class="row g-0">
-        <div class="card-body col-7">
+<div class="card p-2" [routerLink]="[recipe.id]" routerLinkActive="active">
+    <div class="row flex-nowrap align-items-center">
+        <div class="card-body col-auto flex-grow-1">
             <h4 class="card-title">{{ recipe.name }}</h4>
-            <div class="card-text">{{ recipe.description | shorten:30 }}</div>
+            <div class="card-text">{{ recipe.description | shorten:100}}</div>
         </div>
-        <div class="col-5">
+        <div class="col-auto justify-content-center">
             <img [src]="recipe.imagePath" class="img-fluid" style="max-height: 150px;">
         </div>
     </div>

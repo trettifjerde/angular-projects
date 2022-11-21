@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { ShoppingListService } from "../../services/shopping-list.service";
-import { IngredientRaw, Ingredient } from "../../shared/ingredient.interface";
 
 @Component({
     selector: 'app-shopping-edit',

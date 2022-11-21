@@ -22,7 +22,7 @@ export class RecipeResolver implements Resolve<Recipe> {
         if (id)
             return this.recipeService.getRecipe(id).pipe(
                 catchError(() => {
-                    this.router.navigate(['/recipes']);
+                    this.router.navigate(['']);
                     return EMPTY;
                 })
             );

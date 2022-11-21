@@ -4,10 +4,10 @@
         <hr>
         <div class="list-group" *ngIf="isFetched" #ingredientsCont>
             <div class="list-group-item ingredient interactive" *ngFor="let ingred of ingredients; let i = index">
-                <div>{{ ingred.name }} ({{ ingred.amount}})</div>
+                <div class="ingredient-text">{{ ingred.name }} ({{ ingred.amount}})</div>
                 <div class="btn-group-sm">
-                    <button class="btn btn-warning" (click)="editItem(i)">Edit</button>
-                    <button class="btn btn-danger" (click)="deleteItem(i)">Delete</button>
+                    <button class="btn btn-outline-warning" (click)="editItem(i)">Edit</button>
+                    <button class="btn btn-outline-danger" (click)="deleteItem(i)">Delete</button>
                 </div>
             </div>
         </div>
