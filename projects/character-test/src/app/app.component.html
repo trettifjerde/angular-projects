@@ -1,0 +1,29 @@
+<main>
+  <section *ngIf="!result && !inProgress">
+    <div class="start-frame">
+      <div>Кто ты из субличностей Фантомки?</div>
+      <div>
+        <button class="btn" type="button" (click)="startTest()">Начать тест</button>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="!result && inProgress">
+    <div class="poll-frame">
+      <div class="question" [textContent]="currentQuestion.question"></div>
+      <div class="option" *ngFor="let option of currentQuestion.options; let i = index" 
+        [textContent]="option" (click)="select(i)"></div>
+      <button [ngClass]="{invisible: answers.length === 0}" type="button" class="btn btn-secondary" (click)="unselect()">Назад</button>
+    </div>
+  </section>
+
+  <section *ngIf="result">
+    <div class="spinner"></div>
+    <div class="answer-frame">
+      <p>{{result.phrase}}</p>
+      <div class="img-cont"><img [src]="result.imagePath"></div>
+      <div class="desc">{{ result.description}}</div>
+      <div><button class="btn" type="button" (click)="initTest()">Начать заново</button></div>
+    </div>
+  </section>
+</main>

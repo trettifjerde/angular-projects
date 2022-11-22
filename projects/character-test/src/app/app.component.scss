@@ -1,0 +1,108 @@
+@import '../dev-static/mixins';
+main {
+    width: 100%;
+    min-height: 100vh;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section {
+    max-height: 100%;
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border: 1px solid $secondary-color;
+    border-radius: 5px;
+    box-shadow: 2px 2px 7px $primary-color;
+    overflow: auto;
+    padding-inline: 3rem;
+
+    @include mobile {
+        padding-inline: 2rem;
+    }
+}
+
+.start-frame {
+    display: flex;
+    flex-direction: column;
+    min-height: 40vh;
+    justify-content: space-evenly;
+    padding-block: 3rem;
+
+    @include mobile {
+        padding-block: 2rem;
+    }
+
+    div { font-size: 1.7rem; text-align: center;}
+}
+
+.poll-frame {
+    min-height: 60vh;
+    max-height: 100%;
+    padding-block: 5rem 8rem;
+    position: relative;
+
+    @include mobile {
+        padding-top: 3rem; 
+    }
+
+    .question {
+        font-size: 1.25rem;
+        padding-bottom: 3rem;
+    }
+
+    .option {
+        border-top: 1px dashed gray;
+        padding: 0.5rem 2rem;
+        cursor: pointer;
+        transition: color .2s ease-in-out, background-color .2s ease-in-out;
+
+        @include pointer {
+            &:hover {
+                background-color: $secondary-color;
+                color: $primary-color;
+            }
+        }
+    }
+
+    .btn { position: absolute; bottom: 2.5rem; }
+}
+
+.answer-frame {
+    padding-block: 3rem;
+    text-align: center;
+
+    p { 
+        font-size: 1.5rem; 
+        font-weight: 600;
+    }
+    .img-cont {
+        padding-block: 1.5rem;
+
+        img {
+            max-width: 100%;
+            max-height: 60vh;
+        }
+    }
+    .desc {
+        padding-inline: 1rem;
+        line-height: 1.7;
+        text-align: left;
+    }
+
+    .btn {
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .poll-frame .option {
+        padding-inline: 0;
+    }
+
+    .answer-frame .img-cont img {
+        max-height: 70vh;
+    }
+}
