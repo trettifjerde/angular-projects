@@ -9,10 +9,12 @@
 </div>
 <div class="row recipes">
     <div class="col-md-5 side">
-        <app-recipe-list [filterString]="filterString"></app-recipe-list>
+        <div class="side-content">
+            <app-recipe-list [filterString]="filterString"></app-recipe-list>
+        </div>
     </div>
     <div class="col-md-7 main">
-        <div class="router-cont">
+        <div class="main-content">
             <router-outlet></router-outlet>
         </div>
     </div>

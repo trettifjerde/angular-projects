@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../auth/auth.service";
@@ -20,7 +20,7 @@ export class RecipeDetailComponent implements OnInit {
 
     constructor(private authService: AuthService, private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
 
-    @ViewChild('cont') cont: ElementRef;
+    @ViewChild('cont', {static: true}) cont: ElementRef;
 
     ngOnInit(): void {
         this.authSubscription = this.authService.user.subscribe(
@@ -32,13 +32,9 @@ export class RecipeDetailComponent implements OnInit {
         this.route.data.subscribe(
             data => {
                 this.recipe = data['recipe'];
-                this.cont.nativeElement.scrollIntoView();
+                this.cont.nativeElement.scrollIntoView(true);
             }
         )
-    }
-
-    ngAfterViewInif() {
-        this.cont.nativeElement.scrollIntoView(true);
     }
 
     ngOnDestroy() {

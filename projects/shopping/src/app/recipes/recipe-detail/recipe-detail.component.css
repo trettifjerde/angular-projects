@@ -43,6 +43,10 @@
     display: none !important;
 }
 
+h5 {
+    margin-bottom: 1.5rem;
+}
+
 @media (max-width: 700px) {
 
     .detail-header-content {
@@ -51,8 +55,6 @@
     }
 
     .detail-title {
-        flex-direction: column;
-        gap: 0;
-        align-items: flex-end;
+        display: block;
     }
 }

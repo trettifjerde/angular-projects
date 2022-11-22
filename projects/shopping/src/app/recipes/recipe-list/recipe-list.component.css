@@ -3,3 +3,9 @@
     flex-direction: column-reverse;
     gap: 0.5rem;
 }
+
+@media (max-width: 700px) {
+    .btn.btn-success {
+        margin-top: 0.5rem;
+    }
+}
