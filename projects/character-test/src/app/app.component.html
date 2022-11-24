@@ -1,29 +1,70 @@
 <main>
-  <section *ngIf="!result && !inProgress">
+  <section *ngIf="!results && currentI === null">
     <div class="start-frame">
       <div>Кто ты из субличностей Фантомки?</div>
       <div>
-        <button class="btn" type="button" (click)="startTest()">Начать тест</button>
+          <button class="btn" type="button" (click)="startTest()">Начать тест</button>
       </div>
     </div>
   </section>
 
-  <section *ngIf="!result && inProgress">
-    <div class="poll-frame">
-      <div class="question" [textContent]="currentQuestion.question"></div>
-      <div class="option" *ngFor="let option of currentQuestion.options; let i = index" 
-        [textContent]="option" (click)="select(i)"></div>
-      <button [ngClass]="{invisible: answers.length === 0}" type="button" class="btn btn-secondary" (click)="unselect()">Назад</button>
+  <section *ngIf="!results && currentI !== null">
+    <div class="poll-frame" [@qState]="qState" (@qState.done)="onAnimationEnd($event)">
+      <div>
+        <div class="q-number">Вопрос {{currentI + 1}}/{{questionsLength}}</div>
+        <div class="q-text">{{currentQuestion.question}}</div>
+        <div class="option" *ngFor="let option of currentQuestion.options" 
+            [textContent]="option.name" (click)="select(option.id)"></div>
+      </div>
+      <button [ngClass]="{invisible: currentI === 0}" type="button" class="btn btn-secondary" (click)="unselect()">Назад</button>
     </div>
   </section>
 
-  <section *ngIf="result">
-    <div class="spinner"></div>
-    <div class="answer-frame">
-      <p>{{result.phrase}}</p>
-      <div class="img-cont"><img [src]="result.imagePath"></div>
-      <div class="desc">{{ result.description}}</div>
-      <div><button class="btn" type="button" (click)="initTest()">Начать заново</button></div>
+  <section *ngIf="loadingText">
+    <div class="spinner">
+        <div [textContent]="loadingText"></div>
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
+</section>
+
+<section *ngIf="results && !result && !loadingText && !lastQuestionVisible">
+  <div class="start-frame">
+    <div>Хм... Да кто же вы такой...</div>
+    <p>Вы готовы ответить на решающий вопрос?</p>
+    <div>
+        <button class="btn" type="button" (click)="startLastQuestion()">Поехали!</button>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="lastQuestionVisible">
+  <div class="poll-frame">
+    <div>
+      <div class="q-number">Финальный вопрос</div>
+      <div class="q-text">{{currentQuestion.question}}</div>
+      <div class="option" *ngFor="let option of currentQuestion.options|filterOptions:results;" 
+          [textContent]="option.name" (click)="setFinalResult(option.id)"></div>
+    </div>
+  </div>
+</section>
+
+  <section *ngIf="result" [ngClass]="{none: loadingText}">
+      <div class="answer-frame">
+          <p class="catch-phrase">{{result.phrase}}</p>
+          <div>
+            <div class="img-cont"><img [src]="result.imagePath"></div>
+            <div class="desc">{{ result.description}}</div>
+            <div><button class="btn" type="button" (click)="initTest()">Начать заново</button></div>
+          </div>
+      </div>
   </section>
 </main>

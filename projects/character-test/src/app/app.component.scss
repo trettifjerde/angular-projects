@@ -1,108 +1,88 @@
 @import '../dev-static/mixins';
-main {
-    width: 100%;
-    min-height: 100vh;
-    padding: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-section {
-    max-height: 100%;
-    width: 100%;
-    max-width: 600px;
-    background-color: white;
-    border: 1px solid $secondary-color;
-    border-radius: 5px;
-    box-shadow: 2px 2px 7px $primary-color;
-    overflow: auto;
-    padding-inline: 3rem;
-
-    @include mobile {
-        padding-inline: 2rem;
-    }
-}
-
-.start-frame {
-    display: flex;
-    flex-direction: column;
-    min-height: 40vh;
-    justify-content: space-evenly;
-    padding-block: 3rem;
-
-    @include mobile {
-        padding-block: 2rem;
-    }
-
-    div { font-size: 1.7rem; text-align: center;}
-}
-
-.poll-frame {
-    min-height: 60vh;
-    max-height: 100%;
-    padding-block: 5rem 8rem;
+.lds-roller {
+    display: inline-block;
     position: relative;
-
-    @include mobile {
-        padding-top: 3rem; 
+    width: 80px;
+    height: 80px;
+  }
+  .lds-roller div {
+    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    transform-origin: 40px 40px;
+  }
+  .lds-roller div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 2px solid $primary-color;
+    background: $secondary-color;
+    margin: -4px 0 0 -4px;
+  }
+  .lds-roller div:nth-child(1) {
+    animation-delay: -0.036s;
+  }
+  .lds-roller div:nth-child(1):after {
+    top: 63px;
+    left: 63px;
+  }
+  .lds-roller div:nth-child(2) {
+    animation-delay: -0.072s;
+  }
+  .lds-roller div:nth-child(2):after {
+    top: 68px;
+    left: 56px;
+  }
+  .lds-roller div:nth-child(3) {
+    animation-delay: -0.108s;
+  }
+  .lds-roller div:nth-child(3):after {
+    top: 71px;
+    left: 48px;
+  }
+  .lds-roller div:nth-child(4) {
+    animation-delay: -0.144s;
+  }
+  .lds-roller div:nth-child(4):after {
+    top: 72px;
+    left: 40px;
+  }
+  .lds-roller div:nth-child(5) {
+    animation-delay: -0.18s;
+  }
+  .lds-roller div:nth-child(5):after {
+    top: 71px;
+    left: 32px;
+  }
+  .lds-roller div:nth-child(6) {
+    animation-delay: -0.216s;
+  }
+  .lds-roller div:nth-child(6):after {
+    top: 68px;
+    left: 24px;
+  }
+  .lds-roller div:nth-child(7) {
+    animation-delay: -0.252s;
+  }
+  .lds-roller div:nth-child(7):after {
+    top: 63px;
+    left: 17px;
+  }
+  .lds-roller div:nth-child(8) {
+    animation-delay: -0.288s;
+  }
+  .lds-roller div:nth-child(8):after {
+    top: 56px;
+    left: 12px;
+  }
+  @keyframes lds-roller {
+    0% {
+      transform: rotate(0deg);
     }
-
-    .question {
-        font-size: 1.25rem;
-        padding-bottom: 3rem;
+    100% {
+      transform: rotate(360deg);
     }
-
-    .option {
-        border-top: 1px dashed gray;
-        padding: 0.5rem 2rem;
-        cursor: pointer;
-        transition: color .2s ease-in-out, background-color .2s ease-in-out;
-
-        @include pointer {
-            &:hover {
-                background-color: $secondary-color;
-                color: $primary-color;
-            }
-        }
-    }
-
-    .btn { position: absolute; bottom: 2.5rem; }
-}
-
-.answer-frame {
-    padding-block: 3rem;
-    text-align: center;
-
-    p { 
-        font-size: 1.5rem; 
-        font-weight: 600;
-    }
-    .img-cont {
-        padding-block: 1.5rem;
-
-        img {
-            max-width: 100%;
-            max-height: 60vh;
-        }
-    }
-    .desc {
-        padding-inline: 1rem;
-        line-height: 1.7;
-        text-align: left;
-    }
-
-    .btn {
-        margin-top: 1.5rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .poll-frame .option {
-        padding-inline: 0;
-    }
-
-    .answer-frame .img-cont img {
-        max-height: 70vh;
-    }
-}
+  }
+  

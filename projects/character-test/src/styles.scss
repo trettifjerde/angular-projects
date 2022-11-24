@@ -69,3 +69,121 @@ body {
 .invisible {
     visibility: hidden;
 }
+
+.none {display: none;}
+
+@keyframes fade-in {
+    0% { opacity: 0; transform: scale(0.9);}
+    40% { opacity: 1; transform: scale(1.1);}
+    100% { opacity: 1; transform: scale(1);}
+}
+
+main {
+    width: 100%;
+    min-height: 100vh;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+section {
+    animation: fade-in .5s ease-in-out forwards;
+    max-height: 100%;
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border: 1px solid $secondary-color;
+    border-radius: 5px;
+    box-shadow: 2px 2px 7px $primary-color;
+    overflow: hidden;
+    padding-inline: 3rem;
+
+    @include mobile {
+        padding-inline: 2rem;
+    }
+}
+
+.start-frame, .spinner {
+    display: flex;
+    flex-direction: column;
+    min-height: 40vh;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    padding-block: 3rem;
+    font-size: 1.7rem;
+
+    p { font-size: 1rem;}
+}
+
+.poll-frame {
+    min-height: 85vh;
+    padding-block: 4rem 8rem;
+
+    .q-number { font-size: 0.75rem; padding-bottom: 1rem;}
+
+    .q-text {
+        font-size: 1.2rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .option {
+        font-size: 0.9rem;
+        border-top: 1px dashed gray;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: color .2s ease-in-out, background-color .2s ease-in-out;
+
+        &::before {
+            content: '★';
+            padding-right: 1rem;
+        }
+
+        @include mobile {
+            padding-inline: 0;
+        }
+
+        @include pointer {
+            &:hover {
+                background-color: $secondary-color;
+                color: $primary-color;
+            }
+        }
+    }
+
+    .btn { position: absolute; bottom: 2.5rem; }
+}
+
+.answer-frame {
+    padding-block: 3rem;
+    text-align: center;
+
+    .catch-phrase { 
+        font-size: 1.5rem; 
+        font-weight: 600;
+    }
+    .img-cont {
+        padding-block: 1.5rem;
+
+        img {
+            max-width: 100%;
+            max-height: 60vh;
+
+            @include mobile {
+                max-height: 70vh;
+            }
+        }
+    }
+    .desc {
+        padding-inline: 1rem;
+        line-height: 1.7;
+        text-align: left;
+    }
+
+    .btn {
+        margin-top: 1.5rem;
+    }
+}
