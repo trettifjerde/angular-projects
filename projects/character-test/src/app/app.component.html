@@ -13,8 +13,8 @@
       <div>
         <div class="q-number">Вопрос {{currentI + 1}}/{{questionsLength}}</div>
         <div class="q-text">{{currentQuestion.question}}</div>
-        <div class="option" *ngFor="let option of currentQuestion.options" 
-            [textContent]="option.name" (click)="select(option.id)"></div>
+        <button type="button" class="btn option" *ngFor="let option of currentQuestion.options" 
+            [textContent]="option.name" (click)="select(option.id)"></button>
       </div>
       <button [ngClass]="{invisible: currentI === 0}" type="button" class="btn btn-secondary" (click)="unselect()">Назад</button>
     </div>
@@ -57,14 +57,20 @@
   </div>
 </section>
 
-  <section *ngIf="result" [ngClass]="{none: loadingText}">
-      <div class="answer-frame">
-          <p class="catch-phrase">{{result.phrase}}</p>
-          <div>
-            <div class="img-cont"><img [src]="result.imagePath"></div>
-            <div class="desc">{{ result.description}}</div>
-            <div><button class="btn" type="button" (click)="initTest()">Начать заново</button></div>
-          </div>
-      </div>
-  </section>
+  <div *ngIf="result" [ngClass]="{none: loadingText}">
+
+    <section class="catch-phrase" [@resultAnimation]="!loadingText ? 'in' : ''" 
+      (@resultAnimation.done)="onCatchPhraseDone($event)">{{ result.phrase }}</section>
+
+    <section [ngClass]="{none: !resultAnimationDone}">
+        <div class="answer-frame">
+            <p class="catch-phrase">{{result.phrase}}</p>
+            <div>
+              <div class="img-cont"><img [src]="result.imagePath"></div>
+              <div class="desc">{{ result.description}}</div>
+              <div><button class="btn" type="button" (click)="initTest()">Начать заново</button></div>
+            </div>
+        </div>
+    </section>
+  </div>
 </main>

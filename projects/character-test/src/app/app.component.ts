@@ -1,4 +1,4 @@
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
+import { trigger, state, style, transition, animate, keyframes, query, stagger, sequence, animateChild, AnimationEvent } from '@angular/animations';
 import { Component } from '@angular/core';
 import { pollQuestions, pollResults } from './data';
 import { PollResult, Question } from './interfaces';
@@ -58,7 +58,21 @@ import { PollResult, Question } from './interfaces';
           transform: 'translate(0)',
         })
       ]))),
-    ])
+    ]),
+    trigger('resultAnimation', [
+      transition('* => in', [
+          style({display: 'block'}),
+          animate(5000, keyframes([
+            style({opacity: 0, visibility: 'visible', transform: 'scale(0.5)', offset: 0}),
+            style({opacity: 1, visibility: 'visible', transform: 'scale(1.3)', offset: 0.05}),
+            style({opacity: 1, visibility: 'visible', transform: 'scale(1)', offset: 0.1}),
+            style({opacity: 1, visibility: 'visible', transform: 'scale(0.9)', offset: 0.4}),
+            style({opacity: 1, visibility: 'visible', transform: 'scale(1)', offset: 0.65}),
+            style({opacity: 1, visibility: 'visible', transform: 'scale(0.9)', offset: 0.9}),
+            style({opacity: 0, visibility: 'visible', transform: 'scale(0) translateY(-500px)', offset: 1}),
+            ])),
+        ])
+      ])
   ]
 })
 export class AppComponent {
@@ -75,6 +89,7 @@ export class AppComponent {
   results: number[];
   loadingText: string;
   lastQuestionVisible = false;
+  resultAnimationDone = false;
 
   get currentQuestion(): Question {
     return this.questions[this.currentI];
@@ -98,10 +113,11 @@ export class AppComponent {
     this.answers = [];
     this.currentI = null;
     this.qState = 'current';
-    this.result = pollResults[1];
-    this.results = [];
+    this.result = null;
+    this.results = null;
     this.loadingText = '';
     this.lastQuestionVisible = false;
+    this.resultAnimationDone = false;
   }
 
   startTest() {
@@ -118,7 +134,7 @@ export class AppComponent {
     this.qState = 'next';
   }
 
-  onAnimationEnd(data: any) {
+  onAnimationEnd(data: AnimationEvent) {
     if (data.fromState === 'current') {
       if (data.toState === 'next') {
         this.setNextQuestion(1);
@@ -142,8 +158,6 @@ export class AppComponent {
     this.loadingText = 'Размышляем...';
     setTimeout(() => this.loadingText = '', 2000);
 
-    console.log(this.answers);
-
     const scores = this.answers.reduce((acc, a) => {
         if (a in acc)
           acc[a] += 1;
@@ -152,7 +166,6 @@ export class AppComponent {
         return acc
       }, {} as {[k: string]: number}
     );
-    console.log(scores);
 
     let highest = 0;
     let results = [];
@@ -165,7 +178,6 @@ export class AppComponent {
         results.push(id)
       }
     })
-    console.log(results);
 
     this.results = results.map(r => (+r));
 
@@ -183,6 +195,11 @@ export class AppComponent {
     setTimeout(() => this.loadingText = '', 1500);
 
     this.result = pollResults[id];
+  }
+
+  onCatchPhraseDone(event: AnimationEvent) {
+    if (event.toState === 'in')
+      this.resultAnimationDone = true;
   }
 
 }

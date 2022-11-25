@@ -3,9 +3,10 @@ $secondary-color: #000;
 $highlight-color: #f9ff93;
 $input-border-radius: 3px;
 $font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-$font-size-std: 1rem;
-$btn-i-xs: 2rem;
-$input-padding-h: 0.5rem;
+$rem: 16px;
+$font-size-std: $rem;
+$btn-i-xs: $rem * 2;
+$input-padding-h: $rem * 0.5;
 
 %borders {
     border: 1px solid $primary-color;
