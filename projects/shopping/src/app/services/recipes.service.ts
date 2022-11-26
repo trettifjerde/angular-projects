@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, of, Subject, tap, throwError } from "rxjs";
+import { map, Observable, of, Subject, tap } from "rxjs";
 import { Recipe, RecipeRaw } from "../recipes/recipe.model";
-import { Ingredient } from "../shared/ingredient.interface"; 
+import { IngredientRaw } from "../shared/ingredient.interface"; 
 import { ShoppingListService } from "./shopping-list.service";
 
 @Injectable({providedIn: 'root'})
@@ -74,8 +74,12 @@ export class RecipesService {
         )
     }
 
-    updateRecipe(id: string, recipeRaw: RecipeRaw): Observable<Recipe> {
-        console.log('ID: ', id);
+    updateRecipe(id: string, recipeRaw: any): Observable<Recipe> {
+        recipeRaw.ingredients = recipeRaw.ingredients.map(ing => {
+            const modified = {...ing};
+            modified.amount = +modified.amount;
+            return modified;
+        })
         return this.http.put<RecipeRaw>(this.makeUrl('recipes/' + id), recipeRaw).pipe(
             map(() => new Recipe({...recipeRaw, id: id})),
             tap(recipe => this.updateRecipes([recipe], recipe.id))
@@ -88,7 +92,7 @@ export class RecipesService {
         );
     }
 
-    toShoppingList(ingredients: Ingredient[]) {
+    toShoppingList(ingredients: IngredientRaw[]) {
         this.listService.addIngredients(ingredients);
     }
 }

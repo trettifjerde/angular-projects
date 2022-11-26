@@ -18,7 +18,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
         this.edittingSubscription = this.listService.ingredientBeingEditted.subscribe(
             ([i, ing]) => {
                 this.i = i;
-                this.form.setValue({name: ing.name, amount: ing.amount});
+                this.form.setValue({name: ing.name, amount: ing.amount, unit: ing.unit});
             }
         )
     }

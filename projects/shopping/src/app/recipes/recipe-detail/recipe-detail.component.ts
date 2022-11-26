@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../auth/auth.service";
@@ -50,7 +50,7 @@ export class RecipeDetailComponent implements OnInit {
         if (confirm('Delete recipe?')) {
             this.manageBtnDisabled = true;
             this.recipeService.deleteRecipe(this.id).subscribe(
-                () => this.router.navigate(['/recipes'])
+                () => this.router.navigate(['../'], {relativeTo: this.route})
             );
             
         }

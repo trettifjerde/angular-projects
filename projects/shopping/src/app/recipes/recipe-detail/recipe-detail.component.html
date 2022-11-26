@@ -2,14 +2,14 @@
     <div class="detail-header">
         <img [src]="recipe.imagePath" class="img-fluid">
         <div class="detail-header-content">
-            <div class="detail-title">
-                <h1>{{ recipe.name }}</h1>
-                <div>
+            <div class="row g-2 justify-content-between mb-3">
+                <h1 class="col-8">{{ recipe.name }}</h1>
+                <div class="col-auto">
                     <div *ngIf="user" class="dropdown" appDropdown>
                         <button class="btn btn-outline-light dropdown-toggle">
-                            Manage Recipe
+                            Manage
                         </button>
-                        <div class="dropdown-menu" [ngClass]="{'disabled': manageBtnDisabled}">
+                        <div class="dropdown-menu dropdown-menu-end" [ngClass]="{'disabled': manageBtnDisabled}">
                             <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
                             <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
                             <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>
@@ -25,7 +25,7 @@
     <div class="detail-block">
         <h5>Ingredients</h5>
         <ul class="list-group">
-            <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.amount}} {{ing.name}}</li>
+            <li class="list-group-item" *ngFor="let ing of recipe.ingredients">{{ing.amount}} {{ing.unit}} {{ing.name}}</li>
         </ul>
     </div>
     <div class="detail-block">

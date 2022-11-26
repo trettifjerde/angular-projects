@@ -1,10 +1,10 @@
-import { Ingredient } from "../shared/ingredient.interface"; 
+import { IngredientRaw } from "../shared/ingredient.interface"; 
 
 export class Recipe {
     public name: string;
     public description: string;
     public imagePath: string;
-    public ingredients: Ingredient[];
+    public ingredients: IngredientRaw[];
     public steps: string[];
     public id: string;
 
@@ -26,6 +26,6 @@ export interface RecipeRaw {
     name: string;
     description: string;
     imagePath: string;
-    ingredients: Ingredient[];
+    ingredients: IngredientRaw[];
     steps: string[];
 }

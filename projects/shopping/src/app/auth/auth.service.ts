@@ -68,7 +68,7 @@ export class AuthService {
             this.logoutTimer = null;
         }
         localStorage.removeItem('userData');
-        this.router.navigate(['/recipes']);
+        this.router.navigate(['/']);
     }
 
     autoLogin() {

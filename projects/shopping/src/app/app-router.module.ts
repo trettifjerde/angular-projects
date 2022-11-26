@@ -1,18 +1,15 @@
 import { NgModule } from "@angular/core";
-import { Route, RouterModule } from "@angular/router";
-import { AuthGuard } from "./auth/auth-guard.service";
+import { PreloadAllModules, Route, RouterModule } from "@angular/router";
 import { AuthComponent } from "./auth/auth.component";
-import { EmptyComponent } from "./shared/empty/empty.component";
-import { ShoppingListComponent } from "./shopping-list/shopping-list.component";
 
 const appRoutes: Route[] = [
-    { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-    { path: 'list', component: ShoppingListComponent, canActivate: [AuthGuard] },
+    { path: 'recipes', loadChildren: () => import('./recipes/recipes.module').then(m => m.RecipesModule)},
+    { path: 'list', loadChildren: () => import('./shopping-list/shopping-list.module').then(m => m.ShoppingListModule)},
     { path: 'login', component: AuthComponent },
     //{ path: '**', component: EmptyComponent, data: {message: 'Page not found'}}
 ];
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes)],
+    imports: [RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules})],
     exports: [RouterModule]
 })
 export class AppRouterModule {}

@@ -4,11 +4,15 @@
             <div class="row mb-2">
                 <div class="col-8 form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" class="form-control" ngModel required>
+                    <input type="text" id="name" name="name" class="form-control" lower ngModel required>
                 </div>
-                <div class="col-4 form-group">
+                <div class="col-2 form-group">
                     <label for="amount">Amount</label>
                     <input type="number" id="amount" name="amount" class="form-control" ngModel required>
+                </div>
+                <div class="col-2 form-group">
+                    <label for="unit">Units</label>
+                    <input type="text" id="unit" name="unit" class="form-control" lettersOnly lower ngModel>
                 </div>
             </div>
             <div class="row row-cols-auto mg-2 g-2">

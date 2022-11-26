@@ -35,10 +35,13 @@
         <div class="row align-items-center justify-content-between g-2 flex-nowrap" 
             *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
             <div class="col-2">
-                <input type="string" class="form-control" formControlName="amount" placeholder="10 g.">
+                <input type="number" class="form-control" formControlName="amount" placeholder="amount">
+            </div>
+            <div class="col-2">
+                <input type="string" class="form-control" formControlName="unit" placeholder="unit">
             </div>
             <div class="col-auto flex-grow-1">
-                <input type="text" class="form-control" formControlName="name" placeholder="Name">
+                <input type="text" class="form-control" formControlName="name" placeholder="name">
             </div>
             <div class="col-auto">
                 <button class="btn btn-outline-danger" type="button" (click)="deleteIngredient(i)">X</button>

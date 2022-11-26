@@ -8,7 +8,7 @@ import { RecipeListResolver, RecipeResolver } from "./recipe-resolver.service";
 import { RecipesComponent } from "./recipes.component";
 
 const routes: Routes = [
-    { path: 'recipes', component: RecipesComponent, resolve: {recipes: RecipeListResolver}, children: [
+    { path: '', component: RecipesComponent, resolve: {recipes: RecipeListResolver}, children: [
         { path: '', pathMatch: 'full', component: EmptyComponent, data: { message: 'No recipe selected' }},
         { path: 'new', component: RecipeFormComponent, resolve: {recipe: RecipeResolver}, canActivate: [AuthGuard] },
         { path: ':id', component: RecipeDetailComponent, resolve: {recipe: RecipeResolver}},

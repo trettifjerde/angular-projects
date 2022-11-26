@@ -1,7 +1,6 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, exhaustMap, map, Observable, Subject, take, tap } from "rxjs";
-import { AuthService } from "../auth/auth.service";
+import { catchError, map, Observable, Subject, tap } from "rxjs";
 import { Ingredient, IngredientRaw } from "../shared/ingredient.interface";
 
 @Injectable({
@@ -13,7 +12,7 @@ export class ShoppingListService {
     ingredientsUpdated = new Subject<Ingredient[]>();
     ingredientBeingEditted = new Subject<[number, Ingredient]>();
 
-    constructor(private http: HttpClient, private authService: AuthService) {}
+    constructor(private http: HttpClient) {}
 
     makeUrl(path: string): string {
         return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/${path}.json`;
@@ -31,7 +30,7 @@ export class ShoppingListService {
 
     addIngredient(ingRaw: IngredientRaw, announce=true) {
         const i = this.ingredients.findIndex(ing => ing.name === ingRaw.name);
-        if (i >= 0){
+        if (i >= 0 && this.ingredients[i].unit === ingRaw.unit) {
             const ing = {...ingRaw};
             ing.amount += this.ingredients[i].amount;
             this.updateIngredient(i, ing, announce);
@@ -72,7 +71,8 @@ export class ShoppingListService {
                             return {
                                 id: id, 
                                 name: ingRaw.name, 
-                                amount: ingRaw.amount
+                                amount: ingRaw.amount,
+                                unit: ingRaw.unit
                             }
                         }); 
             }),

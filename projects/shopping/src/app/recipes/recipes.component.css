@@ -9,18 +9,13 @@
     height: 100%;
 }
 
-.side-content { 
+.side-content, .main-content { 
     padding-inline: 0.5rem; 
 }
 
-.main-content {
-    padding-inline: 1rem;
-}
-
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .side { height: 35vh; position: relative; box-shadow: 0 3px 5px gray inset, 0 -3px 5px gray inset; padding-block: 5px;}
     .main { height: unset;}
-    .main-content { padding-inline: 0;}
 }
 
 .input-cont {

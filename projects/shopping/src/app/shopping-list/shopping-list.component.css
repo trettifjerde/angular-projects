@@ -23,7 +23,7 @@
 .interactive {
     opacity: 1;
 }
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .list-group-item {
         padding-inline: 0.5rem;
     }

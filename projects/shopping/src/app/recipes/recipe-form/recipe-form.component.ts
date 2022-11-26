@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RecipesService } from "../../services/recipes.service";
-import { Ingredient } from "../../shared/ingredient.interface"; 
+import { IngredientRaw } from "../../shared/ingredient.interface"; 
 import { Recipe } from "../recipe.model";
 
 @Component({
@@ -97,12 +97,15 @@ export class RecipeFormComponent {
     onSubmit() {
         if (this.recipe) {
             this.recipeService.updateRecipe(this.recipe.id, this.recipeForm.value).subscribe(
-                () => this.router.navigate(['/recipes', this.recipe.id])
+                () => {
+                    console.log(this.route);
+                    this.router.navigate(['../'], {relativeTo: this.route});
+                }
             );
         }
         else {
             this.recipeService.addRecipe(this.recipeForm.value).subscribe(
-                recipeId => this.router.navigate(['/recipes', recipeId])
+                recipeId => this.router.navigate(['../', recipeId], {relativeTo: this.route})
             );
         }
     }
@@ -111,15 +114,17 @@ export class RecipeFormComponent {
         return new FormControl(step, [Validators.required, Validators.maxLength(1000)]);
     }
 
-    createIngredientGroup(ing?: Ingredient): FormGroup {
+    createIngredientGroup(ing?: IngredientRaw): FormGroup {
         let name = '';
         let amount = '';
+        let unit = '';
 
-        if (ing) ({ name, amount } = ing);
+        if (ing) ({name, amount, unit} = ing)
 
         return new FormGroup({
             'name': new FormControl(name, [Validators.required]),
-            'amount': new FormControl(amount, [Validators.required])
+            'amount': new FormControl(amount, [Validators.required]),
+            'unit': new FormControl(unit),
         });
     }
 
@@ -140,7 +145,7 @@ export class RecipeFormComponent {
     }
 
     cancelEdit() {
-        this.recipe ? this.router.navigate(['/recipes', this.recipe.id]) : this.router.navigate(['/recipes']);
+        this.router.navigate(['../'], {relativeTo: this.route});
     }
 
 }
