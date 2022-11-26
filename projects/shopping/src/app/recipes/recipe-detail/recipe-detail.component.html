@@ -1,7 +1,9 @@
 <div class="detail-cont" #cont>
     <div class="detail-header">
-        <img [src]="recipe.imagePath" class="img-fluid">
-        <div class="detail-header-content">
+        <div class="detail-header-img">
+            <img [src]="recipe.imagePath" class="img-fluid">
+        </div>
+        <div class="detail-header-text">
             <div class="row g-2 justify-content-between mb-3">
                 <h1 class="col-8">{{ recipe.name }}</h1>
                 <div class="col-auto">

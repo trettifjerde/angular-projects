@@ -1,21 +1,30 @@
 .detail-header {
     position: relative;
     text-align: center;
+    overflow: hidden;
+    background-color: rgba(7, 71, 27, 0.7);
+    z-index: 0;
 }
 
-.detail-header .img-fluid {
+.detail-header-img {
+    position: absolute;
+    z-index: 1;
+}
+
+.detail-header-img .img-fluid {
     max-height: 600px;
 }
 
-.detail-header-content {
+.detail-header-text {
+    position: relative;
+    margin-top: 10vh;
     text-align: left;
-    position: absolute;
-    bottom: 0;
     color: white;
     background-color: rgba(7, 71, 27, 0.7);
     padding-inline: 2rem;
     border-radius: 10px 10px 0 0;
     padding-block: 1.5rem;
+    z-index: 2;
 }
 
 .detail-block, .detail-title {
