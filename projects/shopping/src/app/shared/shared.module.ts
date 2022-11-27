@@ -5,7 +5,6 @@ import { AlertComponent } from "./alert/alert.component";
 import { DropdownDirective } from "./dropdown.directive";
 import { EmptyComponent } from "./empty/empty.component";
 import { FilterPipe } from "./filter.pipe";
-import { LettersOnlyDirective, LowerCaseDirective, TrimDirective } from "./input.directive";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { ShortenPipe } from "./shorten.pipe";
 
@@ -15,28 +14,22 @@ import { ShortenPipe } from "./shorten.pipe";
         EmptyComponent,
         LoadingSpinnerComponent,
         DropdownDirective,
-        TrimDirective,
-        LowerCaseDirective,
-        LettersOnlyDirective,
         ShortenPipe,
-        FilterPipe,
+        FilterPipe
     ],
     imports: [
         CommonModule,
         FormsModule
     ],
     exports: [
+        CommonModule,
+        FormsModule,
         AlertComponent,
         EmptyComponent,
         LoadingSpinnerComponent,
         DropdownDirective,
-        TrimDirective,
-        LowerCaseDirective,
-        LettersOnlyDirective,
         ShortenPipe,
         FilterPipe,
-        CommonModule,
-        FormsModule
     ]
 })
 export class SharedModule {}

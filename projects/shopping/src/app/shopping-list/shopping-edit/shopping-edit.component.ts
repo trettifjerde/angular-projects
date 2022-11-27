@@ -1,44 +1,54 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, ViewChild} from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
+
+import * as shlist from '../store/shopping-list.actions';
 import { ShoppingListService } from "../../services/shopping-list.service";
+import { AppState } from "../store/shopping-list.reducer";
+
 
 @Component({
     selector: 'app-shopping-edit',
     templateUrl: './shopping-edit.component.html'
 })
-export class ShoppingEditComponent implements OnInit, OnDestroy {
+export class ShoppingEditComponent implements OnDestroy {
     @ViewChild('form') form: NgForm;
-    edittingSubscription: Subscription;
-    i: number | null = null;
-
-    constructor(private listService: ShoppingListService) {}
+    ingredientSubscription: Subscription;
+    id: string;
+    
+    constructor(private listService: ShoppingListService, private store: Store<AppState>) {}
 
     ngOnInit() {
-        this.edittingSubscription = this.listService.ingredientBeingEditted.subscribe(
-            ([i, ing]) => {
-                this.i = i;
-                this.form.setValue({name: ing.name, amount: ing.amount, unit: ing.unit});
+        this.ingredientSubscription = this.store.select('shoppingList').subscribe(
+            state => {
+                if (state.ingredientBeingEdited) {
+                    const {name, amount, unit, id} = state.ingredientBeingEdited;
+                    this.id = id;
+                    this.form.setValue({name: name, amount: amount, unit: unit ? unit : ''});
+                }
+                else {
+                    this.id = null;
+                }
             }
         )
     }
 
-    ngOnDestroy() {
-        this.edittingSubscription.unsubscribe();
+    ngOnDestroy(): void {
+        this.ingredientSubscription.unsubscribe();
+        this.clear();
+    }
+
+    clear() {
+        this.form.reset();
+        this.store.dispatch(new shlist.StopEdit());
     }
 
     saveIngredient() {
-        if (this.i !== null) {
-            this.listService.updateIngredient(this.i, this.form.value);
-        }
-        else {
-            this.listService.addIngredient(this.form.value);
-        }
-        this.clearForm();
+        (this.id ? this.listService.updateIngredient(this.id, this.form.value) : this.listService.addIngredient(this.form.value)).subscribe({
+            next: () => this.clear(),
+            error: err => console.log(err)
+        })
     }
 
-    clearForm() {
-        this.form.reset();
-        this.i = null;
-    }
 }

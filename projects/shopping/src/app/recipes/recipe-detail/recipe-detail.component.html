@@ -4,14 +4,14 @@
             <img [src]="recipe.imagePath" class="img-fluid">
         </div>
         <div class="detail-header-text">
-            <div class="row g-2 justify-content-between mb-3">
+            <div class="row flex-nowrap g-2 justify-content-between mb-3">
                 <h1 class="col-8">{{ recipe.name }}</h1>
                 <div class="col-auto">
                     <div *ngIf="user" class="dropdown" appDropdown>
                         <button class="btn btn-outline-light dropdown-toggle">
                             Manage
                         </button>
-                        <div class="dropdown-menu dropdown-menu-end" [ngClass]="{'disabled': manageBtnDisabled}">
+                        <div class="dropdown-menu" [ngClass]="{'disabled': manageBtnDisabled}">
                             <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
                             <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
                             <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>

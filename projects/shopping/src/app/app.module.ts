@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRouterModule } from './app-router.module';
+import { StoreModule} from '@ngrx/store';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { HeaderComponent } from './header/header.component';
 import { DBInterseptorService } from './services/db-interseptor.service';
+import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { DBInterseptorService } from './services/db-interseptor.service';
     HttpClientModule,
     FormsModule,
     AppRouterModule,
+    StoreModule.forRoot({shoppingList: shoppingListReducer})
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: DBInterseptorService, multi: true}
