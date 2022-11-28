@@ -1,11 +1,11 @@
-import { Component, OnDestroy, ViewChild} from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { Component, OnDestroy} from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 
 import * as shlist from '../store/shopping-list.actions';
 import { ShoppingListService } from "../../services/shopping-list.service";
-import { AppState } from "../store/shopping-list.reducer";
+import { Ingredient } from "../../shared/ingredient.interface";
+import { AppState } from "../../store/app.reducer";
 
 
 @Component({
@@ -13,23 +13,17 @@ import { AppState } from "../store/shopping-list.reducer";
     templateUrl: './shopping-edit.component.html'
 })
 export class ShoppingEditComponent implements OnDestroy {
-    @ViewChild('form') form: NgForm;
     ingredientSubscription: Subscription;
-    id: string;
+    model: Ingredient;
     
-    constructor(private listService: ShoppingListService, private store: Store<AppState>) {}
+    constructor(private listService: ShoppingListService, private store: Store<AppState>) {
+        this.model = this.getCleanModel();
+    }
 
     ngOnInit() {
         this.ingredientSubscription = this.store.select('shoppingList').subscribe(
             state => {
-                if (state.ingredientBeingEdited) {
-                    const {name, amount, unit, id} = state.ingredientBeingEdited;
-                    this.id = id;
-                    this.form.setValue({name: name, amount: amount, unit: unit ? unit : ''});
-                }
-                else {
-                    this.id = null;
-                }
+                this.model = state.ingredientBeingEdited ? {...state.ingredientBeingEdited} : this.getCleanModel()
             }
         )
     }
@@ -39,16 +33,19 @@ export class ShoppingEditComponent implements OnDestroy {
         this.clear();
     }
 
+    getCleanModel() : Ingredient {
+        return {name: '', amount: null, id: null, unit: ''};
+    }
+
     clear() {
-        this.form.reset();
+        this.model = this.getCleanModel();
         this.store.dispatch(new shlist.StopEdit());
     }
 
     saveIngredient() {
-        (this.id ? this.listService.updateIngredient(this.id, this.form.value) : this.listService.addIngredient(this.form.value)).subscribe({
+        (this.model.id ? this.listService.updateIngredient(this.model) : this.listService.addIngredient(this.model)).subscribe({
             next: () => this.clear(),
             error: err => console.log(err)
-        })
+        });
     }
-
 }

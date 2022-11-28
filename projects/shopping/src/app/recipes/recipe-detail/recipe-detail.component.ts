@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription } from "rxjs";
-import { AuthService } from "../../auth/auth.service";
+import { Store } from "@ngrx/store";
+import { map, Subscription } from "rxjs";
 import { User } from "../../auth/user.model";
 import { RecipesService } from "../../services/recipes.service";
+import { AppState } from "../../store/app.reducer";
 import { Recipe } from "../recipe.model";
 
 @Component({
@@ -18,14 +19,14 @@ export class RecipeDetailComponent implements OnInit {
     authSubscription: Subscription;
     user: User = null;
 
-    constructor(private authService: AuthService, private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
+    constructor(private store: Store<AppState>, private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
 
     @ViewChild('cont', {static: true}) cont: ElementRef;
 
     ngOnInit(): void {
-        this.authSubscription = this.authService.user.subscribe(
-            user => this.user = user
-        );
+        this.authSubscription = this.store.select('auth').pipe(map(state => state.user))
+            .subscribe(user => this.user = user);
+
         this.route.params.subscribe(
             params => this.id = params['id']
         );

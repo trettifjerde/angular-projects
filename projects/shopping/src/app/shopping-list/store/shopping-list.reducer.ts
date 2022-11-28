@@ -1,10 +1,6 @@
 import { Ingredient } from "../../shared/ingredient.interface";
 import * as shlist from "./shopping-list.actions";
 
-export interface AppState {
-    shoppingList: ShoppingListState
-}
-
 export interface ShoppingListState {
     ingredients: Ingredient[],
     ingredientBeingEdited: Ingredient,

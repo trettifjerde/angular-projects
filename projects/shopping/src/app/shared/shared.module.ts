@@ -5,6 +5,7 @@ import { AlertComponent } from "./alert/alert.component";
 import { DropdownDirective } from "./dropdown.directive";
 import { EmptyComponent } from "./empty/empty.component";
 import { FilterPipe } from "./filter.pipe";
+import { CustomInputDirective } from "./input.directive";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { ShortenPipe } from "./shorten.pipe";
 
@@ -15,7 +16,8 @@ import { ShortenPipe } from "./shorten.pipe";
         LoadingSpinnerComponent,
         DropdownDirective,
         ShortenPipe,
-        FilterPipe
+        FilterPipe,
+        CustomInputDirective,
     ],
     imports: [
         CommonModule,
@@ -30,6 +32,7 @@ import { ShortenPipe } from "./shorten.pipe";
         DropdownDirective,
         ShortenPipe,
         FilterPipe,
+        CustomInputDirective
     ]
 })
 export class SharedModule {}

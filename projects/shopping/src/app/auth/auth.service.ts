@@ -1,8 +1,11 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from "rxjs";
+import { Store } from "@ngrx/store";
+import { catchError, map, Observable, throwError } from "rxjs";
+import { AppState } from "../store/app.reducer";
 import { User, UserInterface } from "./user.model";
+import * as authActions from './store/auth.actions';
 
 export interface AuthSignUpResponse {
     idToken: string,
@@ -39,35 +42,33 @@ function castFormToAuthRequest(form: SignForm): AuthRequest {
 export class AuthService {
     signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDVjawArzDll20acHgeHZWuymViGGRBtvg';
     signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDVjawArzDll20acHgeHZWuymViGGRBtvg';
-
-    user = new BehaviorSubject<User>(null);
     logoutTimer: any;
 
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router, private store: Store<AppState>) {}
 
-    signUp(form: SignForm) : Observable<AuthSignUpResponse> {
+    signUp(form: SignForm): Observable<User> {
         return this.http.post<AuthSignUpResponse>(
             this.signUpUrl, castFormToAuthRequest(form)).pipe(
-                tap(res => this.handleAuthentication(res)),
+                map(res => this.handleAuthentication(res)),
                 catchError(error => this.handleError(error))
-            );
+            )
     }
 
-    signIn(form: SignForm) : Observable<AuthSignInResponse> {
+    signIn(form: SignForm): Observable<User> {
         return this.http.post<AuthSignInResponse>(
             this.signInUrl, castFormToAuthRequest(form)).pipe(
-                tap(res => this.handleAuthentication(res)),
+                map(res => this.handleAuthentication(res)),
                 catchError(error => this.handleError(error))
             );
     }
 
     logout() {
-        this.user.next(null);
         if (this.logoutTimer) {
             clearTimeout(this.logoutTimer);
             this.logoutTimer = null;
         }
         localStorage.removeItem('userData');
+        this.store.dispatch(new authActions.LogOutAction());
         this.router.navigate(['/']);
     }
 
@@ -79,9 +80,9 @@ export class AuthService {
         const user = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
 
         if (user.token) {
-            this.user.next(user);
             const expiresIn = user.tokenExpirationDate - new Date().getTime();
             this.autoLogout(expiresIn);
+            this.store.dispatch(new authActions.LogInAction(user));
         }
     }
 
@@ -90,13 +91,14 @@ export class AuthService {
         this.logoutTimer = setTimeout(this.logout.bind(this), expirationDuration);
     }
 
-    private handleAuthentication(res: AuthSignUpResponse|AuthSignInResponse) {
+    private handleAuthentication(res: AuthSignUpResponse|AuthSignInResponse): User {
         const expiresIn = +res.expiresIn * 1000;
         const expirationDate = new Date(new Date().getTime() + expiresIn);
         const user = new User(res.email, res.localId, res.idToken, expirationDate);
-        this.user.next(user);
+        this.store.dispatch(new authActions.LogInAction(user));
         localStorage.setItem('userData', JSON.stringify(user));
         this.autoLogout(expiresIn);
+        return user;
     }
 
     private handleError(error: HttpErrorResponse) {

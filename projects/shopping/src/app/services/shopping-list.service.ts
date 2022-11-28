@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 
 import * as shlist from '../shopping-list/store/shopping-list.actions';
-import { AppState } from "../shopping-list/store/shopping-list.reducer";
 import { Ingredient, IngredientRaw } from "../shared/ingredient.interface";
-import { catchError, map, Observable, tap } from "rxjs";
+import { map, Observable, tap } from "rxjs";
+import { AppState } from "../store/app.reducer";
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +34,8 @@ export class ShoppingListService {
         this.store.dispatch(new shlist.ClearIngredients());
     }
 
-    addIngredient(ingRaw: IngredientRaw) : Observable<null> {
+    addIngredient(ing: Ingredient) : Observable<null> {
+        const {id, ...ingRaw} = ing;
         return this.http.post<{name: string}>(this.makeUrl(), ingRaw).pipe(
             tap(obj => this.store.dispatch(new shlist.AddIngredient({...ingRaw, id: obj.name}))),
             map(() => (null))
@@ -43,9 +44,10 @@ export class ShoppingListService {
 
     addIngredients(ings: IngredientRaw[]) {}
 
-    updateIngredient(id: string, ing: IngredientRaw) : Observable<null> {
-        return this.http.patch<{[id: string]: IngredientRaw}>(this.makeUrl(), {[id]: ing}).pipe(
-            tap(() => this.store.dispatch(new shlist.UpdateIngredient({...ing, id: id}))),
+    updateIngredient(ing: Ingredient) : Observable<null> {
+        const {id, ...ingRaw} = ing;
+        return this.http.patch<{[id: string]: IngredientRaw}>(this.makeUrl(), {[id]: ingRaw}).pipe(
+            tap(() => this.store.dispatch(new shlist.UpdateIngredient({...ing}))),
             map(() => (null))
         )
     }

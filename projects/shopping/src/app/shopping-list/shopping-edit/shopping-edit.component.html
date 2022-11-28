@@ -4,20 +4,20 @@
             <div class="row mb-2 g-2">
                 <div class="col-8 form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" class="form-control" ngModel required>
+                    <input type="text" id="name" name="name" class="form-control" [(ngModel)]="model.name" customInput [pipes]="'trim lower'" required>
                 </div>
                 <div class="col-2 form-group">
                     <label for="amount">Amount</label>
-                    <input type="number" id="amount" name="amount" class="form-control" ngModel required>
+                    <input type="number" id="amount" name="amount" class="form-control" [(ngModel)]="model.amount" required>
                 </div>
                 <div class="col-2 form-group">
                     <label for="unit">Units</label>
-                    <input type="text" id="unit" name="unit" class="form-control" ngModel>
+                    <input type="text" id="unit" name="unit" class="form-control" [(ngModel)]="model.unit" customInput [pipes]="'trim lower lettersOnly'">
                 </div>
             </div>
             <div class="row row-cols-auto mg-2 g-2">
                 <div class="col">
-                    <button type="submit" class="btn-success btn" [disabled]="!form.valid">{{ id ? 'Edit' : 'Add'}}</button>
+                    <button type="submit" class="btn-success btn" [disabled]="!form.valid">{{ model.id ? 'Edit' : 'Add'}}</button>
                 </div>
                 <div class="col">
                     <button type="button" class="btn btn-outline-secondary" (click)="clear()">Clear</button>
