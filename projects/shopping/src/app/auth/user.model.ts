@@ -6,13 +6,17 @@ export class User {
         private _tokenExpirationDate: Date
         ) {}
 
-    get token() { 
+    get token(): string { 
         if (! this._tokenExpirationDate || new Date() > this._tokenExpirationDate )
             return null;
         return this._token;
     }
 
-    get tokenExpirationDate() { return this._tokenExpirationDate?.getTime()}
+    get tokenExpirationTime(): number { 
+        if (! this.token)
+            return null;
+        return this._tokenExpirationDate.getTime() - new Date().getTime();
+    }
 }
 
 export interface UserInterface {

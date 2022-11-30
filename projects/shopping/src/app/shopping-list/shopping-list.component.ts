@@ -13,8 +13,7 @@ import { AppState } from "../store/app.reducer";
 @Component({
     selector: 'app-shopping-list',
     templateUrl: './shopping-list.component.html',
-    styleUrls: ['./shopping-list.component.css'],
-    providers: [{provide: HTTP_INTERCEPTORS, useClass: DBInterseptorService, multi: true}]
+    styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit {
     shoppingList: Observable<ShoppingListState>;

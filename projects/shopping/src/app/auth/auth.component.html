@@ -28,7 +28,7 @@
 
         </form>
 
-        <app-alert *ngIf="error" [message]="error" (close)="error = null;"></app-alert>
+        <app-alert *ngIf="error" [message]="error"></app-alert>
 
         <div class="row align-center justify-content-center">
             <app-spinner *ngIf="isLoading"></app-spinner>

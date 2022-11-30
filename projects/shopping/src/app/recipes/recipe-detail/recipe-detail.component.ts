@@ -14,7 +14,6 @@ import { Recipe } from "../recipe.model";
 })
 export class RecipeDetailComponent implements OnInit {
     recipe: Recipe;
-    id: string;
     manageBtnDisabled = false;
     authSubscription: Subscription;
     user: User = null;
@@ -27,9 +26,6 @@ export class RecipeDetailComponent implements OnInit {
         this.authSubscription = this.store.select('auth').pipe(map(state => state.user))
             .subscribe(user => this.user = user);
 
-        this.route.params.subscribe(
-            params => this.id = params['id']
-        );
         this.route.data.subscribe(
             data => {
                 this.recipe = data['recipe'];
@@ -50,10 +46,7 @@ export class RecipeDetailComponent implements OnInit {
     deleteRecipe() {
         if (confirm('Delete recipe?')) {
             this.manageBtnDisabled = true;
-            this.recipeService.deleteRecipe(this.id).subscribe(
-                () => this.router.navigate(['../'], {relativeTo: this.route})
-            );
-            
+            this.recipeService.deleteRecipe(this.recipe.id);
         }
     }
 }

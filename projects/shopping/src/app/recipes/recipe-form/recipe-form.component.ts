@@ -1,9 +1,11 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { RecipesService } from "../../services/recipes.service";
+import { Store } from "@ngrx/store";
 import { IngredientRaw } from "../../shared/ingredient.interface"; 
+import { AppState } from "../../store/app.reducer";
 import { Recipe } from "../recipe.model";
+import * as recipeActions from '../store/recipes.actions';
 
 @Component({
     selector: 'app-recipe-form',
@@ -15,7 +17,7 @@ export class RecipeFormComponent {
     recipe: Recipe | null;
     recipeForm: FormGroup;
 
-    constructor(private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) { }
+    constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit(): void {
         this.route.data.subscribe(
@@ -94,22 +96,6 @@ export class RecipeFormComponent {
     }
     */
 
-    onSubmit() {
-        if (this.recipe) {
-            this.recipeService.updateRecipe(this.recipe.id, this.recipeForm.value).subscribe(
-                () => {
-                    console.log(this.route);
-                    this.router.navigate(['../'], {relativeTo: this.route});
-                }
-            );
-        }
-        else {
-            this.recipeService.addRecipe(this.recipeForm.value).subscribe(
-                recipeId => this.router.navigate(['../', recipeId], {relativeTo: this.route})
-            );
-        }
-    }
-
     createStep(step: string = '') : FormControl {
         return new FormControl(step, [Validators.required, Validators.maxLength(1000)]);
     }
@@ -146,6 +132,13 @@ export class RecipeFormComponent {
 
     cancelEdit() {
         this.router.navigate(['../'], {relativeTo: this.route});
+    }
+
+    onSubmit() {
+        if (this.recipe) 
+            this.store.dispatch(new recipeActions.StartUpdateRecipe([this.recipe.id, this.recipeForm.value]));
+        else 
+            this.store.dispatch(new recipeActions.StartAddRecipe({...this.recipeForm.value}));
     }
 
 }

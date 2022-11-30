@@ -1,28 +1,21 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { AppState } from "../store/app.reducer";
 import { User, UserInterface } from "./user.model";
+import { environment } from "../../environments/environment";
 import * as authActions from './store/auth.actions';
 
-export interface AuthSignUpResponse {
-    idToken: string,
-    email: string,
-    refreshToken: string,
-    expiresIn: string,
-    localId: string
-}
-
-export interface AuthSignInResponse {
+export interface AuthResponse {
     idToken: string,
     email: string,
     refreshToken: string,
     expiresIn: string,
     localId: string,
-    registered: boolean
+    registered?: boolean
 }
+
 interface AuthRequest {
     email: string,
     password: string,
@@ -40,69 +33,65 @@ function castFormToAuthRequest(form: SignForm): AuthRequest {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-    signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDVjawArzDll20acHgeHZWuymViGGRBtvg';
-    signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDVjawArzDll20acHgeHZWuymViGGRBtvg';
+    signUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.authKey}`;
+    signInUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.authKey}`;
     logoutTimer: any;
 
-    constructor(private http: HttpClient, private router: Router, private store: Store<AppState>) {}
+    constructor(private http: HttpClient, private store: Store<AppState>) {}
 
-    signUp(form: SignForm): Observable<User> {
-        return this.http.post<AuthSignUpResponse>(
-            this.signUpUrl, castFormToAuthRequest(form)).pipe(
+    authenticate(form: SignForm, url: string): Observable<User> {
+        return this.http.post<AuthResponse>(
+            url, castFormToAuthRequest(form)).pipe(
                 map(res => this.handleAuthentication(res)),
                 catchError(error => this.handleError(error))
             )
     }
 
+    signUp(form: SignForm): Observable<User> {
+        return this.authenticate(form, this.signUpUrl);
+    }
+
     signIn(form: SignForm): Observable<User> {
-        return this.http.post<AuthSignInResponse>(
-            this.signInUrl, castFormToAuthRequest(form)).pipe(
-                map(res => this.handleAuthentication(res)),
-                catchError(error => this.handleError(error))
-            );
+        return this.authenticate(form, this.signInUrl);
     }
 
     logout() {
-        if (this.logoutTimer) {
-            clearTimeout(this.logoutTimer);
-            this.logoutTimer = null;
-        }
+        clearTimeout(this.logoutTimer);
+        this.logoutTimer = null;
         localStorage.removeItem('userData');
-        this.store.dispatch(new authActions.LogOutAction());
-        this.router.navigate(['/']);
     }
 
     autoLogin() {
-        const userData: UserInterface = JSON.parse(localStorage.getItem('userData'));
-        if (!userData) 
-            return;
-
-        const user = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
-
-        if (user.token) {
-            const expiresIn = user.tokenExpirationDate - new Date().getTime();
-            this.autoLogout(expiresIn);
-            this.store.dispatch(new authActions.LogInAction(user));
+        const userData : UserInterface = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+            const user = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+            if (user.token) {
+                this.setAutoLogout(user.tokenExpirationTime);
+                this.store.dispatch(new authActions.LogInAction(user));
+            }
+            else {
+                localStorage.removeItem('userData');
+            }
         }
     }
 
-    autoLogout(expirationDuration: number) {
-        console.log('Remaining session time: ', expirationDuration);
-        this.logoutTimer = setTimeout(this.logout.bind(this), expirationDuration);
+    setAutoLogout(expiresIn: number) {
+        console.log('setting logout timer to', expiresIn, 'ms');
+        this.logoutTimer = setTimeout(() => this.store.dispatch(new authActions.LogOutAction()), expiresIn);
     }
 
-    private handleAuthentication(res: AuthSignUpResponse|AuthSignInResponse): User {
+    private handleAuthentication(res: AuthResponse): User {
         const expiresIn = +res.expiresIn * 1000;
         const expirationDate = new Date(new Date().getTime() + expiresIn);
         const user = new User(res.email, res.localId, res.idToken, expirationDate);
-        this.store.dispatch(new authActions.LogInAction(user));
         localStorage.setItem('userData', JSON.stringify(user));
-        this.autoLogout(expiresIn);
+        this.setAutoLogout(expiresIn);
         return user;
     }
 
     private handleError(error: HttpErrorResponse) {
         let errorMsg = 'An error has occurred';
+        console.log(error);
         if (error?.error?.error?.message){
             switch(error.error.error.message) {
                 case 'EMAIL_EXISTS':

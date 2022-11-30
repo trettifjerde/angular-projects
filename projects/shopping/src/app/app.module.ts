@@ -4,12 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRouterModule } from './app-router.module';
 import { StoreModule} from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { HeaderComponent } from './header/header.component';
 import { DBInterseptorService } from './services/db-interseptor.service';
 import { appReducer } from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
+import { SharedModule } from './shared/shared.module';
+import { environment } from '../environments/environment';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RecipesEffects } from './recipes/store/recipes.effect';
 
 @NgModule({
   declarations: [
@@ -22,7 +29,12 @@ import { appReducer } from './store/app.reducer';
     HttpClientModule,
     FormsModule,
     AppRouterModule,
-    StoreModule.forRoot(appReducer)
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([AuthEffects, RecipesEffects]),
+    SharedModule,
+    StoreDevtoolsModule.instrument({logOnly: environment.production}),
+    StoreRouterConnectingModule.forRoot()
+
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: DBInterseptorService, multi: true}
