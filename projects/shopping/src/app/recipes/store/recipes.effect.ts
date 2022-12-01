@@ -46,10 +46,14 @@ export class RecipesEffects {
     recipeRedirect = createEffect(() => this.actions$.pipe(
         ofType(recipeActions.ADD_RECIPE, recipeActions.UPDATE_RECIPE, recipeActions.DELETE_RECIPE),
         tap((action: recipeActions.AddRecipe | recipeActions.UpdateRecipe | recipeActions.DeleteRecipe) => {
-            if (action.payload instanceof Recipe)
-                this.router.navigate(['/recipes', action.payload.id]);
-            else
-                this.router.navigate(['/recipes']);
+            switch (action.type) {
+                case recipeActions.ADD_RECIPE:
+                case recipeActions.UPDATE_RECIPE:
+                    this.router.navigate(['/recipes', action.payload.id]);
+                    break;
+                default:
+                    this.router.navigate(['/recipes']);
+            }
         })
     ), {dispatch: false})
 

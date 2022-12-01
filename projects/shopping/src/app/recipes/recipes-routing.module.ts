@@ -11,8 +11,10 @@ const routes: Routes = [
     { path: '', component: RecipesComponent, children: [
         { path: '', pathMatch: 'full', component: EmptyComponent, data: { message: 'No recipe selected' }},
         { path: 'new', component: RecipeFormComponent, resolve: {recipe: RecipeResolver}, canActivate: [AuthGuard] },
+        { path: '404', component: EmptyComponent, data: {message: 'Recipe not found'}},
         { path: ':id', component: RecipeDetailComponent, resolve: {recipe: RecipeResolver}},
-        { path: ':id/edit', component: RecipeFormComponent, resolve: {recipe: RecipeResolver}, canActivate: [AuthGuard] }
+        { path: ':id/edit', component: RecipeFormComponent, resolve: {recipe: RecipeResolver}, canActivate: [AuthGuard] },
+        { path: '**', component: EmptyComponent, data: {message: 'Recipe not found'}}
     ]}
 ];
 

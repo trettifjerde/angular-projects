@@ -101,16 +101,12 @@ export class RecipeFormComponent {
     }
 
     createIngredientGroup(ing?: IngredientRaw): FormGroup {
-        let name = '';
-        let amount = '';
-        let unit = '';
-
-        if (ing) ({name, amount, unit} = ing)
+        const ingRaw = ing ? ing : new IngredientRaw();
 
         return new FormGroup({
-            'name': new FormControl(name, [Validators.required]),
-            'amount': new FormControl(amount, [Validators.required]),
-            'unit': new FormControl(unit),
+            'name': new FormControl(ingRaw.name, [Validators.required]),
+            'amount': new FormControl(ingRaw.amount),
+            'unit': new FormControl(ingRaw.unit),
         });
     }
 

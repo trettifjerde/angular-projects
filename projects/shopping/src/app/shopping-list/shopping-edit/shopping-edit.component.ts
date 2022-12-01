@@ -4,7 +4,7 @@ import { Subscription } from "rxjs";
 
 import * as shlist from '../store/shopping-list.actions';
 import { ShoppingListService } from "../../services/shopping-list.service";
-import { Ingredient } from "../../shared/ingredient.interface";
+import { Ingredient, IngredientRaw } from "../../shared/ingredient.interface";
 import { AppState } from "../../store/app.reducer";
 
 
@@ -17,13 +17,13 @@ export class ShoppingEditComponent implements OnDestroy {
     model: Ingredient;
     
     constructor(private listService: ShoppingListService, private store: Store<AppState>) {
-        this.model = this.getCleanModel();
+        this.model = new Ingredient();
     }
 
     ngOnInit() {
         this.ingredientSubscription = this.store.select('shoppingList').subscribe(
             state => {
-                this.model = state.ingredientBeingEdited ? {...state.ingredientBeingEdited} : this.getCleanModel()
+                this.model = state.ingredientBeingEdited ? new Ingredient({...state.ingredientBeingEdited}) : new Ingredient();
             }
         )
     }
@@ -33,17 +33,13 @@ export class ShoppingEditComponent implements OnDestroy {
         this.clear();
     }
 
-    getCleanModel() : Ingredient {
-        return {name: '', amount: null, id: null, unit: ''};
-    }
-
     clear() {
-        this.model = this.getCleanModel();
+        this.model = new Ingredient();
         this.store.dispatch(new shlist.StopEdit());
     }
 
     saveIngredient() {
-        (this.model.id ? this.listService.updateIngredient(this.model) : this.listService.addIngredient(this.model)).subscribe({
+        (this.model.id ? this.listService.updateIngredient(this.model) : this.listService.addIngredient(new IngredientRaw({...this.model}))).subscribe({
             next: () => this.clear(),
             error: err => console.log(err)
         });

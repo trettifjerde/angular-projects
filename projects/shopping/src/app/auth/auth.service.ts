@@ -67,7 +67,7 @@ export class AuthService {
             const user = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
             if (user.token) {
                 this.setAutoLogout(user.tokenExpirationTime);
-                this.store.dispatch(new authActions.LogInAction(user));
+                this.store.dispatch(new authActions.AutoLogIn(user));
             }
             else {
                 localStorage.removeItem('userData');

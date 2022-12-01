@@ -21,9 +21,10 @@ export function shoppingListReducer(state=initialShoppingList, action: shlist.Sh
                 ingredients: [...state.ingredients, action.payload]
             };
         case shlist.ADD_INGREDIENTS:
+            const toExclude = action.payload.map(i => i.id);
             return {
                 ...state,
-                ingredients: [...state.ingredients, ...action.payload]
+                ingredients: [...state.ingredients.filter(i => !toExclude.includes(i.id)), ...action.payload]
             }
         case shlist.UPDATE_INGREDIENT:
             return {
@@ -44,12 +45,13 @@ export function shoppingListReducer(state=initialShoppingList, action: shlist.Sh
         case shlist.CLEAR_INGREDIENTS:
             return {
                 ...state,
-                ingredients: []
+                ingredients: [],
+                fetched: true
             }
         case shlist.START_EDIT:
             return {
                 ...state,
-                ingredientBeingEdited: {...action.payload}
+                ingredientBeingEdited: action.payload
             }
         case shlist.STOP_EDIT:
             return {

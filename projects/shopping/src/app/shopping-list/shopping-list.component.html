@@ -4,7 +4,7 @@
         <hr>
         <div *ngIf="(shoppingList|async).fetched && (shoppingList|async).ingredients.length > 0" class="list-group" #ingredientsCont>
             <div class="list-group-item ingredient interactive" *ngFor="let ingred of (shoppingList | async).ingredients; let i = index">
-                <div class="ingredient-text">{{ ingred.name }} ({{ ingred.amount }}{{ ingred.unit ? ' ' + ingred.unit : '' }})</div>
+                <div class="ingredient-text">{{ getIngredInfo(ingred) }}</div>
                 <div class="btn-group-sm">
                     <button class="btn btn-outline-warning" (click)="editItem(ingred)">Edit</button>
                     <button class="btn btn-outline-danger" (click)="deleteItem(ingred.id, i)">Delete</button>

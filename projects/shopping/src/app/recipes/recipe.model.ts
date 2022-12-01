@@ -13,8 +13,8 @@ export class Recipe {
         this.id = id;
         this.description = description;
         this.imagePath = imagePath;
-        this.ingredients = ingredients;
         this.steps = steps;
+        this.ingredients = ingredients.map(ingRaw => new IngredientRaw(ingRaw));
     }
 
     get imgSrc() {

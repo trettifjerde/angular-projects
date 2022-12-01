@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Actions, ofType, createEffect } from "@ngrx/effects";
 import { catchError, map, of, switchMap, tap } from "rxjs";
 import { ShoppingListService } from '../../services/shopping-list.service';
@@ -9,7 +9,11 @@ import * as authActions from './auth.actions';
 @Injectable()
 export class AuthEffects {
 
-    constructor(private actions$: Actions, private authService: AuthService, private listService: ShoppingListService, private router: Router) {}
+    constructor(
+        private actions$: Actions, 
+        private authService: AuthService, 
+        private listService: ShoppingListService, 
+        private router: Router) {}
     
     authLogin = createEffect(() => this.actions$.pipe(
         ofType(authActions.LOG_IN_START),
@@ -37,10 +41,11 @@ export class AuthEffects {
     ), {dispatch: false});
 
     authSuccess = createEffect(() => this.actions$.pipe(
-        ofType(authActions.LOG_IN, authActions.SIGN_UP),
-        tap(() => {
+        ofType(authActions.LOG_IN, authActions.SIGN_UP, authActions.AUTO_LOG_IN),
+        tap((action: authActions.AuthAction) => {
             this.listService.fetchIngredients();
-            this.router.navigate(['/']);
+            if(action.type !== authActions.AUTO_LOG_IN)
+                this.router.navigate(['/']);
         }),
     ), {dispatch: false});
 

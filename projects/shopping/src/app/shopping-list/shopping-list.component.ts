@@ -42,4 +42,16 @@ export class ShoppingListComponent implements OnInit {
         this.store.dispatch(new shlist.StartEdit(ing));
     }
 
+    getIngredInfo(ing: Ingredient) {
+        let info = ing.name;
+        if (ing.amount) {
+            info += ` (${ing.amount}`;
+            if (ing.unit) {
+                info += ` ${ing.unit}`;
+            }
+            info += ')';
+        }
+        return info;
+    }
+
 }

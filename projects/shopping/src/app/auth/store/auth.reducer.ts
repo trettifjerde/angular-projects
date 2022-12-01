@@ -17,6 +17,7 @@ export function authReducer(state=initialState, action: authActions.AuthAction) 
     switch(action.type) {
         case authActions.LOG_IN:
         case authActions.SIGN_UP:
+        case authActions.AUTO_LOG_IN:
             return {
                 ...state,
                 user: action.payload,

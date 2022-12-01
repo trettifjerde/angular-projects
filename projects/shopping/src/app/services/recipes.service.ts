@@ -65,4 +65,10 @@ export class RecipesService {
     toShoppingList(ingredients: IngredientRaw[]) {
         this.listService.addIngredients(ingredients);
     }
+
+    getRecipe(id: string): Observable<Recipe> {
+        return this.http.get<RecipeRaw>(this.makeUrl('/' + id)).pipe(
+            map(res => res ? new Recipe({...res, id: id}) : null)
+        )
+    }
 }
