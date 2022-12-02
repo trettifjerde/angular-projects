@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, EventEmitter, HostListener, Input, Output } from "@angular/core";
+import { AfterViewInit, Directive, EventEmitter, Host, HostListener, Input, Output } from "@angular/core";
 
 @Directive({selector: '[ngModel][customInput]'})
 export class CustomInputDirective implements AfterViewInit {
@@ -18,9 +18,6 @@ export class CustomInputDirective implements AfterViewInit {
 
         this.pipesList.forEach(pipe => {
             switch(pipe) {
-                case 'trim':
-                    newValue = newValue.trim();
-                    break;
                 case 'lower':
                     newValue = newValue.toLowerCase();
                     break;

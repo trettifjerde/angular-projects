@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 
-import * as authActions from "./store/auth.actions";
+import * as authActions from "./store/auth.actions.newer";
 import { AppState } from "../store/app.reducer";
 import { Subscription } from "rxjs";
 
@@ -43,10 +42,10 @@ export class AuthComponent implements OnInit, OnDestroy {
         const formValue = form.form.value;
 
         if (this.isSignUpMode) {
-            this.store.dispatch(new authActions.SignUpStartAction(formValue));
+            this.store.dispatch(authActions.signUpStart({form: formValue}));
         }
         else {
-            this.store.dispatch(new authActions.LogInStartAction(formValue));
+            this.store.dispatch(authActions.logInStart({form: formValue}));
         }
     }
 }

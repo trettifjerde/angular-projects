@@ -39,7 +39,7 @@ export class ShoppingEditComponent implements OnDestroy {
     }
 
     saveIngredient() {
-        (this.model.id ? this.listService.updateIngredient(this.model) : this.listService.addIngredient(new IngredientRaw({...this.model}))).subscribe({
+        (this.model.id ? this.listService.updateIngredient(new Ingredient({...this.model})) : this.listService.addIngredient(new IngredientRaw({...this.model}))).subscribe({
             next: () => this.clear(),
             error: err => console.log(err)
         });

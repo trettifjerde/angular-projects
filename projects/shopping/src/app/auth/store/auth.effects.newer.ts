@@ -4,7 +4,7 @@ import { Actions, ofType, createEffect } from "@ngrx/effects";
 import { catchError, map, of, switchMap, tap } from "rxjs";
 import { ShoppingListService } from '../../services/shopping-list.service';
 import { AuthService } from "../auth.service";
-import * as authActions from './auth.actions';
+import * as authActions from './auth.actions.newer';
 
 @Injectable()
 export class AuthEffects {
@@ -16,23 +16,23 @@ export class AuthEffects {
         private router: Router) {}
     
     authLogin = createEffect(() => this.actions$.pipe(
-        ofType(authActions.LOG_IN_START),
-        switchMap((authData: authActions.LogInStartAction) => this.authService.signIn(authData.payload).pipe(
-            map(user => new authActions.LogInAction(user)),
-            catchError(err => of(new authActions.AuthenticationFailed(err.message))),
+        ofType(authActions.logInStart),
+        switchMap(({form}) => this.authService.signIn(form).pipe(
+            map(user => authActions.logIn({user: user})),
+            catchError(err => of(authActions.authFailed({error: err.message}))),
         ))
     ));
 
     authSignup = createEffect(() => this.actions$.pipe(
-        ofType(authActions.SIGN_UP_START),
-        switchMap((authData: authActions.SignUpStartAction) => this.authService.signUp(authData.payload).pipe(
-            map(user => new authActions.SignUpAction(user)),
-            catchError(err => of(new authActions.AuthenticationFailed(err.message)))
+        ofType(authActions.signUpStart),
+        switchMap(({form}) => this.authService.signUp(form).pipe(
+            map(user => authActions.signUp({user: user})),
+            catchError(err => of(authActions.authFailed({error: err.message})))
         ))
     ));
 
     authLogout = createEffect(() => this.actions$.pipe(
-        ofType(authActions.LOG_OUT),
+        ofType(authActions.logOut),
         tap(() => {
             this.listService.clearIngredients();
             this.authService.logout();
@@ -41,8 +41,8 @@ export class AuthEffects {
     ), {dispatch: false});
 
     authSuccess = createEffect(() => this.actions$.pipe(
-        ofType(authActions.LOG_IN, authActions.SIGN_UP, authActions.AUTO_LOG_IN),
-        tap((action: authActions.AuthAction) => {
+        ofType(authActions.logIn, authActions.signUp, authActions.autoLogIn),
+        tap(action => {
             this.listService.fetchIngredients();
             if(action.type !== authActions.AUTO_LOG_IN)
                 this.router.navigate(['/']);

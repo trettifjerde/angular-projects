@@ -5,10 +5,12 @@ export class Ingredient {
     public id: string;
 
     constructor(info?: {name?: string, amount?: number, unit?: string, id?: string}) {
-        this.name = info?.name? info.name : null;
         this.amount = info?.amount? info.amount : null;
-        this.unit = info?.unit? info.unit : null;
         this.id = info?.id? info.id : null;
+        const nameTrimmed = info?.name?.trim();
+        const unitTrimmed = info?.unit?.trim();
+        this.name = nameTrimmed ? nameTrimmed : null;
+        this.unit = unitTrimmed ? unitTrimmed : null;
     }
 }
 
@@ -18,9 +20,11 @@ export class IngredientRaw {
     public unit: string;
 
     constructor(info?: {name?: string, amount?: number, unit?: string}) {
-        this.name = info?.name? info.name : null;
+        const nameTrimmed = info?.name?.trim();
+        const unitTrimmed = info?.unit?.trim();
+        this.name = nameTrimmed ? nameTrimmed : null;
         this.amount = info?.amount? info.amount : null;
-        this.unit = info?.unit? info.unit : null;
+        this.unit = unitTrimmed ? unitTrimmed : null;
     }
 
 }

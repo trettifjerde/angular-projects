@@ -13,7 +13,7 @@
     padding-inline: 0.5rem; 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
     .side { height: 35vh; position: relative; box-shadow: 0 3px 5px gray inset, 0 -3px 5px gray inset; padding-block: 5px;}
     .main { height: unset;}
 }

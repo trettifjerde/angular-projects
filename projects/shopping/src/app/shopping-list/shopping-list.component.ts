@@ -1,10 +1,8 @@
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { Observable } from "rxjs";
 import { Store } from '@ngrx/store';
 
 import * as shlist from './store/shopping-list.actions';
-import { DBInterseptorService } from "../services/db-interseptor.service";
 import { ShoppingListService } from "../services/shopping-list.service";
 import { ShoppingListState } from "./store/shopping-list.reducer";
 import { Ingredient } from "../shared/ingredient.interface";

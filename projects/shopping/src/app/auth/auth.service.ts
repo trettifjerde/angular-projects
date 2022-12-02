@@ -5,7 +5,7 @@ import { catchError, map, Observable, throwError } from "rxjs";
 import { AppState } from "../store/app.reducer";
 import { User, UserInterface } from "./user.model";
 import { environment } from "../../environments/environment";
-import * as authActions from './store/auth.actions';
+import * as authActions from './store/auth.actions.newer';
 
 export interface AuthResponse {
     idToken: string,
@@ -67,7 +67,7 @@ export class AuthService {
             const user = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
             if (user.token) {
                 this.setAutoLogout(user.tokenExpirationTime);
-                this.store.dispatch(new authActions.AutoLogIn(user));
+                this.store.dispatch(authActions.autoLogIn({user: user}));
             }
             else {
                 localStorage.removeItem('userData');
@@ -77,7 +77,7 @@ export class AuthService {
 
     setAutoLogout(expiresIn: number) {
         console.log('setting logout timer to', expiresIn, 'ms');
-        this.logoutTimer = setTimeout(() => this.store.dispatch(new authActions.LogOutAction()), expiresIn);
+        this.logoutTimer = setTimeout(() => this.store.dispatch(authActions.logOut()), expiresIn);
     }
 
     private handleAuthentication(res: AuthResponse): User {

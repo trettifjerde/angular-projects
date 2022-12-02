@@ -4,7 +4,7 @@
             <div class="row mb-2 g-2">
                 <div class="col-8 form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" class="form-control" [(ngModel)]="model.name" customInput [pipes]="'trim lower'" required>
+                    <input type="text" id="name" name="name" class="form-control" [(ngModel)]="model.name" customInput [pipes]="'lower'" required>
                 </div>
                 <div class="col-2 form-group">
                     <label for="amount">Amount</label>
@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-2 form-group">
                     <label for="unit">Units</label>
-                    <input type="text" id="unit" name="unit" class="form-control" [(ngModel)]="model.unit" customInput [pipes]="'trim lower lettersOnly'">
+                    <input type="text" id="unit" name="unit" class="form-control" [(ngModel)]="model.unit" customInput [pipes]="'lower lettersOnly'">
                 </div>
             </div>
             <div class="row row-cols-auto mg-2 g-2">

@@ -3,7 +3,7 @@
     <div class="form-group">
         <div class="label-row">
             <label for="name">Name</label>
-            <div *ngIf="name.touched && !name.valid">
+            <div *ngIf="name.dirty && !name.valid">
                 <p class="form-text text-danger" *ngIf="name.hasError('required')">Name is required</p>
                 <p class="form-text text-danger" *ngIf="name.hasError('recipeNameExists')">Recipe with such name already exists</p>
             </div>
@@ -14,7 +14,7 @@
     <div class="form-group">
         <div class="label-row">
             <label for="description">Description</label>
-            <p class="form-text text-danger" *ngIf="description.touched && !description.valid">Description is required</p>
+            <p class="form-text text-danger" *ngIf="description.dirty && !description.valid">Description is required</p>
         </div>
         <textarea class="form-control" formControlName="description"></textarea>
         
@@ -28,8 +28,8 @@
     <div class="form-group" formArrayName="ingredients">
         <div class="label-row">
             <label>Ingredients</label>
-            <p class="form-text text-danger" *ngIf="ingredients.touched && !ingredients.valid">
-                Ingredient info is required
+            <p class="form-text text-danger" *ngIf="ingredients.dirty && !ingredients.valid">
+                Ingredient names are required
             </p>
         </div>
         <div class="row row-cols-auto align-items-center g-2 flex-nowrap" 
@@ -55,8 +55,8 @@
     <div class="form-group">
         <div class="label-row">
             <label>Steps</label>
-            <p class="form-text text-danger" *ngIf="steps.touched && !steps.valid">
-                Cooking instructions are required
+            <p class="form-text text-danger" *ngIf="steps.dirty && !steps.valid">
+                Some instructions are empty
             </p>
         </div>
         <ol class="list-group list-group-flush list-group-numbered" formArrayName="steps">
