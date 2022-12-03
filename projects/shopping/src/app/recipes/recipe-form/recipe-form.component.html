@@ -1,82 +1,84 @@
-<h3 #pageTop>{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
-<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
-    <div class="form-group">
-        <div class="label-row">
-            <label for="name">Name</label>
-            <div *ngIf="name.dirty && !name.valid">
-                <p class="form-text text-danger" *ngIf="name.hasError('required')">Name is required</p>
-                <p class="form-text text-danger" *ngIf="name.hasError('recipeNameExists')">Recipe with such name already exists</p>
+<div class="fadeIn">
+    <h3 #pageTop>{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
+        <div class="form-group">
+            <div class="label-row">
+                <label for="name">Name</label>
+                <div *ngIf="name.dirty && !name.valid">
+                    <p class="form-text text-danger" *ngIf="name.hasError('required')">Name is required</p>
+                    <p class="form-text text-danger" *ngIf="name.hasError('recipeNameExists')">Recipe with such name already exists</p>
+                </div>
             </div>
+            <input type="text" id="name" class="form-control" formControlName="name">
         </div>
-        <input type="text" id="name" class="form-control" formControlName="name">
-    </div>
-    <hr>
-    <div class="form-group">
-        <div class="label-row">
-            <label for="description">Description</label>
-            <p class="form-text text-danger" *ngIf="description.dirty && !description.valid">Description is required</p>
+        <hr>
+        <div class="form-group">
+            <div class="label-row">
+                <label for="description">Description</label>
+                <p class="form-text text-danger" *ngIf="description.dirty && !description.valid">Description is required</p>
+            </div>
+            <textarea class="form-control" formControlName="description"></textarea>
+            
         </div>
-        <textarea class="form-control" formControlName="description"></textarea>
+        <hr>
+        <div class="form-group">
+            <label for="imagePath">Image URL</label>
+            <input type="text" class="form-control" formControlName="imagePath">
+        </div>
+        <hr>
+        <div class="form-group" formArrayName="ingredients">
+            <div class="label-row">
+                <label>Ingredients</label>
+                <p class="form-text text-danger" *ngIf="ingredients.dirty && !ingredients.valid">
+                    Ingredient names are required
+                </p>
+            </div>
+            <div class="row row-cols-auto align-items-center g-2 flex-nowrap ingred-cont" 
+                *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+                <div class="col flex-shrink-1">
+                    <input type="number" class="form-control" formControlName="amount" placeholder="amount" disableUnitIfNoAmount>
+                </div>
+                <div class="col flex-shrink-1">
+                    <input type="text" class="form-control" formControlName="unit" placeholder="unit" >
+                </div>
+                <div class="col flex-grow-1">
+                    <input type="text" class="form-control" formControlName="name" placeholder="name">
+                </div>
+                <div class="col flex-shrink-1">
+                    <button class="btn btn-outline-danger" type="button" (click)="deleteIngredient(i)">X</button>
+                </div>            
+            </div>
+            <button type="button" class="btn btn-outline-success mt-2" (click)="addIngredientGroup()">
+                Add new ingredient
+            </button>
+        </div>
+        <hr>
+        <div class="form-group">
+            <div class="label-row">
+                <label>Steps</label>
+                <p class="form-text text-danger" *ngIf="steps.dirty && !steps.valid">
+                    Make sure instructions are neither empty nor longer than 1000 letters
+                </p>
+            </div>
+            <ol class="list-group list-group-flush list-group-numbered" formArrayName="steps">
+                <li class="list-group-item d-flex row align-items-center justify-content-between p-1 m-1" *ngFor="let step of steps.controls; let i = index">
+                    <div class="col-md-8 flex-grow-1">
+                        <textarea class="form-control" [formControlName]="i"></textarea>
+                    </div>
+                    <div class="col-auto g-0">
+                        <button class="btn btn-outline-danger" type="button" (click)="deleteStep(i)">X</button>      
+                    </div>
+                </li>     
+            </ol>
+            <button type="button" class="btn btn-outline-success" (click)="addStepControl()">
+                Add new step
+            </button>
+        </div>
+        <hr>
+        <div class="row justify-content-evenly g-0">
+            <button class="btn btn-success col-5" type="submit" [disabled]="!recipeForm.valid">Submit</button>
+            <button class="btn btn-outline-success col-5" type="button" (click)="cancelEdit()">Cancel</button>
+        </div>
         
-    </div>
-    <hr>
-    <div class="form-group">
-        <label for="imagePath">Image URL</label>
-        <input type="text" class="form-control" formControlName="imagePath">
-    </div>
-    <hr>
-    <div class="form-group" formArrayName="ingredients">
-        <div class="label-row">
-            <label>Ingredients</label>
-            <p class="form-text text-danger" *ngIf="ingredients.dirty && !ingredients.valid">
-                Ingredient names are required
-            </p>
-        </div>
-        <div class="row row-cols-auto align-items-center g-2 flex-nowrap" 
-            *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
-            <div class="col flex-shrink-1">
-                <input type="number" class="form-control" formControlName="amount" placeholder="amount">
-            </div>
-            <div class="col flex-shrink-1">
-                <input type="string" class="form-control" formControlName="unit" placeholder="unit">
-            </div>
-            <div class="col flex-grow-1">
-                <input type="text" class="form-control" formControlName="name" placeholder="name">
-            </div>
-            <div class="col flex-shrink-1">
-                <button class="btn btn-outline-danger" type="button" (click)="deleteIngredient(i)">X</button>
-            </div>            
-        </div>
-        <button type="button" class="btn btn-outline-success mt-2" (click)="addIngredientGroup()">
-            Add new ingredient
-        </button>
-    </div>
-    <hr>
-    <div class="form-group">
-        <div class="label-row">
-            <label>Steps</label>
-            <p class="form-text text-danger" *ngIf="steps.dirty && !steps.valid">
-                Some instructions are empty
-            </p>
-        </div>
-        <ol class="list-group list-group-flush list-group-numbered" formArrayName="steps">
-            <li class="list-group-item d-flex row align-items-center justify-content-between p-1 m-1" *ngFor="let step of steps.controls; let i = index">
-                <div class="col-md-8 flex-grow-1">
-                    <textarea class="form-control" [formControlName]="i"></textarea>
-                </div>
-                <div class="col-auto g-0">
-                    <button class="btn btn-outline-danger" type="button" (click)="deleteStep(i)">X</button>      
-                </div>
-            </li>     
-        </ol>
-        <button type="button" class="btn btn-outline-success" (click)="addStepControl()">
-            Add new step
-        </button>
-    </div>
-    <hr>
-    <div class="row justify-content-evenly g-0">
-        <button class="btn btn-success col-5" type="submit" [disabled]="!recipeForm.valid">Submit</button>
-        <button class="btn btn-outline-success col-5" type="button" (click)="cancelEdit()">Cancel</button>
-    </div>
-    
-</form>
+    </form>
+</div>

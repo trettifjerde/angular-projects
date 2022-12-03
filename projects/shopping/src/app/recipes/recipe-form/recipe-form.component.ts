@@ -106,7 +106,7 @@ export class RecipeFormComponent {
         return new FormGroup({
             'name': new FormControl(ingRaw.name, [Validators.required]),
             'amount': new FormControl(ingRaw.amount),
-            'unit': new FormControl(ingRaw.unit),
+            'unit': new FormControl({value: ingRaw.unit, disabled: !ingRaw.amount}),
         });
     }
 

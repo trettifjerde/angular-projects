@@ -5,44 +5,65 @@ import * as recipesActions from './recipes.actions';
 export interface RecipesState {
     recipes: Recipe[],
     fetched: boolean,
-    error: Error
+    allRecipesFetched: boolean,
+    error: Error,
+    navigationInProgress: boolean,
+    recipeFetchInProgress: boolean
 }
 
 const initialState: RecipesState = {
     recipes: [],
     fetched: false,
-    error: null
+    allRecipesFetched: false,
+    error: null,
+    navigationInProgress: false,
+    recipeFetchInProgress: false
 }
 
 export function recipesReducer(state=initialState, action: recipesActions.RecipesAction) {
     switch(action.type) {
-        case recipesActions.RECIPES_INIT:
         case recipesActions.START_ADD_RECIPE:
         case recipesActions.START_UPDATE_RECIPE:
-            return {...state };
+            return state;
+        case recipesActions.RECIPES_INIT:
+            return {
+                ...state,
+                recipeFetchInProgress: true
+            }
         case recipesActions.RECIPES_INIT_SUCCESS:
             return {
                 ...state,
                 recipes: action.payload,
+                recipeFetchInProgress: false,
                 fetched: true,
+                allRecipesFetched: action.payload.length < 3,
                 error: null
             }
         case recipesActions.RECIPES_INIT_FAIL:
             return {
                 ...state,
+                recipeFetchInProgress: false,
                 fetched: false,
                 error: action.payload
+            }
+        case recipesActions.RECIPES_FETCH_STARTED:
+            return {
+                ...state,
+                recipeFetchInProgress: true
             }
         case recipesActions.RECIPES_FETCH_SUCCESS:
             return {
                 ...state,
+                recipeFetchInProgress: false,
+                allRecipesFetched: action.payload.length < 3,
                 recipes: [...state.recipes, ...action.payload],
                 error: null                
             }
         case recipesActions.RECIPES_HTTP_FAIL:
             return {
                 ...state, 
-                error: action.payload
+                error: action.payload,
+                recipeFetchInProgress: false
             }
         case recipesActions.ADD_RECIPE:
             return {
@@ -61,6 +82,17 @@ export function recipesReducer(state=initialState, action: recipesActions.Recipe
                 ...state,
                 recipes: [...state.recipes.filter(r => r.id !== action.payload)],
                 error: null
+            }
+
+        case recipesActions.NAVIGATION_STARTED:
+            return {
+                ...state,
+                navigationInProgress: true    
+            }
+        case recipesActions.NAVIGATION_COMPLETE:
+            return {
+                ...state,
+                navigationInProgress: false
             }
         default:
             return state;

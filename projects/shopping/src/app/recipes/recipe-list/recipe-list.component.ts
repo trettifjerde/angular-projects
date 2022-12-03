@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
-import { RecipesService } from "../../services/recipes.service";
 import { AppState } from "../../store/app.reducer";
 import { Recipe } from "../recipe.model";
+import * as recipeActions from "../store/recipes.actions";
 
 @Component({
     selector: 'app-recipe-list',
@@ -14,12 +14,17 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     @Input('filterString') filterString: string;
     recipesSubscription: Subscription;
     recipes: Recipe[];
+    allRecipesFetched: boolean;
 
-    constructor(private recipeService: RecipesService, private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>) {}
 
     ngOnInit(): void {
         this.recipesSubscription = this.store.select('recipes').subscribe(
-            state => this.recipes = state.recipes
+            state => {
+                this.recipes = state.recipes;
+                this.allRecipesFetched = state.allRecipesFetched;
+                console.log(this.allRecipesFetched);
+            }
         )
     }
 
@@ -28,6 +33,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     }
 
     loadMoreRecipes() {
-        this.recipeService.loadMoreRecipes();
+        this.store.dispatch(new recipeActions.StartFetchRecipes(this.recipes[this.recipes.length - 1].id));
     }
 }

@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { SharedModule } from "../shared/shared.module";
 import { RecipeDetailComponent } from "./recipe-detail/recipe-detail.component";
+import { DisableUnitDirective } from "./recipe-form/disable-unit.directive";
 import { RecipeFormComponent } from "./recipe-form/recipe-form.component";
 import { RecipeItemComponent } from "./recipe-list/recipe-item/recipe-item.component";
 import { RecipeListComponent } from "./recipe-list/recipe-list.component";
@@ -16,6 +17,7 @@ import { RecipesComponent } from "./recipes.component";
         RecipeItemComponent,
         RecipeDetailComponent,
         RecipeFormComponent,
+        DisableUnitDirective
     ],
     imports: [
         SharedModule,

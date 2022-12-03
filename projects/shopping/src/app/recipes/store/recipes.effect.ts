@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, map, of, switchMap, tap } from "rxjs";
 import { RecipesService } from "../../services/recipes.service";
-import { Recipe } from "../recipe.model";
+import * as routerActions from "@ngrx/router-store";
 
 import * as recipeActions from './recipes.actions';
 
@@ -20,8 +20,8 @@ export class RecipesEffects {
     ));
 
     fetchRecipes = createEffect(() => this.actions$.pipe(
-        ofType(recipeActions.FETCH_RECIPES),
-        switchMap(() => this.recipeService.fetchRecipes().pipe(
+        ofType(recipeActions.RECIPES_FETCH_STARTED),
+        switchMap((action: recipeActions.StartFetchRecipes) => this.recipeService.fetchRecipes(action.payload).pipe(
             map(recipes => new recipeActions.RecipesFetchSuccess(recipes)),
             catchError(err => of(new recipeActions.RecipesHttpFail(err)))
         )),
@@ -56,5 +56,17 @@ export class RecipesEffects {
             }
         })
     ), {dispatch: false})
+
+    startNavigation = createEffect(() => this.actions$.pipe(
+        ofType(routerActions.ROUTER_REQUEST),
+        map(_ => new recipeActions.StartNavigation())
+    ))
+
+    completeNavigation = createEffect(() => this.actions$.pipe(
+        ofType(routerActions.ROUTER_CANCEL, routerActions.ROUTER_NAVIGATED, routerActions.ROUTER_ERROR),
+        map(_ => new recipeActions.CompleteNavigation())
+    ))
+
+
 
 }

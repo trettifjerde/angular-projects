@@ -89,7 +89,7 @@ export class ShoppingListService {
             )}))
     }
 
-    addIngredients(ingRaws: IngredientRaw[]) {
+    addIngredients(ingRaws: IngredientRaw[]) : Observable<any> {
         const ings: Ingredient[] = [];
         let obsChain = this.addIngredient(ingRaws[0], false);
         for (let i = 1; i < ingRaws.length; i++) {
@@ -98,12 +98,12 @@ export class ShoppingListService {
                 switchMap(res => this.addIngredient(ingRaws[i], false))
             )
         }
-        obsChain.subscribe({
-            next: res => {
+        return obsChain.pipe(
+            tap(res => {
                 ings.push(res);
                 this.store.dispatch(new shlist.AddIngredients(ings));
-            }
-        })
+            })
+        )
     }
 
     deleteIngredient(id: string) {

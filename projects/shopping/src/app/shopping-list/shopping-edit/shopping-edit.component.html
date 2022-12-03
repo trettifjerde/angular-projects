@@ -12,7 +12,10 @@
                 </div>
                 <div class="col-2 form-group">
                     <label for="unit">Units</label>
-                    <input type="text" id="unit" name="unit" class="form-control" [(ngModel)]="model.unit" customInput [pipes]="'lower lettersOnly'">
+                    <input type="text" id="unit" name="unit" class="form-control" 
+                    [(ngModel)]="model.unit" 
+                    customInput [pipes]="'lower lettersOnly'"
+                    [disabled]="!model.amount">
                 </div>
             </div>
             <div class="row row-cols-auto mg-2 g-2">

@@ -1,4 +1,4 @@
-<div class="detail-cont" #cont>
+<div class="detail-cont fadeIn" #cont>
     <div class="detail-header">
         <div class="detail-header-img">
             <img [src]="recipe.imagePath" class="img-fluid">
@@ -8,10 +8,10 @@
                 <h1 class="col-8">{{ recipe.name }}</h1>
                 <div class="col-auto">
                     <div *ngIf="user" class="dropdown" appDropdown>
-                        <button class="btn btn-outline-light dropdown-toggle">
+                        <button class="btn btn-outline-light dropdown-toggle" [disabled]="manageBtnDisabled">
                             Manage
                         </button>
-                        <div class="dropdown-menu" [ngClass]="{'disabled': manageBtnDisabled}">
+                        <div class="dropdown-menu" [ngClass]="{disabled: manageBtnDisabled}">
                             <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
                             <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
                             <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>

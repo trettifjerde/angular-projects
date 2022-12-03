@@ -1,4 +1,4 @@
-<div *ngIf="(recipes$|async).fetched">
+<div *ngIf="state.fetched" class="fadeIn">
     <div class="row">
         <div class="col-auto">
             <button class="btn btn-success mb-2" routerLink="new">New Recipe</button>
@@ -15,15 +15,20 @@
             </div>
         </div>
         <div class="col-md-7 main">
-            <div class="main-content">
+            <div class="main-content" *ngIf="!state.navigationInProgress">
                 <router-outlet></router-outlet>
+            </div>
+            <div class="main-content" *ngIf="isNavigationSpinnerVisible">
+                <div class="empty">
+                    <app-spinner></app-spinner>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div *ngIf="!(recipes$|async).fetched && !(recipes$|async).error">
+<div *ngIf="isPageSpinnerVisible">
     <app-spinner></app-spinner>
 </div>
-<div *ngIf="(recipes$|async).error">
-    <app-alert [message]="(recipes$|async).error"></app-alert>
+<div *ngIf="state.error">
+    <app-alert [message]="state.error"></app-alert>
 </div>

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { Recipe, RecipeRaw } from "../recipes/recipe.model";
@@ -15,9 +15,17 @@ export class RecipesService {
     makeUrl(path='') : string {
         return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/recipes${path}.json`;
     }
+    makePaginatedGetUrl(start: boolean) : string {
+        const paramStr = start ? '&startAt="m"' : '&endAt="m';
+        const encoded = encodeURI(this.makeUrl() + '?orderBy="name"' + paramStr);
+        console.log(encoded);
+        return encoded;
+    }
 
-    fetchRecipes(): Observable<Recipe[]> {
-        return this.http.get<{[id: string]: RecipeRaw}>(this.makeUrl()).pipe(
+    fetchRecipes(startId=''): Observable<Recipe[]> {
+        return this.http.get<{[id: string]: RecipeRaw}>(this.makeUrl(), {
+            params: new HttpParams().set('orderBy', '"$key"').set('startAt', (startId ? `"${startId}0"` : '')).set('limitToFirst', 3)
+        }).pipe(
             map(recipesDict => recipesDict ? Object.entries(recipesDict).reduce(
                 (acc, [id, recipe]) => {
                     acc.push(new Recipe({...recipe, id: id}));
@@ -29,10 +37,6 @@ export class RecipesService {
                 return throwError(() => err);
             })
         )
-    }
-
-    loadMoreRecipes() {
-        this.store.dispatch(new recipeActions.FetchRecipes());
     }
 
     addRecipe(recipe: RecipeRaw): Observable<Recipe> {
@@ -60,10 +64,6 @@ export class RecipesService {
             next: () => this.store.dispatch(new recipeActions.DeleteRecipe(id)),
             error: (err) => this.store.dispatch(new recipeActions.RecipesHttpFail(err))
         })
-    }
-
-    toShoppingList(ingredients: IngredientRaw[]) {
-        this.listService.addIngredients(ingredients);
     }
 
     getRecipe(id: string): Observable<Recipe> {

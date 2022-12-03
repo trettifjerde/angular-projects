@@ -1,9 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { map, Subscription } from "rxjs";
 import { User } from "../../auth/user.model";
 import { RecipesService } from "../../services/recipes.service";
+import { ShoppingListService } from "../../services/shopping-list.service";
 import { AppState } from "../../store/app.reducer";
 import { Recipe } from "../recipe.model";
 
@@ -12,26 +13,34 @@ import { Recipe } from "../recipe.model";
     templateUrl: './recipe-detail.component.html',
     styleUrls: ['./recipe-detail.component.css']
 })
-export class RecipeDetailComponent implements OnInit {
+export class RecipeDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     recipe: Recipe;
     manageBtnDisabled = false;
     authSubscription: Subscription;
     user: User = null;
 
-    constructor(private store: Store<AppState>, private recipeService: RecipesService, private route: ActivatedRoute, private router: Router) {}
+    constructor(
+        private store: Store<AppState>, 
+        private recipeService: RecipesService, 
+        private listService: ShoppingListService,
+        private route: ActivatedRoute
+    ) {}
 
     @ViewChild('cont', {static: true}) cont: ElementRef;
 
     ngOnInit(): void {
-        this.authSubscription = this.store.select('auth').pipe(map(state => state.user))
-            .subscribe(user => this.user = user);
+        this.authSubscription = this.store.select('auth')
+            .pipe(map(state => state.user)
+        )
+        .subscribe(user => this.user = user);
 
         this.route.data.subscribe(
-            data => {
-                this.recipe = data['recipe'];
-                this.cont.nativeElement.scrollIntoView(true);
-            }
+            data => this.recipe = data['recipe']
         )
+    }
+
+    ngAfterViewInit(): void {
+        this.cont.nativeElement.scrollIntoView(true);
     }
 
     ngOnDestroy() {
@@ -39,8 +48,11 @@ export class RecipeDetailComponent implements OnInit {
     }
 
     toShoppingList() {
-        this.recipeService.toShoppingList(this.recipe.ingredients);
-        return false;
+        this.manageBtnDisabled = true;
+        this.listService.addIngredients(this.recipe.ingredients).subscribe({
+            next: _ => this.manageBtnDisabled = false,
+            error: _ => this.manageBtnDisabled = false
+        });
     }
 
     deleteRecipe() {
