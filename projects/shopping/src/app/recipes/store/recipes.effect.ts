@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, EMPTY, map, NEVER, of, switchMap, tap } from "rxjs";
 import { RecipesService } from "../../services/recipes.service";
 import * as routerActions from "@ngrx/router-store";
 
@@ -59,14 +59,20 @@ export class RecipesEffects {
 
     startNavigation = createEffect(() => this.actions$.pipe(
         ofType(routerActions.ROUTER_REQUEST),
-        map(_ => new recipeActions.StartNavigation())
+        switchMap((action: routerActions.RouterRequestAction) => {
+            if (action.payload.event.url.startsWith('/recipes/'))
+                return of(new recipeActions.StartNavigation())
+            else
+                return EMPTY
+        })
     ))
 
     completeNavigation = createEffect(() => this.actions$.pipe(
         ofType(routerActions.ROUTER_CANCEL, routerActions.ROUTER_NAVIGATED, routerActions.ROUTER_ERROR),
-        map(_ => new recipeActions.CompleteNavigation())
+        switchMap((action: any) => {
+            if (action.payload.event.url.startsWith('/recipes/'))
+                return of(new recipeActions.CompleteNavigation())
+            else return EMPTY
+        })
     ))
-
-
-
 }

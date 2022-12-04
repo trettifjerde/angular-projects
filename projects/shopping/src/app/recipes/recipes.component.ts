@@ -15,9 +15,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     recipesSubscription: Subscription;
     state: RecipesState;
     navigationSpinnerTimer: any;
-    pageSpinnerTimer: any;
     isNavigationSpinnerVisible: boolean;
-    isPageSpinnerVisible: boolean;
 
     constructor(private store: Store<AppState>) {}
 
@@ -26,7 +24,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
             state => {
                 this.state = state;
                 this.setNavigationSpinnerTimer(state.navigationInProgress);
-                this.setPageSpinnerTimer(!state.error && !state.fetched);
             }
         )
     }
@@ -49,15 +46,4 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.navigationSpinnerTimer = null;
         }
     }
-
-    setPageSpinnerTimer(on: boolean) {
-        if (on) 
-            this.pageSpinnerTimer = setTimeout(() => this.isPageSpinnerVisible = true, 200);
-        else {
-            this.isPageSpinnerVisible = false;
-            clearTimeout(this.pageSpinnerTimer);
-            this.pageSpinnerTimer = null;
-        }
-    }
-
 }

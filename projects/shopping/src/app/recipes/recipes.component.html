@@ -26,9 +26,6 @@
         </div>
     </div>
 </div>
-<div *ngIf="isPageSpinnerVisible">
-    <app-spinner></app-spinner>
-</div>
 <div *ngIf="state.error">
     <app-alert [message]="state.error"></app-alert>
 </div>

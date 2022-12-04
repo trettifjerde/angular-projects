@@ -23,7 +23,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
             state => {
                 this.recipes = state.recipes;
                 this.allRecipesFetched = state.allRecipesFetched;
-                console.log(this.allRecipesFetched);
             }
         )
     }
