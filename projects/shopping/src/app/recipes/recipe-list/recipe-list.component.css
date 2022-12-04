@@ -1,7 +1,16 @@
-.r-c { 
+.recipes-c { 
     display: flex;
     flex-direction: column-reverse;
     gap: 0.5rem;
+}
+
+.spinner-c {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff80;
 }
 
 @media (max-width: 768px) {

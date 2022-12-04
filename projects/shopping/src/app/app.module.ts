@@ -17,6 +17,7 @@ import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects.newer';
 import { SharedModule } from './shared/shared.module';
 import { RecipesEffects } from './recipes/store/recipes.effect';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { RecipesEffects } from './recipes/store/recipes.effect';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     AppRouterModule,
