@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, tap, Observable, of } from 'rxjs';
 import { Mailbox, Email, FormInfo, emailToEntries } from './interfaces';
@@ -27,12 +27,8 @@ export class MailService {
       );
   }
 
-  archiveEmail(emailId: number, archived: boolean) : Observable<Mailbox> {
-    return this.http.put<Email[]>(this.emailsUrl + emailId + "/", {archived: archived})
-      .pipe(
-        map(emails => {return {name: 'inbox', entries: emailToEntries(emails, 'inbox')} as Mailbox}),
-        catchError(this.handleError<Mailbox>('error (un)archiving email', {name: 'inbox'} as Mailbox))
-      );
+  archiveEmail(emailId: number, archived: boolean) : Observable<null> {
+    return this.http.put<null>(this.emailsUrl + emailId + "/", {archived: archived})
   }
 
   openEmail(emailId: number) : Observable<Email> {
@@ -65,8 +61,11 @@ export class MailService {
   handleError<T>(message: string, fallback? : T)
   {
     return (error: any) : Observable<T> => {
-      console.error(error);
-      console.log(message);
+      if (error.status === 401) 
+        window.location.reload();
+      else {
+        console.log(error, message);
+      }
       return of(fallback as T);
     }
   }

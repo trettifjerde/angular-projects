@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FormInfo } from '../interfaces';
 
@@ -6,18 +6,20 @@ import { FormInfo } from '../interfaces';
   selector: 'app-mailform',
   templateUrl: './mailform.component.html'
 })
-export class MailformComponent implements AfterViewInit, OnChanges {
+export class MailformComponent implements OnChanges {
 
   @Input() info = {} as FormInfo;
   @Input() errorMsg : string|null = null;
+  @Input() isFormBeingProcessed: boolean;
   @Output() sendEmailEvent = new EventEmitter();
   @ViewChild('emailForm') form!: NgForm;
   @ViewChild('textarea') textarea!: ElementRef;
   @ViewChild('submitBtn') submitBtn!: ElementRef;
 
-  constructor() {   }
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('mail form regiseting changes');
     if (changes['info'] && ! changes['info'].firstChange) {
       this.form.form.markAsPristine();
       setTimeout(()=>{
@@ -27,10 +29,7 @@ export class MailformComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  ngAfterViewInit(): void { }
-
   onSubmit(): void {
-    this.submitBtn.nativeElement.disabled = true;
     this.sendEmailEvent.emit(this.info);
   }
 

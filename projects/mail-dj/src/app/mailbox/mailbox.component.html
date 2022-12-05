@@ -1,14 +1,14 @@
 <h3>{{ mailbox.name | titlecase }}</h3>
 <div>{{ errorMsg }}</div>
 <div>
-    <div *ngFor="let entry of mailbox.entries" [ngClass]="{'entry': true, 'read': entry.read}" (click)="onEntryClick(entry.id)">
+    <div *ngFor="let entry of mailbox.entries" class="entry" [ngClass]="{'read': entry.read}" (click)="onEntryClick(entry.id)">
         <div class="info">
-            <span class="sender">
+            <div class="sender">
                 {{ entry.user }}
                 <span *ngIf="entry.extra > 0" class="extra-recip">+{{ entry.extra }}</span>
-            </span>
-            <span class="subject">{{ entry.subject }}</span>
-            <span class="timestamp">{{entry.timestamp}}</span>
+            </div>
+            <div class="subject">{{ entry.subject }}</div>
+            <div class="timestamp">{{entry.timestamp}}</div>
         </div>
         <button *ngIf="mailbox.name !== 'sent'" class="btn archive" type="button" 
             (click)="onArchive(entry.id, mailbox.name === 'inbox', $event)">

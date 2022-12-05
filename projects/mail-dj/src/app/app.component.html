@@ -4,14 +4,19 @@
 </div>
 
 <div id="menuBtns" class="btn-bar">
-	<button class="btn" id="inbox" (click)="openMailbox('inbox')">Inbox</button>
-	<button class="btn" id="compose" (click)="openCompose()">Compose</button>
-	<button class="btn" id="sent" (click)="openMailbox('sent')">Sent</button>
-	<button class="btn" id="archived" (click)="openMailbox('archived')">Archived</button>
+	<button class="btn" id="inbox" (click)="openMailbox('inbox')" [disabled]="loading">Inbox</button>
+	<button class="btn" id="compose" (click)="openCompose()" [disabled]="loading">Compose</button>
+	<button class="btn" id="sent" (click)="openMailbox('sent')" [disabled]="loading">Sent</button>
+	<button class="btn" id="archived" (click)="openMailbox('archived')" [disabled]="loading">Archived</button>
 </div>
 <hr>
 <div class="error-msg">{{ errorMsg }}</div>
-<app-mailbox [hidden]="currentTab !== 1" [(mailbox)]="mailbox" (emailOpenEvent)="openEmail($event)"></app-mailbox>
-<app-mailform [hidden]="currentTab !== 2" [info]="formInfo" (sendEmailEvent)="sendEmail($event)"></app-mailform>
-<app-mailview [hidden]="currentTab !== 3" [email]="email" 
-	(replyEvent)="openCompose(true)" (deleteEvent)="deleteEmail($event)"></app-mailview>
+<div class="mailbox">
+	<app-mailbox [hidden]="currentTab !== 1" [mailbox]="mailbox" (error)="onError($event)" (emailOpenEvent)="openEmail($event)"></app-mailbox>
+	<app-mailform [hidden]="currentTab !== 2" [info]="formInfo" [isFormBeingProcessed]="isFormBeingProcessed" (sendEmailEvent)="sendEmail($event)"></app-mailform>
+	<app-mailview [hidden]="currentTab !== 3" [email]="email" 
+		(replyEvent)="openCompose(true)" (deleteEvent)="deleteEmail($event)"></app-mailview>
+	<div class="spinner-cont" [ngClass]="{none: !loading}">
+		<app-spinner *ngIf="loading"></app-spinner>
+	</div>
+</div>

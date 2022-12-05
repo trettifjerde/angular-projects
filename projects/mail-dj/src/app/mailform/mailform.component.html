@@ -5,14 +5,13 @@
         <span class="b">From:</span>
         <input type="text" disabled value="{{ info.sender }}" />
     </div>
-    <p class="error-msg" [hidden]="emailRecipients.valid || emailRecipients.pristine">Recipients must be a comma separated list of usernames</p>
     <div class="row">
-        <span class="b">To:</span> 
+        <span class="b">To:</span>
         <input #emailRecipients="ngModel" type="text" name="recipients" [(ngModel)]="info.recipients" 
             placeholder="username1, username2" required/>
     </div>
+    <p class="error-msg" [ngClass]="{hidden: emailRecipients.valid || emailRecipients.pristine}">Recipients must be a comma separated list of usernames</p>
     <input type="text" name="subject" [(ngModel)]="info.subject" placeholder="Subject"/>
-    <p class="error-msg" [hidden]="emailBody.valid || emailBody.pristine">Email is empty</p>
     <textarea #textarea #emailBody="ngModel" name="body" [(ngModel)]="info.body" placeholder="Type your email" required></textarea>
-    <button #submitBtn type="submit" class="btn" [disabled]="!emailForm.valid">Send</button>
+    <button #submitBtn type="submit" class="btn" [disabled]="!emailForm.valid || isFormBeingProcessed">Send</button>
 </form>

@@ -56,15 +56,11 @@ form .row input {
     margin: 1rem auto;
 }
 
-.form-div form {margin-bottom: 1rem;}
-
-
-#compose-form textarea {
-    resize: none;
+.form-div form {
+    margin-bottom: 1rem;
 }
 
 .error-msg {
-    line-height: 2.5rem;
     color: red;
     text-align: center;
     font-size: 0.85rem;
@@ -91,7 +87,6 @@ a {
 }
 
 .btn {
-    display: block;
     text-align: center;
     cursor: pointer;
     font-weight: 600;
@@ -100,8 +95,7 @@ a {
 }
 
 .btn:disabled {
-    color: gray;
-    border: gray;
+    opacity: 0.5;
     cursor: default;
 }
 
@@ -111,6 +105,9 @@ a {
     border-radius: 5px;
     outline: none;
     background: transparent !important;
+}
+
+.btn, input {
     white-space: nowrap;
 }
 
@@ -140,18 +137,18 @@ hr {
     border-top: 1px solid #00b7ff;
 }
 
-.error {
-    border-color: red !important;
-}
+.none { display: none; }
+
+.hidden {visibility: hidden;}
 
 #email-header button {
     margin: 1rem 0;
 }
 
 .entry {
-    display: flex;
+    display: grid;
     align-items: center;
-    justify-content: space-between;
+    grid-template-columns: 1fr auto;
     gap: 1rem;
     border: 1px solid #00b7ff;
     border-radius: 5px;
@@ -167,26 +164,27 @@ hr {
     box-shadow: 2px 2px 2px lightgray;
 }
 
-.entry .info {
-    flex-grow: 1;
-    display: flex;
+.info {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     gap: 1rem;
     height: 100%;
 }
 
-.entry .sender {
+.sender {
     font-weight: 600;
 }
 
-.entry .subject {
-    flex-grow: 1;
+.subject {
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    
 }
 
-.entry .timestamp {
+.timestamp {
     font-size: 0.8rem;
     color: gray;
-    min-width: fit-content;
 }
 
 .read {
@@ -236,30 +234,46 @@ footer .links a {
     font-weight: 400;
 }
 
-@media (max-width: 600px) {
+.mailbox {
+    position: relative;
+}
 
+.spinner-cont {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.ng-dirty.ng-invalid {
+    border-color: red;
+}
+
+@media (max-width: 700px) {
     body {
         width: 100%;
         padding: 1rem;
     }
+
+    .entry, .info, .archive {
+        display: block;
+    }
+
     .entry {
-        flex-wrap: wrap;
-        gap: 0.2rem;
         padding: 0.5rem;
         line-height: 1.5rem;
         height: auto;
     }
 
-    .entry .info {
-        flex-direction: column;
-        gap: 0rem;
-    }
-
-    .entry .subject {
+    .subject {
         max-height: 1.5rem;
+        max-width: 100%;
     }
 
-    .archive {
-        display: block;
+    .entry > *, .info > * {
+        margin-block: 0.2rem;
     }
+
 }

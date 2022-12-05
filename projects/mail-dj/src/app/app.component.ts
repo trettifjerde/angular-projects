@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormInfo, Mailbox, EmailEntry, Email, emailToReplyFormInfo } from './interfaces';
+import { FormInfo, Mailbox, Email, emailToReplyFormInfo } from './interfaces';
 import { MailService } from './mail.service';
 
 @Component({
@@ -12,13 +12,17 @@ export class AppComponent implements OnInit {
 
   mailbox = {name: '', entries: []} as Mailbox;
   formInfo = {sender : '' } as FormInfo;
+  isFormBeingProcessed = false;
   email = {} as Email;
   errorMsg = '';
+  spinnerTimer: any;
+  loading = false;
 
-  btns! : NodeListOf<HTMLButtonElement>;
   currentTab! : number;
 
-  constructor(private mailService : MailService) {
+  constructor(private mailService : MailService) {  }
+
+  ngOnInit(): void {
     this.mailService.setUsername().subscribe(
       data => {
         this.username = data.username;
@@ -26,28 +30,19 @@ export class AppComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-    this.btns = document.querySelectorAll('#menuBtns button') as NodeListOf<HTMLButtonElement>;
-  }
-
-  toggleMenuBtns() : void {
-    this.btns.forEach(btn => btn.disabled = ! btn.disabled);
-  }
-
   openMailbox(name: string) : void {
-    this.toggleMenuBtns();
+    this.setSpinnerTimer();
     this.errorMsg = '';
-    this.currentTab = 1;
     this.mailService.openMailbox(name).subscribe(mailbox => {
+      this.currentTab = 1;
       this.mailbox = mailbox;
-      this.toggleMenuBtns();
+      this.clearSpinnerTimer();
     });
   }
 
   openCompose(reply=false) : void {
     this.errorMsg = '';
     this.currentTab = 2;
-
     if (reply)
       this.formInfo = emailToReplyFormInfo(this.username, this.email);
     else
@@ -55,26 +50,28 @@ export class AppComponent implements OnInit {
   }
 
   openEmail(emailId: number) {
-    this.toggleMenuBtns();
+    this.setSpinnerTimer();
     this.errorMsg = '';
-    this.currentTab = 3;
     this.mailService.openEmail(emailId).subscribe(email => {
+      this.currentTab = 3;
       this.email = email;
-      this.toggleMenuBtns();
+      this.clearSpinnerTimer();
     });
   }
 
   sendEmail(info: FormInfo) {
-    this.toggleMenuBtns();
+    this.isFormBeingProcessed = true;
+    this.setSpinnerTimer();
     this.errorMsg = '';
     this.mailService.sendEmail(info).subscribe(response => {
       if (typeof(response) === 'string') {
         this.errorMsg = response; 
+        this.isFormBeingProcessed = false;
       } else {
         this.currentTab = 1;
         this.mailbox = response;
       }
-      this.toggleMenuBtns();
+      this.clearSpinnerTimer();
     });
   }
 
@@ -87,5 +84,20 @@ export class AppComponent implements OnInit {
           this.errorMsg = 'Error deleting email';
       }
     );
+  }
+
+  onError(error: Error) {
+    console.log(error);
+    this.errorMsg = error.message;
+  }
+
+  setSpinnerTimer() {
+    this.spinnerTimer = setTimeout(() => this.loading = true, 100);
+  }
+
+  clearSpinnerTimer() {
+    clearTimeout(this.spinnerTimer);
+    this.spinnerTimer = null;
+    this.loading = false;
   }
 }
