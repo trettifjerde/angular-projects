@@ -14,8 +14,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
     filterString = '';
     recipesSubscription: Subscription;
     state: RecipesState;
-    navigationSpinnerTimer: any;
-    isNavigationSpinnerVisible: boolean;
+    navigationSpinner = {visible: false, timer: null};
+    fetchSpinner = {visible: false, timer: null};
 
     constructor(private store: Store<AppState>) {}
 
@@ -23,7 +23,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.recipesSubscription = this.store.select('recipes').subscribe(
             state => {
                 this.state = state;
-                this.setNavigationSpinnerTimer(state.navigationInProgress);
+                this.setSpinnerTimer(state.recipeFetchInProgress, this.fetchSpinner);
+                this.setSpinnerTimer(state.navigationInProgress, this.navigationSpinner);
             }
         )
     }
@@ -36,14 +37,14 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.filterString = '';
     }
 
-    setNavigationSpinnerTimer(inProgress: boolean) {
-        if (inProgress && ! this.navigationSpinnerTimer) {
-            this.navigationSpinnerTimer = setTimeout(() => this.isNavigationSpinnerVisible = true, 200);
+    setSpinnerTimer(inProgress: boolean, spinner: {visible:boolean, timer: any}) {
+        if (inProgress && ! spinner.timer) {
+            spinner.timer = setTimeout(() => spinner.visible = true, 200);
         }
-        else if (!inProgress && this.navigationSpinnerTimer) {
-            this.isNavigationSpinnerVisible = false;
-            clearTimeout(this.navigationSpinnerTimer);
-            this.navigationSpinnerTimer = null;
+        else if (!inProgress && spinner.timer) {
+            spinner.visible = false;
+            clearTimeout(spinner.timer);
+            spinner.timer = null;
         }
     }
 }

@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Store } from "@ngrx/store";
 import { map, Observable, take } from "rxjs";
 import { AppState } from "../store/app.reducer";
-import { AuthService } from "./auth.service";
 
 @Injectable({providedIn: 'root'})
 export class AuthGuard implements CanActivate {
@@ -13,7 +12,7 @@ export class AuthGuard implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot, 
         state: RouterStateSnapshot
-    ): boolean  | UrlTree| Observable<boolean|UrlTree> | Promise<boolean|UrlTree> {
+    ): boolean | UrlTree| Observable<boolean|UrlTree> | Promise<boolean|UrlTree> {
         return this.store.select('auth').pipe(
             take(1),
             map(info => info.user),

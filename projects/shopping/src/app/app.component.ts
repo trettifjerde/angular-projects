@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/app.reducer';
 import { AuthService } from './auth/auth.service';
 
 import { RecipesInit } from './recipes/store/recipes.actions';
-import { Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,25 +13,17 @@ import { Router, RouterEvent } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   title = 'Cookbook';
-  loading = false;
-  loadingSpinnerTimer: any = null;
   //routerSub: Subscription;
 
-  constructor(private authService: AuthService, private store: Store<AppState>) {}
+  constructor(
+    private authService: AuthService, 
+    private store: Store<AppState>,
+    @Inject(PLATFORM_ID) private platformId) {}
 
   ngOnInit() {
-    this.setLoadingSpinnerTimer();
-    this.authService.autoLogin();
+    if (isPlatformBrowser(this.platformId)) {
+      this.authService.autoLogin();
+    }
     this.store.dispatch(new RecipesInit());
-  }
-
-  setLoadingSpinnerTimer() {
-    this.loadingSpinnerTimer = setTimeout(() => this.loading = true, 200);
-  }
-
-  clearLoadingSpinnerTimer() {
-    clearTimeout(this.loadingSpinnerTimer);
-    this.loadingSpinnerTimer = null;
-    this.loading = false;
   }
 }

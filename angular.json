@@ -512,20 +512,23 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/shopping",
+            "outputPath": "dist/shopping/browser",
             "index": "projects/shopping/src/index.html",
             "main": "projects/shopping/src/main.ts",
             "polyfills": "projects/shopping/src/polyfills.ts",
             "tsConfig": "projects/shopping/tsconfig.app.json",
             "assets": [
               "projects/shopping/src/favicon.ico",
-              "projects/shopping/src/assets"
+              "projects/shopping/src/assets",
+              "projects/shopping/src/manifest.webmanifest"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "projects/shopping/src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "projects/shopping/ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -587,13 +590,73 @@
             "karmaConfig": "projects/shopping/karma.conf.js",
             "assets": [
               "projects/shopping/src/favicon.ico",
-              "projects/shopping/src/assets"
+              "projects/shopping/src/assets",
+              "projects/shopping/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/shopping/src/styles.css"
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/shopping/server",
+            "main": "projects/shopping/server.ts",
+            "tsConfig": "projects/shopping/tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "projects/shopping/src/environments/environment.ts",
+                  "with": "projects/shopping/src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "shopping:build:development",
+              "serverTarget": "shopping:server:development"
+            },
+            "production": {
+              "browserTarget": "shopping:build:production",
+              "serverTarget": "shopping:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "shopping:build:production",
+              "serverTarget": "shopping:server:production"
+            },
+            "development": {
+              "browserTarget": "shopping:build:development",
+              "serverTarget": "shopping:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     },

@@ -1,11 +1,11 @@
-import { ThisReceiver } from "@angular/compiler";
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { catchError, EMPTY, exhaustMap, map, NEVER, Observable, of, take } from "rxjs";
+import { catchError, EMPTY, map, Observable } from "rxjs";
 import { RecipesService } from "../services/recipes.service";
 import { AppState } from "../store/app.reducer";
 import { Recipe } from "./recipe.model";
+import * as recipeActions from "../recipes/store/recipes.actions"; 
 
 @Injectable({providedIn: 'root'})
 export class RecipeResolver implements Resolve<Recipe> {
@@ -24,8 +24,8 @@ export class RecipeResolver implements Resolve<Recipe> {
                         return null;
                     }
                 }),
-                catchError(err => {
-                    console.log('error resolving recipe', err);
+                catchError(errorMsg => {
+                    this.store.dispatch(new recipeActions.RecipesHttpFail(errorMsg));
                     this.router.navigate(['/recipes']);
                     return EMPTY;
                 })

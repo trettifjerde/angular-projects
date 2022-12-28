@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { Recipe, RecipeRaw } from "../recipes/recipe.model";
@@ -32,35 +32,30 @@ export class RecipesService {
                     return acc;
                 }, [] as Recipe[]) : []
             ),
-            catchError(err => {
-                console.log('Error while fetching recipes', err);
-                return throwError(() => err);
-            })
+            catchError(err => this.handleError(err))
         )
     }
 
     addRecipe(recipe: RecipeRaw): Observable<Recipe> {
         return this.http.post<{name: string}>(this.makeUrl(), recipe).pipe(
             map(res => new Recipe({...recipe, id: res.name})),
-            catchError(err => {
-                console.log('error adding new recipe:', err);
-                return throwError(() => err);
-            })
+            catchError(this.handleError)
         )
     }
 
     updateRecipe(id: string, recipe: RecipeRaw) {
         return this.http.patch<RecipeRaw>(this.makeUrl('/' + id), recipe).pipe(
             map(res => new Recipe({...recipe, id: id})),
-            catchError(err => {
-                console.log('error updating recipe:', err);
-                return throwError(() => err);
-            })
+            catchError(this.handleError)
         )
     }
 
     deleteRecipe(id: string){
-        this.http.delete<null>(this.makeUrl('/' + id)).subscribe({
+        this.http.delete<null>(this.makeUrl('/' + id))
+        .pipe(
+            catchError(this.handleError)
+        )
+        .subscribe({
             next: () => this.store.dispatch(new recipeActions.DeleteRecipe(id)),
             error: (err) => this.store.dispatch(new recipeActions.RecipesHttpFail(err))
         })
@@ -68,7 +63,28 @@ export class RecipesService {
 
     getRecipe(id: string): Observable<Recipe> {
         return this.http.get<RecipeRaw>(this.makeUrl('/' + id)).pipe(
-            map(res => res ? new Recipe({...res, id: id}) : null)
+            map(res => res ? new Recipe({...res, id: id}) : null),
+            catchError(this.handleError)
         )
+    }
+
+    handleError(err: HttpErrorResponse) {
+        console.log('Error handling recipes', err);
+        let errorMsg = 'An error has occurred. Reload the page';
+        switch(err.status) {
+            case 504:
+                errorMsg = 'Network connection lost';
+                break;
+            case 404:
+                errorMsg = 'Resource not found';
+                break;
+            case 400:
+                errorMsg = 'Bad request';
+                break;
+            case 500:
+                errorMsg = 'Server error';
+                break;
+        }
+        return throwError(() => errorMsg);
     }
 }

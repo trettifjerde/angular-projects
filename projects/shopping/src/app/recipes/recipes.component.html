@@ -1,3 +1,6 @@
+<div *ngIf="state.error">
+    <app-alert [message]="state.error"></app-alert>
+</div>
 <div *ngIf="state.fetched" class="fadeIn">
     <div class="row">
         <div class="col-auto">
@@ -18,7 +21,7 @@
             <div class="main-content" *ngIf="!state.navigationInProgress">
                 <router-outlet></router-outlet>
             </div>
-            <div class="main-content" *ngIf="isNavigationSpinnerVisible">
+            <div class="main-content" *ngIf="navigationSpinner.visible">
                 <div class="empty">
                     <app-spinner></app-spinner>
                 </div>
@@ -26,6 +29,6 @@
         </div>
     </div>
 </div>
-<div *ngIf="state.error">
-    <app-alert [message]="state.error"></app-alert>
+<div *ngIf="fetchSpinner.visible">
+    <app-spinner></app-spinner>
 </div>

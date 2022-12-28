@@ -13,7 +13,7 @@ import { ShoppingListComponent } from "./shopping-list.component";
     imports: [
         SharedModule,
         RouterModule.forChild([
-            {path: '', component: ShoppingListComponent, canActivate: [AuthGuard] }
+            { path: '', component: ShoppingListComponent, canActivate: [AuthGuard] }
         ]), 
     ],
 })
