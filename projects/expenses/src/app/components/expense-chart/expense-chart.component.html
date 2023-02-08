@@ -1,0 +1,4 @@
+<div class="chart">
+    <app-expense-chart-bar *ngFor="let bar of chartBars" 
+        [barLabel]="bar.label" [barValue]="bar.value" [maxValue]="maxValue"></app-expense-chart-bar>
+</div>

@@ -1,0 +1,24 @@
+<div class="new-expense">
+    <form *ngIf="isFormVisible" (ngSubmit)="onSubmit()" #form="ngForm">
+        <div class="controls">
+            <div class="control">
+                <label>Title</label>
+                <input type="text" name="title" [ngModel]="model.title" (ngModelChange)="model.title = $event" required />
+            </div>
+            <div class="control">
+                <label>Date</label>
+                <input type="date" name="date" [ngModel]="model.date|date:'yyyy-MM-dd'" required
+                (ngModelChange)="model.date = $event" min="2021-01-01" [max]="setDateMax()|date:'yyy-MM-dd'"/>
+            </div>
+            <div class="control">
+                <label>Amount</label>
+                <input type="number" required name="amount" [(ngModel)]="model.amount" min="0.1" step="0.1"  />
+            </div>
+        </div>
+        <div class="actions">
+            <button type="button" (click)="setFormVisible(false)">Cancel</button>
+            <button type="submit">Add expense</button>
+        </div>
+    </form>
+    <button *ngIf="!isFormVisible" type="button" (click)="setFormVisible(true)">Add New Expense</button>
+</div>
