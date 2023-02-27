@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { IngredientRaw } from "../../shared/ingredient.interface"; 
 import { AppState } from "../../store/app.reducer";
+import { setSubmitting } from "../../store/general.store";
 import { Recipe } from "../recipe.model";
 import * as recipeActions from '../store/recipes.actions';
 
@@ -131,6 +132,7 @@ export class RecipeFormComponent {
     }
 
     onSubmit() {
+        this.store.dispatch(setSubmitting({status: true}));
         if (this.recipe) 
             this.store.dispatch(new recipeActions.StartUpdateRecipe([this.recipe.id, this.recipeForm.value]));
         else 

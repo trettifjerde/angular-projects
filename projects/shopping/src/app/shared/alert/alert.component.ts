@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Toast } from "../../store/general.store";
 
 @Component({
     selector: 'app-alert',
@@ -6,5 +7,5 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
     styleUrls: ['./alert.component.css']
 })
 export class AlertComponent {
-    @Input() message = '';
+    @Input() toast: Toast = {message: '', isError: false};
 }

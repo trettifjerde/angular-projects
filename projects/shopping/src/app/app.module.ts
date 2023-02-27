@@ -19,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
 import { RecipesEffects } from './recipes/store/recipes.effect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ShoppingListEffects } from './shopping-list/store/shopping-list.effects';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     FormsModule,
     AppRouterModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([AuthEffects, RecipesEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipesEffects, ShoppingListEffects]),
     SharedModule,
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
     StoreRouterConnectingModule.forRoot(),

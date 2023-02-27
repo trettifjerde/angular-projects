@@ -1,12 +1,13 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, map, Observable, throwError } from "rxjs";
-import { Recipe, RecipeRaw } from "../recipes/recipe.model";
+import { Recipe, RecipeRaw } from "./recipe.model";
 import { IngredientRaw } from "../shared/ingredient.interface";
-import { ShoppingListService } from "./shopping-list.service";
-import * as recipeActions from "../recipes/store/recipes.actions";
+import { ShoppingListService } from "../shopping-list/shopping-list.service";
+import * as recipeActions from "./store/recipes.actions";
 import { Store } from "@ngrx/store";
 import { AppState } from "../store/app.reducer";
+import { setSubmitting } from "../store/general.store";
 
 @Injectable({providedIn: 'root'})
 export class RecipesService {
@@ -51,8 +52,8 @@ export class RecipesService {
     }
 
     deleteRecipe(id: string){
-        this.http.delete<null>(this.makeUrl('/' + id))
-        .pipe(
+        this.store.dispatch(setSubmitting({status: true}));
+        this.http.delete<null>(this.makeUrl('/' + id)).pipe(
             catchError(this.handleError)
         )
         .subscribe({
@@ -85,6 +86,6 @@ export class RecipesService {
                 errorMsg = 'Server error';
                 break;
         }
-        return throwError(() => errorMsg);
+        return throwError(() => new Error(errorMsg));
     }
 }

@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { map, Observable, of, Subject, tap } from "rxjs";
 import { Recipe, RecipeRaw } from "../recipes/recipe.model";
 import { IngredientRaw } from "../shared/ingredient.interface"; 
-import { ShoppingListService } from "./shopping-list.service";
+import { ShoppingListService } from "../shopping-list/shopping-list.service";
 
 @Injectable({providedIn: 'root'})
 export class RecipesService {

@@ -4,6 +4,7 @@ import { Observable, Subscription, take } from "rxjs";
 import { AppState } from "../store/app.reducer";
 import { Recipe } from "./recipe.model";
 import { RecipesState } from "./store/recipes.reducer";
+import { setSpinnerTimer } from "../shared/utils";
 
 @Component({
     selector: 'app-recipes',
@@ -12,39 +13,27 @@ import { RecipesState } from "./store/recipes.reducer";
 })
 export class RecipesComponent implements OnInit, OnDestroy {
     filterString = '';
-    recipesSubscription: Subscription;
-    state: RecipesState;
-    navigationSpinner = {visible: false, timer: null};
-    fetchSpinner = {visible: false, timer: null};
+    fetchedSub: Subscription;
+    fetched: boolean;
+    navigationSub: Subscription;
+    navigationSpinner: {visible: boolean, timer: any} = {visible: false, timer: null};
 
     constructor(private store: Store<AppState>) {}
 
     ngOnInit(): void {
-        this.recipesSubscription = this.store.select('recipes').subscribe(
-            state => {
-                this.state = state;
-                this.setSpinnerTimer(state.recipeFetchInProgress, this.fetchSpinner);
-                this.setSpinnerTimer(state.navigationInProgress, this.navigationSpinner);
-            }
+        this.fetchedSub = this.store.select(store => store.recipes.fetched).subscribe(
+            fetched => this.fetched = fetched
+        )
+        this.navigationSub = this.store.select(store => store.recipes.navigationInProgress).subscribe(
+            navigationInProgress => setSpinnerTimer(navigationInProgress, this.navigationSpinner)
         )
     }
 
     ngOnDestroy(): void {
-        this.recipesSubscription.unsubscribe();
+        this.fetchedSub.unsubscribe();
     }
 
     clearFilter() {
         this.filterString = '';
-    }
-
-    setSpinnerTimer(inProgress: boolean, spinner: {visible:boolean, timer: any}) {
-        if (inProgress && ! spinner.timer) {
-            spinner.timer = setTimeout(() => spinner.visible = true, 200);
-        }
-        else if (!inProgress && spinner.timer) {
-            spinner.visible = false;
-            clearTimeout(spinner.timer);
-            spinner.timer = null;
-        }
     }
 }

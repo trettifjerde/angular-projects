@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, EMPTY, map, NEVER, of, switchMap, tap } from "rxjs";
-import { RecipesService } from "../../services/recipes.service";
+import { catchError, EMPTY, map, of, switchMap, tap } from "rxjs";
+import { RecipesService } from "../recipes.service";
 import * as routerActions from "@ngrx/router-store";
+import { setSubmitting, setToast } from "../../store/general.store";
 
 import * as recipeActions from './recipes.actions';
 
@@ -17,6 +18,16 @@ export class RecipesEffects {
                 map(recipes => new recipeActions.RecipesInitSuccess(recipes)),
                 catchError(err => of(new recipeActions.RecipesInitFail(err)))
         ))
+    ));
+
+    recipesFetchSuccess = createEffect(() => this.actions$.pipe(
+        ofType(recipeActions.RECIPES_INIT_SUCCESS),
+        switchMap(() => of(setSubmitting({status: false})))
+    ));
+
+    recipesFetchFail = createEffect(() => this.actions$.pipe(
+        ofType(recipeActions.RECIPES_INIT_FAIL, recipeActions.RECIPES_HTTP_FAIL),
+        switchMap((action: recipeActions.RecipesFail) => of(setToast({toast: {message: action.payload.message, isError: true}})))
     ));
 
     fetchRecipes = createEffect(() => this.actions$.pipe(
@@ -54,8 +65,19 @@ export class RecipesEffects {
                 default:
                     this.router.navigate(['/recipes']);
             }
+        }),
+        map((action: recipeActions.RecipesAction) => {
+            if (action.type === recipeActions.DELETE_RECIPE)
+                return setToast({toast: {message: 'Recipe deleted', isError: false}})
+            
+            return setSubmitting({status: false});
         })
-    ), {dispatch: false})
+    ));
+
+    updateCache = createEffect(() => this.actions$.pipe(
+        ofType(recipeActions.UPDATE_RECIPE),
+        map((action: recipeActions.UpdateRecipe) => new recipeActions.UpdateCache(action.payload))
+    ))
 
     startNavigation = createEffect(() => this.actions$.pipe(
         ofType(routerActions.ROUTER_REQUEST),

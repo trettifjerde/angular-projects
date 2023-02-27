@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofType, createEffect } from "@ngrx/effects";
 import { catchError, map, of, switchMap, tap } from "rxjs";
-import { ShoppingListService } from '../../services/shopping-list.service';
+import { ShoppingListService } from '../../shopping-list/shopping-list.service';
 import { AuthService } from "../auth.service";
 import * as authActions from './auth.actions';
 

@@ -3,9 +3,10 @@ import { Subscription } from "rxjs";
 import { Store } from '@ngrx/store';
 
 import * as shlist from './store/shopping-list.actions';
-import { ShoppingListService } from "../services/shopping-list.service";
+import { ShoppingListService } from "./shopping-list.service";
 import { Ingredient } from "../shared/ingredient.interface";
 import { AppState } from "../store/app.reducer";
+import { setSubmitting } from "../store/general.store";
 
 @Component({
     selector: 'app-shopping-list',
@@ -30,11 +31,12 @@ export class ShoppingListComponent implements OnInit {
             state => {
                 this.fetched = state.fetched;
                 this.ingredients = state.ingredients;
-
-                if (!state.fetched) {
-                    this.listService.fetchIngredients();
-                }
-            })
+        });
+        
+        if (!this.fetched){
+            this.store.dispatch(setSubmitting({status: true}));
+            this.store.dispatch(new shlist.InitShoppingList());
+        }
     }
 
     ngOnDestroy() {

@@ -14,9 +14,13 @@ export const UPDATE_RECIPE = 'UPDATE_RECIPE';
 export const DELETE_RECIPE = 'DELETE_RECIPE';
 export const NAVIGATION_STARTED = 'ANNOUNCE_RECIPE_NAVIGATION';
 export const NAVIGATION_COMPLETE = 'ANNOUNCE_RECIPE_NAV_COMPLETE';
+export const CACHE_RECIPE = 'CACHE_RECIPE';
+export const UPDATE_CACHE = 'UPDATE_CACHE';
 
 export type RecipesAction = RecipesInit | RecipesInitSuccess | RecipesInitFail | RecipesFetchSuccess | StartFetchRecipes | RecipesHttpFail | StartAddRecipe | 
-    AddRecipe | StartUpdateRecipe | UpdateRecipe | DeleteRecipe | StartNavigation | CompleteNavigation;
+    AddRecipe | StartUpdateRecipe | UpdateRecipe | DeleteRecipe | StartNavigation | CompleteNavigation | CacheRecipe | UpdateCache;
+
+export type RecipesFail = RecipesInitFail | RecipesHttpFail;
 
 export class RecipesInit implements Action {
     readonly type = RECIPES_INIT;
@@ -45,7 +49,7 @@ export class RecipesFetchSuccess implements Action {
 
 export class RecipesHttpFail implements Action {
     readonly type = RECIPES_HTTP_FAIL;
-    constructor(public payload: Error) {}
+    constructor(public payload: any) {}
 }
 
 export class StartAddRecipe implements Action {
@@ -81,4 +85,14 @@ export class StartNavigation implements Action {
 export class CompleteNavigation implements Action {
     readonly type = NAVIGATION_COMPLETE;
     constructor() {}
+}
+
+export class CacheRecipe implements Action {
+    readonly type = CACHE_RECIPE;
+    constructor(public payload: Recipe) {}
+}
+
+export class UpdateCache implements Action {
+    readonly type = UPDATE_CACHE;
+    constructor(public payload: Recipe) {}
 }

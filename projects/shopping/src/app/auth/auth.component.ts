@@ -1,35 +1,19 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Store } from "@ngrx/store";
 
 import * as authActions from "./store/auth.actions.newer";
 import { AppState } from "../store/app.reducer";
-import { Subscription } from "rxjs";
+import { setSubmitting } from "../store/general.store";
 
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html'
 })
-export class AuthComponent implements OnInit, OnDestroy {
+export class AuthComponent {
     isSignUpMode= false;
-    isLoading: boolean;
-    error: string;
-    authSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {}
-
-    ngOnInit() {
-        this.authSubscription = this.store.select('auth').subscribe(
-            state => {
-                this.error = state.authError;
-                this.isLoading = state.loading;
-            }
-        )
-    }
-
-    ngOnDestroy(): void {
-        this.authSubscription.unsubscribe();
-    }
 
     toggleForm() {
         this.isSignUpMode = !this.isSignUpMode;
@@ -41,11 +25,11 @@ export class AuthComponent implements OnInit, OnDestroy {
 
         const formValue = form.form.value;
 
-        if (this.isSignUpMode) {
+        this.store.dispatch(setSubmitting({status: true}));
+
+        if (this.isSignUpMode)
             this.store.dispatch(authActions.signUpStart({form: formValue}));
-        }
-        else {
+        else 
             this.store.dispatch(authActions.logInStart({form: formValue}));
-        }
     }
 }

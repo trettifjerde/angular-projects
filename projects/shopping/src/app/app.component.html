@@ -4,3 +4,9 @@
         <router-outlet></router-outlet>
     </div>
 </div>
+<div *ngIf="toastInfo.visible" class="fixed-bottom flashIn">
+    <app-alert [toast]="toastInfo.toast"></app-alert>
+</div>
+<div *ngIf="submittingSpinner.visible" class="fixed-center">
+    <app-spinner></app-spinner>
+</div>

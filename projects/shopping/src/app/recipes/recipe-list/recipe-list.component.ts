@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { map, Observable, Subscription, switchMap, take } from "rxjs";
+import { setSpinnerTimer } from "../../shared/utils";
 import { AppState } from "../../store/app.reducer";
+import { setSubmitting } from "../../store/general.store";
 import { Recipe } from "../recipe.model";
 import * as recipeActions from "../store/recipes.actions";
 import { RecipesState } from "../store/recipes.reducer";
@@ -15,38 +17,26 @@ import { recipeListAnimations, recipeItemAnimations } from "./recipe-list.animat
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
     @Input('filterString') filterString: string;
-    stateSub: Subscription;
+    recipesSub: Subscription;
+    recipeFetchInProgress: Subscription;
+    allRecipesFetched$: Observable<boolean>;
     recipes: Recipe[];
-    fetching: boolean;
-    allFetched: boolean;
-    spinnerVisible: boolean;
-    spinnerTimer: any;
+    spinner: {visible: boolean, timer: any} = {visible: false, timer: null};
 
     constructor(private store: Store<AppState>) {}
 
     ngOnInit(): void {
-        this.stateSub = this.store.select('recipes').subscribe(
-            state => {
-                this.recipes = state.recipes;
-                this.allFetched = state.allRecipesFetched;
-                this.setFetchStatus(state.recipeFetchInProgress);
-            }
-        );
+        this.allRecipesFetched$ = this.store.select(store => store.recipes.allRecipesFetched);
+        this.recipesSub = this.store.select(store => store.recipes.recipes).subscribe(
+            recipes => this.recipes = recipes);
+
+        this.recipeFetchInProgress = this.store.select(store => store.recipes.recipeFetchInProgress).subscribe(
+            inProgress => setSpinnerTimer(inProgress, this.spinner));
     }
 
     ngOnDestroy(): void {
-        this.stateSub.unsubscribe();
-    }
-
-    setFetchStatus(loading: boolean) {
-        this.fetching = loading;
-        if (loading && !this.spinnerTimer) 
-            this.spinnerTimer = setTimeout(() => this.spinnerVisible = true, 100);
-        else if (!loading && this.spinnerTimer) {
-            clearTimeout(this.spinnerTimer);
-            this.spinnerTimer = null;
-            this.spinnerVisible = false;
-        }
+        this.recipeFetchInProgress.unsubscribe();
+        this.recipesSub.unsubscribe();
     }
 
     loadMoreRecipes() {

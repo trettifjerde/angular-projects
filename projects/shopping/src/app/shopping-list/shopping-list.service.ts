@@ -1,11 +1,12 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 
-import * as shlist from '../shopping-list/store/shopping-list.actions';
+import * as shlist from './store/shopping-list.actions';
 import { Ingredient, IngredientRaw } from "../shared/ingredient.interface";
-import { map, Observable, of, switchMap, take, tap } from "rxjs";
+import { map, Observable, switchMap, take, tap, throwError, catchError } from "rxjs";
 import { AppState } from "../store/app.reducer";
+import { setSubmitting, setToast } from "../store/general.store";
 
 @Injectable({
     providedIn: 'root'
@@ -19,27 +20,14 @@ export class ShoppingListService {
     }
 
     fetchIngredients() {
-        console.log('fetching ingreds');
-        this.http.get<{[id: string]: IngredientRaw}>(this.makeUrl()).subscribe({
-            next: ingDict => {
-                if (ingDict) {
-                    const ings = Object.entries(ingDict).reduce((acc, [id, ingRaw]) => {
+        return this.http.get<{[id: string]: IngredientRaw}>(this.makeUrl()).pipe(
+            map(ingDict => (ingDict ? Object.entries(ingDict).reduce((acc, [id, ingRaw]) => {
                         acc.push(new Ingredient({...ingRaw, id: id}));
                         return acc;
-                    }, [] as Ingredient[]);
-                    this.store.dispatch(new shlist.FetchIngredients(ings));
-                }
-                else this.store.dispatch(new shlist.ClearIngredients());
-            },
-            error: err => {
-                console.log(err);
-                this.store.dispatch(new shlist.ClearIngredients());
-            }
-        })
-    }
-
-    clearIngredients() {
-        this.store.dispatch(new shlist.ClearIngredients());
+                    }, [] as Ingredient[]) : [])
+            ),
+            catchError(error => this.handleError(error))
+        )
     }
 
     addIngredient(ingRaw: IngredientRaw, dispatch=true) : Observable<Ingredient> {
@@ -56,8 +44,10 @@ export class ShoppingListService {
                     return this.http.post<{name: string}>(this.makeUrl(), ingRaw).pipe(
                         map(res => new Ingredient({...ingRaw, id: res.name})),
                         tap(ing => { 
-                            if (dispatch) this.store.dispatch(new shlist.AddIngredient(ing)) 
+                            if (dispatch)
+                                this.store.dispatch(new shlist.AddIngredient(ing));
                         }),
+                        catchError(err => this.handleError(err))
                     )
             })
         )
@@ -81,15 +71,19 @@ export class ShoppingListService {
                 return this.http.patch<{[id: string]: IngredientRaw}>(this.makeUrl(), {[ing.id]: ingRaw}).pipe(
                 map(_ => new Ingredient({...ingRaw, id: ing.id})),
                 tap(updatedIng => {
-                    if (dispatch) 
+                    if (dispatch) {
                         this.store.dispatch(new shlist.UpdateIngredient(updatedIng));
+                    }
                     if (duplicateId) 
                         this.deleteIngredient(duplicateId);
-                })
+                }),
+                catchError(this.handleError)
             )}))
     }
 
     addIngredients(ingRaws: IngredientRaw[]) : Observable<any> {
+        this.store.dispatch(setSubmitting({status: true}));
+
         const ings: Ingredient[] = [];
         let obsChain = this.addIngredient(ingRaws[0], false);
         for (let i = 1; i < ingRaws.length; i++) {
@@ -110,6 +104,27 @@ export class ShoppingListService {
         this.http.delete<null>(this.makeUrl('/' + id)).subscribe(
             _ => this.store.dispatch(new shlist.DeleteIngredient(id))
         );
+    }
+
+    handleError(err: HttpErrorResponse) {
+        console.log('Error handling recipes', err);
+        let errorMsg = 'An error has occurred.';
+        switch(err.status) {
+            case 504:
+                errorMsg = 'Network connection lost';
+                break;
+            case 404:
+                errorMsg = 'Resource not found';
+                break;
+            case 400:
+                errorMsg = 'Bad request';
+                break;
+            case 500:
+                errorMsg = 'Server error';
+                break;
+        }
+        this.store.dispatch(setToast({toast: {message: errorMsg, isError: true}}))
+        return throwError(() => new Error(errorMsg));
     }
 
 }
