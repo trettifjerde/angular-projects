@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import * as shlist from './store/shopping-list.actions';
 import { ShoppingListService } from "../services/shopping-list.service";
-import { ShoppingListState } from "./store/shopping-list.reducer";
 import { Ingredient } from "../shared/ingredient.interface";
 import { AppState } from "../store/app.reducer";
 

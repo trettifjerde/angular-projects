@@ -12,6 +12,6 @@
             </div>
         </div>
         <div *ngIf="fetched && ingredients.length === 0">No ingredients in the list</div>
-        <div *ngIf="!fetched">Loading...</div>
+        <app-spinner *ngIf="!fetched"></app-spinner>
     </div>
 </div>
