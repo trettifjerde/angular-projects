@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from "@angular/core";
-import { Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { Store } from '@ngrx/store';
 
 import * as shlist from './store/shopping-list.actions';
@@ -14,7 +14,10 @@ import { AppState } from "../store/app.reducer";
     styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit {
-    shoppingList: Observable<ShoppingListState>;
+    sub: Subscription;
+    ingredients: Ingredient[];
+    fetched: boolean;
+
     @ViewChild('ingredientsCont') ingredientsCont: ElementRef;
 
     constructor(
@@ -24,7 +27,19 @@ export class ShoppingListComponent implements OnInit {
         ) {}
 
     ngOnInit(): void {
-        this.shoppingList = this.store.select('shoppingList');
+        this.sub = this.store.select('shoppingList').subscribe(
+            state => {
+                this.fetched = state.fetched;
+                this.ingredients = state.ingredients;
+
+                if (!state.fetched) {
+                    this.listService.fetchIngredients();
+                }
+            })
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     deleteItem(id: string, i: number) {

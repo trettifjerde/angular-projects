@@ -1,11 +1,13 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, PLATFORM_ID, Inject } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { isPlatformBrowser } from "@angular/common";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { AppState } from "../store/app.reducer";
 import { User, UserInterface } from "./user.model";
 import { environment } from "../../environments/environment";
 import * as authActions from './store/auth.actions.newer';
+import { FetchIngredients } from "../shopping-list/store/shopping-list.actions";
 
 export interface AuthResponse {
     idToken: string,
@@ -37,7 +39,11 @@ export class AuthService {
     signInUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.authKey}`;
     logoutTimer: any;
 
-    constructor(private http: HttpClient, private store: Store<AppState>) {}
+    constructor(private http: HttpClient, private store: Store<AppState>, @Inject(PLATFORM_ID) platformId) {
+        if (isPlatformBrowser(platformId)) {
+            this.autoLogin();
+        }
+    }
 
     authenticate(form: SignForm, url: string): Observable<User> {
         return this.http.post<AuthResponse>(

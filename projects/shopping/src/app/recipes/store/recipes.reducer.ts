@@ -28,7 +28,6 @@ export function recipesReducer(state=initialState, action: recipesActions.Recipe
         case recipesActions.RECIPES_INIT:
             return {
                 ...state,
-                error: null,
                 recipeFetchInProgress: true
             }
         case recipesActions.RECIPES_INIT_SUCCESS:
@@ -50,7 +49,6 @@ export function recipesReducer(state=initialState, action: recipesActions.Recipe
         case recipesActions.RECIPES_FETCH_STARTED:
             return {
                 ...state,
-                error: null,
                 recipeFetchInProgress: true
             }
         case recipesActions.RECIPES_FETCH_SUCCESS:
@@ -89,7 +87,6 @@ export function recipesReducer(state=initialState, action: recipesActions.Recipe
         case recipesActions.NAVIGATION_STARTED:
             return {
                 ...state,
-                error: null,
                 navigationInProgress: true    
             }
         case recipesActions.NAVIGATION_COMPLETE:

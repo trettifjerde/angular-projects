@@ -70,7 +70,7 @@ export class RecipesService {
 
     handleError(err: HttpErrorResponse) {
         console.log('Error handling recipes', err);
-        let errorMsg = 'An error has occurred. Reload the page';
+        let errorMsg = 'An error has occurred.';
         switch(err.status) {
             case 504:
                 errorMsg = 'Network connection lost';

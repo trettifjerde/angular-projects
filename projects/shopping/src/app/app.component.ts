@@ -17,13 +17,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     private authService: AuthService, 
-    private store: Store<AppState>,
-    @Inject(PLATFORM_ID) private platformId) {}
+    private store: Store<AppState>) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.authService.autoLogin();
-    }
     this.store.dispatch(new RecipesInit());
   }
 }
