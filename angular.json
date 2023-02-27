@@ -30,7 +30,9 @@
               "projects/search/src/favicon.ico",
               "projects/search/src/assets"
             ],
-            "styles": ["projects/search/src/styles.scss"],
+            "styles": [
+              "projects/search/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -657,6 +659,18 @@
             }
           },
           "defaultConfiguration": "production"
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": true,
+            "ssr": false,
+            "browserTarget": "shopping:build:production",
+            "firebaseProject": "academind34",
+            "firebaseHostingSite": "academind34",
+            "serverTarget": "shopping:server:production",
+            "prerenderTarget": "shopping:prerender:production"
+          }
         }
       }
     },

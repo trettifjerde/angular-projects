@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "academind34": {
+      "hosting": {
+        "shopping": [
+          "academind34"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "academind34"
+  }
+}
