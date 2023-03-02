@@ -1,32 +1,34 @@
+.detail-cont {
+    padding-left: 1rem;
+}
+
 .detail-header {
     position: relative;
-    text-align: center;
     overflow: hidden;
-    background-color: rgba(7, 71, 27, 0.7);
+    height: 60vh;
     z-index: 0;
 }
 
 .detail-header-img {
-    position: absolute;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
 }
 
 .detail-header-text {
-    position: relative;
-    margin-top: 15vh;
-    min-height: 200px;
-    text-align: left;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     color: white;
     background-color: rgba(7, 71, 27, 0.7);
     padding-inline: 2rem;
     border-radius: 10px 10px 0 0;
     padding-block: 1.5rem;
-    z-index: 2;
+    z-index: 1;
+    min-height: 200px;
 }
 
 .detail-header-text .dropdown-menu {
@@ -73,5 +75,11 @@ h5 {
 
     .detail-header-text .dropdown-menu {
         right: unset;
+    }
+}
+
+@media (max-width: 768px) {
+    .detail-cont {
+        padding-left: 0;
     }
 }

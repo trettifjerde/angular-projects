@@ -1,16 +1,17 @@
-<div class="recipes-c" [@listState]="spinner.visible ? 'loading' : 'loaded'">
-    <app-recipe-item 
-        *ngFor="let recipe of recipes|recipeFilter:filterString; let i = index" [key]="i" 
-        [recipe]="recipe" @itemState
-    ></app-recipe-item >
-    <button type="button" class="btn btn-success" (click)="loadMoreRecipes()" *ngIf="!(allRecipesFetched$|async)">Load more</button>
+<div class="fadeIn">
+    <div *ngIf="(recipes|recipeFilter:filterString).length === 0" class="empty fadeIn absolute-center">No recipes found</div>  
+
+    <button type="button" class="btn btn-success mb-2 load-btn" (click)="loadMoreRecipes()" *ngIf="!(allRecipesFetched$|async)">Load more</button>
+
+    <div class="recipes-list" [@listState]="fetching ? 'loading' : 'loaded'">
+        <app-recipe-item 
+            *ngFor="let recipe of recipes|recipeFilter:filterString; let i = index" [key]="i" 
+            [recipe]="recipe" @itemState
+        ></app-recipe-item >   
+    </div> 
+
+    <div *ngIf="spinner.visible" class="absolute-center">
+        <app-spinner></app-spinner>
+    </div> 
 </div>
-<div *ngIf="(recipes|recipeFilter:filterString).length === 0" class="empty">No recipes found</div>    
-
-<div *ngIf="spinner.visible" class="absolute-center">
-    <app-spinner></app-spinner>
-</div>
-
-
-
         

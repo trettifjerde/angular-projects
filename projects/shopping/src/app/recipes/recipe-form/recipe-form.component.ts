@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
@@ -7,6 +7,9 @@ import { AppState } from "../../store/app.reducer";
 import { setSubmitting } from "../../store/general.store";
 import { Recipe } from "../recipe.model";
 import * as recipeActions from '../store/recipes.actions';
+import { FormArrayEmpty, ArrayContainsInvalidControl, ArrayContainsInvalidFormGroup } from "./formarray.validator";
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import { confirmAction} from '../../shared/utils';
 
 @Component({
     selector: 'app-recipe-form',
@@ -14,7 +17,6 @@ import * as recipeActions from '../store/recipes.actions';
     styleUrls: ['./recipe-form.component.css']
 })
 export class RecipeFormComponent {
-    @ViewChild('pageTop') pageTop: ElementRef;
     recipe: Recipe | null;
     recipeForm: FormGroup;
 
@@ -27,10 +29,6 @@ export class RecipeFormComponent {
                 this.createRecipeForm();
             }
         )
-    }
-
-    ngAfterViewInit() {
-        this.pageTop.nativeElement.scrollIntoView(true);
     }
 
     get name() {
@@ -69,8 +67,8 @@ export class RecipeFormComponent {
             'name': new FormControl(name, [Validators.required]),
             'description': new FormControl(description, [Validators.required]),
             'imagePath': new FormControl(imagePath),
-            'ingredients': new FormArray(ingredients, [Validators.required]),
-            'steps': new FormArray(steps, [Validators.required])
+            'ingredients': new FormArray(ingredients, [FormArrayEmpty, ArrayContainsInvalidFormGroup]),
+            'steps': new FormArray(steps, [FormArrayEmpty, ArrayContainsInvalidControl])
         });
     }
 
@@ -106,17 +104,25 @@ export class RecipeFormComponent {
 
         return new FormGroup({
             'name': new FormControl(ingRaw.name, [Validators.required]),
-            'amount': new FormControl(ingRaw.amount),
+            'amount': new FormControl(ingRaw.amount, [Validators.min(0.01)]),
             'unit': new FormControl({value: ingRaw.unit, disabled: !ingRaw.amount}),
         });
     }
 
     deleteIngredient(i: number) {
-        (<FormArray>this.recipeForm.get('ingredients')).removeAt(i);
+        const ing = this.ingredients.at(i);
+        const emtpy = !ing.get('name').value && !ing.get('amount').value && !ing.get('unit').value;
+        if (emtpy)
+            this.ingredients.removeAt(i);
+        else 
+            confirmAction('Delete ingredient?', () => this.ingredients.removeAt(i));
     }
 
-    deleteStep(i: number ){
-        (<FormArray>this.recipeForm.get('steps')).removeAt(i);
+    deleteStep(i: number){
+        if (this.steps.at(i).value)
+            confirmAction('Delete step?', () => this.steps.removeAt(i));
+        else
+            this.steps.removeAt(i);
     }
 
     addIngredientGroup() {
@@ -137,6 +143,23 @@ export class RecipeFormComponent {
             this.store.dispatch(new recipeActions.StartUpdateRecipe([this.recipe.id, this.recipeForm.value]));
         else 
             this.store.dispatch(new recipeActions.StartAddRecipe({...this.recipeForm.value}));
+    }
+
+    drop(event: CdkDragDrop<any[]>) {
+        const prevI = event.previousIndex;
+        const curI = event.currentIndex;
+        const item = this.steps.at(prevI);
+        this.steps.removeAt(prevI);
+        this.steps.insert(curI, item);
+    }
+
+    moveStep(i: number, adjust: number) {
+        const item = this.steps.at(i);
+        const newI = i + adjust;
+        if (newI >=0 && newI < this.steps.length) {
+            this.steps.removeAt(i);
+            this.steps.insert(newI, item);
+        }
     }
 
 }

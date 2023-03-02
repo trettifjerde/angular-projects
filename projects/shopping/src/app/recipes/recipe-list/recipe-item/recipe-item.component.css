@@ -15,11 +15,23 @@
     cursor: default;
 }
 
+.card-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.card-body {
+    min-width: 66%;
+}
+
 .card-text {
     font-size: 0.8rem;
 }
 
-.card img {
-    border-radius: 3px;
+@media (min-width: 768px) and (max-width: 990px) {
+    .card-wrapper {
+        display: block;
+    }
 }
-

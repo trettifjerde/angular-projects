@@ -15,6 +15,9 @@ export class DisableUnitDirective implements AfterViewInit {
 
     @HostListener('input', ['$event.target.value']) onInput(amountValue: string) {
         this.renderer.setProperty(this.unit, 'disabled', !amountValue);
+        if (!amountValue) {
+            this.unit.value = '';
+        }
     }
  
 }

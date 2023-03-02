@@ -1,5 +1,8 @@
-<div class="fadeIn">
-    <h3 #pageTop>{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
+<div class="fadeIn mt-4">
+    <div class="row justify-content-between align-items-center mb-4">
+        <h3 class="col-auto">{{ recipe ? 'Edit recipe' : 'Add recipe'}}</h3>
+        <div class="col-auto sm">Green fields are required</div>
+    </div>
     <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="recipe-form">
         <div class="form-group">
             <div class="label-row">
@@ -29,8 +32,10 @@
         <div class="form-group" formArrayName="ingredients">
             <div class="label-row">
                 <label>Ingredients</label>
-                <p class="form-text text-danger" *ngIf="ingredients.dirty && !ingredients.valid">
-                    Ingredient names are required
+                <p class="row align-items-end form-text text-danger" *ngIf="ingredients.hasError('arrayError')">
+                    <span *ngIf="ingredients.getError('arrayError').empty">Must contain at least 1 ingredient</span>
+                    <span *ngIf="ingredients.getError('arrayError').required">Name cannot be empty</span>
+                    <span *ngIf="ingredients.getError('arrayError').min">Invalid amount</span>
                 </p>
             </div>
             <div class="row row-cols-auto align-items-center g-2 flex-nowrap ingred-cont" 
@@ -49,29 +54,40 @@
                 </div>            
             </div>
             <button type="button" class="btn btn-outline-success mt-2" (click)="addIngredientGroup()">
-                Add new ingredient
+                Add a new ingredient
             </button>
         </div>
         <hr>
         <div class="form-group">
             <div class="label-row">
                 <label>Steps</label>
-                <p class="form-text text-danger" *ngIf="steps.dirty && !steps.valid">
-                    Make sure instructions are neither empty nor longer than 1000 letters
+                <p class="form-text text-danger" *ngIf="steps.hasError('arrayError')">
+                    <span *ngIf="steps.getError('arrayError').empty">Must contain at least 1 step</span>
+                    <span *ngIf="steps.getError('arrayError').required">Cannot be empty</span>
+                    <span *ngIf="steps.getError('arrayError').maxLength">Step must be under 1000 letters</span>
                 </p>
             </div>
-            <ol class="list-group list-group-flush list-group-numbered" formArrayName="steps">
-                <li class="list-group-item d-flex row align-items-center justify-content-between p-1 m-1" *ngFor="let step of steps.controls; let i = index">
-                    <div class="col-md-8 flex-grow-1">
-                        <textarea class="form-control" [formControlName]="i"></textarea>
-                    </div>
-                    <div class="col-auto g-0">
+            <ul cdkDropList (cdkDropListDropped)="drop($event)"
+                class="list-group list-group-flush" formArrayName="steps">
+                <li cdkDrag
+                *ngFor="let step of steps.controls; let i = index"
+                    class="list-group-item row step">
+                    <div class="step-drag-placeholder" *cdkDragPlaceholder></div>
+                    <div class="col-auto step-num-n-del">
+                        <div class="btn">{{i + 1}}.</div>
                         <button class="btn btn-outline-danger" type="button" (click)="deleteStep(i)">X</button>      
                     </div>
+                    <div class="col-md-8 step-area">
+                        <textarea class="form-control" [formControlName]="i"></textarea>
+                    </div>
+                    <div class="col-auto step-move-btns">
+                        <button *ngIf="i > 0" class="btn btn-outline-success" type="button" (click)="moveStep(i, -1)">🡅</button>
+                        <button *ngIf="i < steps.controls.length - 1" class="btn btn-outline-success" type="button" (click)="moveStep(i, 1)">🡇</button>      
+                    </div>
                 </li>     
-            </ol>
+            </ul>
             <button type="button" class="btn btn-outline-success" (click)="addStepControl()">
-                Add new step
+                Add a new step
             </button>
         </div>
         <hr>
@@ -79,6 +95,5 @@
             <button class="btn btn-success col-5" type="submit" [disabled]="!recipeForm.valid">Submit</button>
             <button class="btn btn-outline-success col-5" type="button" (click)="cancelEdit()">Cancel</button>
         </div>
-        
     </form>
 </div>

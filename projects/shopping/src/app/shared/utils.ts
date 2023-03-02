@@ -9,3 +9,9 @@ export function setSpinnerTimer(inProgress: boolean, spinner: {visible:boolean, 
         spinner.timer = null;
     }
 }
+
+export function confirmAction(text: string, callback: Function) {
+    const confirm = window.confirm(text);
+    if (confirm)
+        callback();
+}

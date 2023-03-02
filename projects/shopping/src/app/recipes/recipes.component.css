@@ -2,21 +2,7 @@
 .side, .main {
     height: 75vh;
     position: relative;
-    margin-top: 1rem;
-}
-
-.side-content, .main-content {
     overflow: auto;
-    height: 100%;
-}
-
-.side-content, .main-content { 
-    padding-inline: 0.5rem; 
-}
-
-@media (max-width: 760px) {
-    .side { height: 35vh; position: relative; box-shadow: 0 3px 5px gray inset, 0 -3px 5px gray inset; padding-block: 5px;}
-    .main { height: unset;}
 }
 
 .input-cont {
@@ -31,11 +17,48 @@
     opacity: 0;
     transition: visibility .3s, opacity .3s;
 }
-.input-cont input:focus ~ button {
+.input-cont input:focus ~ button,
+.force-visible button {
     visibility: visible;
     opacity: 1;
 }
 
 .input-cont input {
     padding-right: 2.5rem; 
+}
+
+.show-recipes-btn {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    .main, .side {
+        height: unset;
+    }
+
+    .show-recipes-btn {
+        display: flex;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .show-recipes-btn button {
+        box-shadow: 1px 0 3px 1px darkgray;
+    }
+
+    .side {
+        display: none;
+        background-color: white;
+        overflow: auto;
+    }
+
+    .open .side {
+        display: block;
+    }
+
+    .open .main {
+        display: none;
+    }
+    
 }

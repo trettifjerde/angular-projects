@@ -1,7 +1,7 @@
-<div class="row">
+<div class="fadeIn row">
     <div class="col-xs-12 col-md-6 m-auto">
         <h2>Sign {{isSignUpMode? 'up' : 'in'}}</h2>
-        <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm" class="mt-4" matchPasswords>
             <div class="form-group mb-2">
                 <label for="email">Email</label>
                 <input type="text" class="form-control" name="email" id="email" email ngModel required #email="ngModel">
@@ -17,7 +17,16 @@
                     Must be at least 6 characters.
                 </p>
             </div>
-            <div class="row justify-content-between g-0">
+            <div *ngIf="isSignUpMode" class="form-group mb-2">
+                <label for="password">Confirm password</label>
+                <input type="password" class="form-control" name="confirmation" id="confirmation" 
+                ngModel required #confirmation="ngModel">
+                <p *ngIf="confirmation.touched && confirmation.hasError('required')" class="text-danger form-text">Required.</p>
+                <p *ngIf="confirmation.touched && form.hasError('passwordsMatch')" class="text-danger form-text">
+                    Password and its confirmation do not match.
+                </p>
+            </div>
+            <div class="row mt-4 justify-content-between g-0">
                 <button type="submit" class="btn btn-success col-md-5" [disabled]="!form.valid">
                     Sign {{isSignUpMode ? 'up' : 'in'}}
                 </button> 

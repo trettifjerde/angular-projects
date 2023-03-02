@@ -9,6 +9,7 @@ import { RecipeItemComponent } from "./recipe-list/recipe-item/recipe-item.compo
 import { RecipeListComponent } from "./recipe-list/recipe-list.component";
 import { RecipesRoutingModule } from "./recipes-routing.module";
 import { RecipesComponent } from "./recipes.component";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
     declarations: [
@@ -17,13 +18,14 @@ import { RecipesComponent } from "./recipes.component";
         RecipeItemComponent,
         RecipeDetailComponent,
         RecipeFormComponent,
-        DisableUnitDirective
+        DisableUnitDirective,
     ],
     imports: [
         SharedModule,
         ReactiveFormsModule,
         RouterModule, 
         RecipesRoutingModule,
+        DragDropModule,
     ]
 })
 export class RecipesModule {}

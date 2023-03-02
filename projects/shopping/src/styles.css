@@ -1,5 +1,6 @@
 :root {
     --primary: #198754 !important;
+    --secondary: #40e96f17 !important;
 }
 
 ::-webkit-scrollbar {
@@ -78,4 +79,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
+}
+.sm {
+    font-size: 0.75rem;
 }

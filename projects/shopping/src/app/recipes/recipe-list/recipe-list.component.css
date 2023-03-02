@@ -1,4 +1,4 @@
-.recipes-c { 
+.recipes-list { 
     display: flex;
     flex-direction: column-reverse;
     gap: 0.5rem;
@@ -13,8 +13,7 @@
     background-color: #ffffff80;
 }
 
-@media (max-width: 768px) {
-    .btn.btn-success {
-        margin-top: 0.5rem;
-    }
+.load-btn {
+    width: 100%;
+    position: relative;
 }

@@ -7,6 +7,7 @@ import { ShoppingListService } from "../shopping-list.service";
 import { Ingredient, IngredientRaw } from "../../shared/ingredient.interface";
 import { AppState } from "../../store/app.reducer";
 import { setSubmitting, setToast } from "../../store/general.store";
+import { NgForm } from "@angular/forms";
 
 
 @Component({
@@ -16,7 +17,8 @@ import { setSubmitting, setToast } from "../../store/general.store";
 export class ShoppingEditComponent implements OnDestroy {
     ingredientSubscription: Subscription;
     model: Ingredient;
-    @ViewChild('form') form : ElementRef;
+    @ViewChild('form') form : NgForm;
+    @ViewChild('top', {static: true}) top: ElementRef;
     
     constructor(private listService: ShoppingListService, private store: Store<AppState>) {
         this.model = new Ingredient();
@@ -26,7 +28,7 @@ export class ShoppingEditComponent implements OnDestroy {
         this.ingredientSubscription = this.store.select(store => store.shoppingList.ingredientBeingEdited).subscribe(
             ingredient => {
                 this.model = ingredient ? new Ingredient({...ingredient}) : new Ingredient();
-                if (ingredient) this.form.nativeElement.scrollIntoView({behavior: 'smooth'});                
+                if (ingredient) this.top.nativeElement.scrollIntoView({behavior: 'smooth'});                
             }
         )
     }
