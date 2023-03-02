@@ -3,7 +3,7 @@ import { animate, animateChild, keyframes, query, sequence, stagger, state, styl
 export const recipeListAnimations = trigger(
     'listState', [
         transition('loading => loaded', [
-            query('@itemState:enter', stagger(150, animateChild()))
+            query('@itemState:enter', stagger(200, animateChild()))
         ])
     ]
 )

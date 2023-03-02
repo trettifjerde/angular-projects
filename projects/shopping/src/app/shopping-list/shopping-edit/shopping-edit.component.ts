@@ -18,6 +18,7 @@ export class ShoppingEditComponent implements OnDestroy {
     ingredientSubscription: Subscription;
     model: Ingredient;
     @ViewChild('form') form : NgForm;
+    @ViewChild('ingname', {static: true}) ingname: ElementRef;
     @ViewChild('top', {static: true}) top: ElementRef;
     
     constructor(private listService: ShoppingListService, private store: Store<AppState>) {
@@ -28,7 +29,8 @@ export class ShoppingEditComponent implements OnDestroy {
         this.ingredientSubscription = this.store.select(store => store.shoppingList.ingredientBeingEdited).subscribe(
             ingredient => {
                 this.model = ingredient ? new Ingredient({...ingredient}) : new Ingredient();
-                if (ingredient) this.top.nativeElement.scrollIntoView({behavior: 'smooth'});                
+                if (ingredient) this.top.nativeElement.scrollIntoView({behavior: 'smooth'});  
+                this.ingname.nativeElement.focus();
             }
         )
     }
@@ -44,7 +46,6 @@ export class ShoppingEditComponent implements OnDestroy {
     }
 
     saveIngredient() {
-        
         this.store.dispatch(setSubmitting({status: true}));
 
         (this.model.id ? 
