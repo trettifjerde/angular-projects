@@ -4,8 +4,18 @@
             <h4 class="card-title">{{ recipe.name }}</h4>
             <div class="card-text">{{ recipe.description | shorten:100}}</div>
         </div>
-        <div>
-            <img [src]="recipe.imagePath" class="img-fluid">
+        <div class="c">
+            <picture>
+                <source media="(max-width: 430px)" [srcset]="recipe.imagePath" width="161" height="215" />
+                <source media="(max-width: 576px)" [srcset]="recipe.imagePath" width="123" height="164" />
+                <source media="(max-width: 768px)" [srcset]="recipe.imagePath" width="161" height="215" />
+                <source media="(max-width: 990px)" [srcset]="recipe.imagePath" width="250" height="334" />
+                <source media="(max-width: 1200px)" [srcset]="recipe.imagePath" width="113" height="150" />
+                <source media="(max-width: 1399px)" [srcset]="recipe.imagePath" width="139" height="186" />
+                <source media="(min-width: 1400px)" [srcset]="recipe.imagePath" width="162" height="216" />
+                <img [src]="recipe.imagePath">
+            </picture>
+            
         </div>
     </div>
 </div>

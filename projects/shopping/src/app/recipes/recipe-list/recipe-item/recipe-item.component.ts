@@ -9,8 +9,11 @@ import { Recipe } from "../../recipe.model";
 export class RecipeItemComponent implements OnInit {
     @Input() recipe: Recipe;
 
+    imgWidth: number;
+    imgHeight: number;
+
     constructor() { }
 
-    ngOnInit() { }
+    ngOnInit() {}
 
 }
