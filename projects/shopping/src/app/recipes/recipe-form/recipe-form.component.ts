@@ -10,11 +10,14 @@ import * as recipeActions from '../store/recipes.actions';
 import { FormArrayEmpty, ArrayContainsInvalidControl, ArrayContainsInvalidFormGroup } from "./formarray.validator";
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import { confirmAction} from '../../shared/utils';
+import { recipeItemAnimations, recipeListAnimations } from "../recipe-list/recipe-list.animations";
+import { recipeStepAnimations } from "./recipe-form-animations";
 
 @Component({
     selector: 'app-recipe-form',
     templateUrl: './recipe-form.component.html',
-    styleUrls: ['./recipe-form.component.css']
+    styleUrls: ['./recipe-form.component.css'],
+    animations: [recipeStepAnimations]
 })
 export class RecipeFormComponent {
     recipe: Recipe | null;

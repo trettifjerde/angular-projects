@@ -14,7 +14,7 @@
                         <div class="dropdown-menu" [ngClass]="{disabled: manageBtnDisabled}">
                             <div class="dropdown-item" (click)="toShoppingList()">To Shopping List</div>
                             <div class="dropdown-item" routerLink="edit">Edit Recipe</div>
-                            <div class="dropdown-item" (click)="deleteRecipe()">Delete Recipe</div>
+                            <div class="dropdown-item" (click)="askDeleteConfirm()">Delete Recipe</div>
                         </div>
                     </div>
                 </div>
@@ -37,3 +37,4 @@
         </ol>
     </div>
 </div>
+<app-modal *ngIf="modalVisible" text="Delete recipe" [name]="recipe.name" (onClose)="closeModal()" (onConfirm)="deleteRecipe()"></app-modal>

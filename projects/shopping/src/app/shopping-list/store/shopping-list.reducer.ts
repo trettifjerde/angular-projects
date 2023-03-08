@@ -36,6 +36,7 @@ export function shoppingListReducer(state=initialShoppingList, action: shlist.Sh
             return {
                 ...state,
                 ingredients: state.ingredients.filter(i => i.id !== action.payload),
+                ingredientBeingEdited: state.ingredientBeingEdited?.id === action.payload ? null : state.ingredientBeingEdited
             }
         case shlist.FETCH_INGREDIENTS:
             return {
@@ -44,10 +45,7 @@ export function shoppingListReducer(state=initialShoppingList, action: shlist.Sh
                 fetched: true
             }
         case shlist.CLEAR_INGREDIENTS:
-            return {
-                ...state,
-                ingredients: [],
-            }
+            return {...initialShoppingList}
         case shlist.START_EDIT:
             return {
                 ...state,

@@ -19,6 +19,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     authSubscription: Subscription;
     recipeDataSub: Subscription;
     user: User = null;
+    modalVisible = false;
 
     constructor(
         private store: Store<AppState>, 
@@ -47,9 +48,11 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
         this.listService.addIngredients(this.recipe.ingredients).subscribe();
     }
 
+    closeModal() { this.modalVisible = false; }
+
+    askDeleteConfirm() { this.modalVisible = true; }
+
     deleteRecipe() {
-        if (confirm('Delete recipe?')) {
-            this.recipeService.deleteRecipe(this.recipe.id);
-        }
+        this.recipeService.deleteRecipe(this.recipe.id);
     }
 }

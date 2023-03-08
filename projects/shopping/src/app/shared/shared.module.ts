@@ -8,6 +8,7 @@ import { EmptyComponent } from "./empty/empty.component";
 import { FilterPipe } from "./filter.pipe";
 import { CustomInputDirective } from "./input.directive";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
+import { Modal } from "./modal/modal.component";
 import { ShortenPipe } from "./shorten.pipe";
 import { PasswordMatch } from "./validators.directive";
 
@@ -21,7 +22,8 @@ import { PasswordMatch } from "./validators.directive";
         FilterPipe,
         CustomInputDirective,
         PasswordMatch,
-        DnD
+        DnD,
+        Modal
     ],
     imports: [
         CommonModule,
@@ -38,7 +40,8 @@ import { PasswordMatch } from "./validators.directive";
         FilterPipe,
         CustomInputDirective,
         PasswordMatch,
-        DnD
+        DnD,
+        Modal
     ]
 })
 export class SharedModule {}

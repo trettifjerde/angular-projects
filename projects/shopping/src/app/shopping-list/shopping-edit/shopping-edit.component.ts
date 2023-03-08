@@ -37,7 +37,6 @@ export class ShoppingEditComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         this.ingredientSubscription.unsubscribe();
-        this.clear();
     }
 
     clear() {

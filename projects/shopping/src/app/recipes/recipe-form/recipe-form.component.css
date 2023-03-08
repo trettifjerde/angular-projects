@@ -48,6 +48,7 @@ textarea {
     justify-content: center;
     gap: 0.5rem;
     cursor: grab;
+    padding: 0.5rem;
 }
 
 .step-area {
@@ -74,6 +75,7 @@ textarea {
 .step-drag-placeholder {
     height: 150px;
     background-color: var(--secondary);
+    padding: 0;
 }
 
 .cdk-drop-list-dragging .cdk-drag {

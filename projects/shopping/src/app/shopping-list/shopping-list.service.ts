@@ -4,7 +4,7 @@ import { Store } from "@ngrx/store";
 
 import * as shlist from './store/shopping-list.actions';
 import { Ingredient, IngredientRaw } from "../shared/ingredient.interface";
-import { map, Observable, switchMap, take, tap, throwError, catchError } from "rxjs";
+import { map, Observable, switchMap, take, tap, throwError, catchError, Subscription } from "rxjs";
 import { AppState } from "../store/app.reducer";
 import { setSubmitting, setToast } from "../store/general.store";
 
@@ -13,14 +13,23 @@ import { setSubmitting, setToast } from "../store/general.store";
 })
 export class ShoppingListService {
 
-    constructor(private http: HttpClient, private store: Store<AppState>) {}
+    userId: string | null;
+    userSub: Subscription;
 
-    makeUrl(path: string=''): string {
-        return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/list${path}.json`;
+    constructor(private http: HttpClient, private store: Store<AppState>) {
+        this.userSub = this.store.select(store => store.auth.user).subscribe(
+            user => this.userId = user ? user.id : null
+        );
+    }
+
+    makeUrl(path?: string): string {
+        if (!this.userId) throw new Error('Authentication error');
+        return `https://academind34-default-rtdb.europe-west1.firebasedatabase.app/list/${this.userId}${path ? '/' + path : ''}.json`;
     }
 
     fetchIngredients() {
-        return this.http.get<{[id: string]: IngredientRaw}>(this.makeUrl()).pipe(
+        const url = this.makeUrl();
+        return this.http.get<{[id: string]: IngredientRaw}>(url).pipe(
             map(ingDict => (ingDict ? Object.entries(ingDict).reduce((acc, [id, ingRaw]) => {
                         acc.push(new Ingredient({...ingRaw, id: id}));
                         return acc;
@@ -101,7 +110,7 @@ export class ShoppingListService {
     }
 
     deleteIngredient(id: string) {
-        this.http.delete<null>(this.makeUrl('/' + id)).subscribe(
+        this.http.delete<null>(this.makeUrl(id)).subscribe(
             _ => this.store.dispatch(new shlist.DeleteIngredient(id))
         );
     }
@@ -126,5 +135,4 @@ export class ShoppingListService {
         this.store.dispatch(setToast({toast: {message: errorMsg, isError: true}}))
         return throwError(() => new Error(errorMsg));
     }
-
 }

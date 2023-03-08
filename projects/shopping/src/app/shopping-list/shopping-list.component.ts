@@ -17,6 +17,7 @@ export class ShoppingListComponent implements OnInit {
     sub: Subscription;
     ingredients: Ingredient[];
     fetched: boolean;
+    itemToDelete: {id: string, name: string, i: number} | null = null;
 
     @ViewChild('ingredientsCont') ingredientsCont: ElementRef;
 
@@ -43,13 +44,18 @@ export class ShoppingListComponent implements OnInit {
         this.sub.unsubscribe();
     }
 
-    deleteItem(id: string, i: number) {
-        if (confirm('Delete item?'))
-        {
-            const el = this.ingredientsCont.nativeElement.querySelectorAll('.ingredient')[i];
-            this.renderer.removeClass(el, 'interactive');
-            this.listService.deleteIngredient(id);
-        }
+    askDeleteConfirm(id: string, i: number) {
+        this.itemToDelete = {id: id, name: this.ingredients[i].name, i: i};
+    }
+    cancelDelete() { this.itemToDelete = null;}
+
+    deleteItem() {
+        const {id, i} = this.itemToDelete;
+        this.itemToDelete = null;
+        
+        const el = this.ingredientsCont.nativeElement.querySelectorAll('.ingredient')[i];
+        this.renderer.removeClass(el, 'interactive');
+        this.listService.deleteIngredient(id);
     }
 
     editItem(ing: Ingredient) {

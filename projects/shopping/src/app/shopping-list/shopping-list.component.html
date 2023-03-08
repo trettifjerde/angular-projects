@@ -7,10 +7,11 @@
                 <div class="ingredient-text">{{ getIngredInfo(ingred) }}</div>
                 <div class="btn-group-sm">
                     <button class="btn btn-outline-warning" (click)="editItem(ingred)">Edit</button>
-                    <button class="btn btn-outline-danger" (click)="deleteItem(ingred.id, i)">Delete</button>
+                    <button class="btn btn-outline-danger" (click)="askDeleteConfirm(ingred.id, i)">Delete</button>
                 </div>
             </div>
         </div>
         <div *ngIf="fetched && ingredients.length === 0">No ingredients in the list</div>
     </div>
 </div>
+<app-modal *ngIf="itemToDelete" [name]="itemToDelete.name" text="Delete item" (onClose)="cancelDelete()" (onConfirm)="deleteItem()"></app-modal>

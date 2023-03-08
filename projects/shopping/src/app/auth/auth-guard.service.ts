@@ -17,8 +17,6 @@ export class AuthGuard implements CanActivate {
         state: RouterStateSnapshot
     ): boolean | UrlTree| Observable<boolean|UrlTree> | Promise<boolean|UrlTree> {
 
-        console.log('inside auth guard');
-
         return this.store.select('auth').pipe(
             take(1),
             map(info => info.user),
@@ -31,5 +29,23 @@ export class AuthGuard implements CanActivate {
             })
         );
     }
+}
 
+@Injectable({providedIn: 'root'})
+export class NonAuthGuard implements CanActivate{
+    constructor(private router: Router, private store: Store<AppState>) {}
+
+    canActivate(
+        route: ActivatedRouteSnapshot, 
+        state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+        
+        return this.store.select('auth').pipe(
+            take(1),
+            map(info => {
+                const user = info.user;
+                if (user) return this.router.createUrlTree(['/recipes']); 
+                else return true;
+            })
+        )
+    }
 }

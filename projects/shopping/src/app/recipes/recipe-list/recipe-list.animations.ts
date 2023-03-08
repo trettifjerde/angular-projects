@@ -1,4 +1,4 @@
-import { animate, animateChild, keyframes, query, sequence, stagger, state, style, transition, trigger } from "@angular/animations";
+import { animate, animateChild, keyframes, query, stagger, style, transition, trigger } from "@angular/animations";
 
 export const recipeListAnimations = trigger(
     'listState', [

@@ -1,0 +1,12 @@
+<div class="m" @modal>
+    <div class='m-shadow' @modalShadow (click)="onClose.emit()"></div>
+    <div class="m-content" @modalContent>
+        <div class="m-message">
+            {{ text }}<span class="b">{{ name ? ' ' + name : '' }}</span>?
+        </div>
+        <div class='m-btns'>
+            <button type='button' class='btn btn-success' (click)="onConfirm.emit()">Confirm</button>
+            <button type="button" class='btn btn-outline-success' (click)="onClose.emit()">Cancel</button>
+        </div>
+    </div>
+</div>

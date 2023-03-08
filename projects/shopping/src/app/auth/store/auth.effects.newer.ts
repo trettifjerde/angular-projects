@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, ofType, createEffect } from "@ngrx/effects";
+import { Actions, ofType, createEffect, act } from "@ngrx/effects";
 import { catchError, map, of, switchMap, tap } from "rxjs";
 import { ShoppingListService } from '../../shopping-list/shopping-list.service';
 import { AuthService } from "../auth.service";
@@ -27,10 +27,9 @@ export class AuthEffects {
 
     authSignup = createEffect(() => this.actions$.pipe(
         ofType(authActions.signUpStart),
-        switchMap(({form}) => this.authService.signUp(form).pipe(
-            map(user => authActions.signUp({user: user})),
-            catchError(err => of(setToast({toast: {message: err.message, isError: true}}))),
-        ))
+        switchMap(({form}) => this.authService.signUp(form)),
+        map(user => authActions.signUp({user: user})),
+        catchError(err => of(setToast({toast: {message: err.message, isError: true}}))),
     ));
 
     authLogout = createEffect(() => this.actions$.pipe(
@@ -45,13 +44,11 @@ export class AuthEffects {
     authSuccess = createEffect(() => this.actions$.pipe(
         ofType(authActions.logIn, authActions.signUp, authActions.autoLogIn),
         tap(action => {
-            this.listService.fetchIngredients();
-
-            if(action.type !== authActions.AUTO_LOG_IN) {
+            if (action.type !== authActions.AUTO_LOG_IN)
                 this.router.navigate(['/']);
-            }
         }),
-        map(() => setSubmitting({status: false}))
+        map(() => new shlist.InitShoppingList()),
+        catchError(err => of(setToast({toast: {message: err.message, isError: true}})))
     ));
 
 }

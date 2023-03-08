@@ -47,10 +47,11 @@
 
 .fadeIn {
     animation: fadeIn .3s ease-in-out forwards;
+
 }
 
 .flashIn {
-    animation: fadeIn .15s;
+    animation: fadeIn .15s;    
 }
 
 .fixed-bottom {
