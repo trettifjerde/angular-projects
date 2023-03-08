@@ -13,7 +13,7 @@
                 <source media="(max-width: 1200px)" [srcset]="recipe.imagePath" width="113" height="150" />
                 <source media="(max-width: 1399px)" [srcset]="recipe.imagePath" width="139" height="186" />
                 <source media="(min-width: 1400px)" [srcset]="recipe.imagePath" width="162" height="216" />
-                <img [src]="recipe.imagePath">
+                <img [src]="recipe.imagePath" [alt]="recipe.name">
             </picture>
             
         </div>
