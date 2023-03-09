@@ -10,14 +10,27 @@ import * as recipeActions from '../store/recipes.actions';
 import { FormArrayEmpty, ArrayContainsInvalidControl, ArrayContainsInvalidFormGroup } from "./formarray.validator";
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import { confirmAction} from '../../shared/utils';
-import { recipeItemAnimations, recipeListAnimations } from "../recipe-list/recipe-list.animations";
-import { recipeStepAnimations } from "./recipe-form-animations";
+import { animate, keyframes, style, transition, trigger } from "@angular/animations";
+
+export const bumpIn = trigger(
+    'bumpIn', [
+        transition(':enter', animate(300, keyframes([
+            style({opacity: 0, transform: 'translateY(-50%)'}),
+            style({opacity: 0.7, transform: 'translateY(10%)'}),
+            style({opacity: 1, transform: 'translateY(0%)'})
+        ]))),
+        transition(':leave', animate(150, keyframes([
+            style({opacity: 1, transform: 'scale(1)'}),
+            style({opacity: 0, transform: 'scale(0.9)'}),
+        ])))
+    ]
+)
 
 @Component({
     selector: 'app-recipe-form',
     templateUrl: './recipe-form.component.html',
     styleUrls: ['./recipe-form.component.css'],
-    animations: [recipeStepAnimations]
+    animations: [bumpIn]
 })
 export class RecipeFormComponent {
     recipe: Recipe | null;

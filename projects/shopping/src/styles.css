@@ -14,18 +14,6 @@
     background: var(--primary);
     border-radius: 5px;
 }
-.dropdown-menu {
-    min-width: unset;
-}
-
-.dropdown-menu-end {
-    right: 0;
-}
-
-.dropdown-item {
-    cursor: pointer;
-    transition: all .2s ease-in-out;
-}
 
 .empty {
     display: flex;
@@ -41,12 +29,12 @@
 }
 
 @keyframes fadeIn {
-    from {opacity: 0}
+    from {opacity: 0.5}
     to {opacity: 1;}
 }
 
 .fadeIn {
-    animation: fadeIn .3s ease-in-out forwards;
+    animation: fadeIn .25s ease-in-out forwards;
 
 }
 
@@ -86,3 +74,10 @@
 }
 
 .c {text-align: center;}
+
+.dropdown-item {
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    padding: 0.5rem 1rem;
+    background-color: white;
+}

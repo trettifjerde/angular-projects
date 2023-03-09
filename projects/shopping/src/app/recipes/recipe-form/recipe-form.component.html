@@ -38,7 +38,7 @@
                     <span *ngIf="ingredients.getError('arrayError').min">Invalid amount</span>
                 </p>
             </div>
-            <div class="row row-cols-auto align-items-center g-2 flex-nowrap ingred-cont" @stepState
+            <div class="row row-cols-auto align-items-center g-2 flex-nowrap ingred-cont" @bumpIn
                 *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
                 <div class="col flex-shrink-1">
                     <input type="number" class="form-control" formControlName="amount" placeholder="amount" disableUnitIfNoAmount>
@@ -69,7 +69,7 @@
             </div>
             <ul cdkDropList (cdkDropListDropped)="drop($event)"
                 class="list-group list-group-flush" formArrayName="steps">
-                <li cdkDrag @stepState
+                <li cdkDrag @bumpIn
                 *ngFor="let step of steps.controls; let i = index"
                     class="list-group-item row step">
                     <div class="step-drag-placeholder" *cdkDragPlaceholder></div>

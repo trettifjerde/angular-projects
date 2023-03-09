@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute} from "@angular/router";
 import { Store } from "@ngrx/store";
-import { filter, map, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { User } from "../../auth/user.model";
 import { RecipesService } from "../recipes.service";
 import { ShoppingListService } from "../../shopping-list/shopping-list.service";
@@ -11,7 +11,7 @@ import { Recipe } from "../recipe.model";
 @Component({
     selector: 'app-recipe-detail',
     templateUrl: './recipe-detail.component.html',
-    styleUrls: ['./recipe-detail.component.css']
+    styleUrls: ['./recipe-detail.component.css'],
 })
 export class RecipeDetailComponent implements OnInit, OnDestroy {
     recipe: Recipe;

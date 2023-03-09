@@ -1,0 +1,18 @@
+.dropdown-menu {
+    overflow: hidden;
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+    min-width: unset;
+    right: 0;
+}
+
+.dropdown-menu.open {
+    display: block;
+}
+
+@media (max-width: 576px) {
+    .dropdown-menu {
+        right: unset;
+    }
+}

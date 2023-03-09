@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { AlertComponent } from "./alert/alert.component";
 import { DnD } from "./dnd.directive";
-import { DropdownDirective } from "./dropdown.directive";
+import { Dropdown } from "./dropdown/dropdown.component";
 import { EmptyComponent } from "./empty/empty.component";
 import { FilterPipe } from "./filter.pipe";
 import { CustomInputDirective } from "./input.directive";
@@ -17,13 +17,13 @@ import { PasswordMatch } from "./validators.directive";
         AlertComponent,
         EmptyComponent,
         LoadingSpinnerComponent,
-        DropdownDirective,
         ShortenPipe,
         FilterPipe,
         CustomInputDirective,
         PasswordMatch,
         DnD,
-        Modal
+        Modal,
+        Dropdown
     ],
     imports: [
         CommonModule,
@@ -35,13 +35,13 @@ import { PasswordMatch } from "./validators.directive";
         AlertComponent,
         EmptyComponent,
         LoadingSpinnerComponent,
-        DropdownDirective,
         ShortenPipe,
         FilterPipe,
         CustomInputDirective,
         PasswordMatch,
         DnD,
-        Modal
+        Modal,
+        Dropdown
     ]
 })
 export class SharedModule {}

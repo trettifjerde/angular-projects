@@ -1,0 +1,10 @@
+<div class="dropdown">
+    <button class="btn btn-outline-light dropdown-toggle" #btn>
+        Manage
+    </button>
+    <div class="dropdown-menu" [@dropdownState]="visible ? 'open' : 'closed'">
+        <div class="dropdown-menu-inner">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>
