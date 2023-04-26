@@ -33,9 +33,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
             .subscribe(user => this.user = user);
 
         this.recipeDataSub = this.route.data.subscribe(
-            data => {
-                this.recipe = data['recipe']
-            }
+            data => this.recipe = data['recipe']
         )
     }
 

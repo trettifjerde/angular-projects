@@ -90,23 +90,31 @@ export class ShoppingListService {
             )}))
     }
 
-    addIngredients(ingRaws: IngredientRaw[]) : Observable<any> {
+    addIngredients(ingRaws: IngredientRaw[]) {
         this.store.dispatch(setSubmitting({status: true}));
-
-        const ings: Ingredient[] = [];
-        let obsChain = this.addIngredient(ingRaws[0], false);
-        for (let i = 1; i < ingRaws.length; i++) {
-            obsChain = obsChain.pipe(
-                tap(res => ings.push(res)),
-                switchMap(res => this.addIngredient(ingRaws[i], false))
-            )
-        }
-        return obsChain.pipe(
-            tap(res => {
-                ings.push(res);
-                this.store.dispatch(new shlist.AddIngredients(ings));
-            })
+        return this.store.select('shoppingList').pipe(
+            take(1),
+            map(state => state.ingredients),
+            map(ings => {
+                const updatedIngs = ings.map(it => new IngredientRaw(it));
+                ingRaws.forEach((ing, i) => {
+                    const exI = updatedIngs.findIndex(it => it.name === ing.name && it.unit === ing.unit);
+                    if (exI > -1) {
+                        if (ing.amount) {
+                            const ex = updatedIngs[exI];
+                            updatedIngs[exI] = new IngredientRaw({...ex, amount: ex.amount + ing.amount});
+                        }
+                    }
+                    else updatedIngs.push(new IngredientRaw(ing))
+                });
+                return updatedIngs;
+            }),
+            switchMap(raws => this.http.put<IngredientRaw[]>(this.makeUrl(), raws)),
+            map(raws => raws.map((ing, i) => new Ingredient({...ing, id: i.toString()}))),
+            tap(ings => this.store.dispatch(new shlist.SetUpdatedIngredients(ings))),
+            catchError(this.handleError)
         )
+        
     }
 
     deleteIngredient(id: string) {

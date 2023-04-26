@@ -27,7 +27,7 @@ export class ShoppingListEffects {
     ))
 
     flashSuccess = createEffect(() => this.actions$.pipe(
-        ofType(shlist.ADD_INGREDIENT, shlist.UPDATE_INGREDIENT, shlist.ADD_INGREDIENTS, shlist.DELETE_INGREDIENT),
+        ofType(shlist.ADD_INGREDIENT, shlist.UPDATE_INGREDIENT, shlist.SET_UPDATED_INGREDIENTS, shlist.DELETE_INGREDIENT),
         map((action: shlist.ShoppingListAction) => {
             let message = 'Success';
             switch(action.type) {
@@ -37,7 +37,7 @@ export class ShoppingListEffects {
                 case shlist.UPDATE_INGREDIENT:
                     message = 'Item updated';
                     break;
-                case shlist.ADD_INGREDIENTS:
+                case shlist.SET_UPDATED_INGREDIENTS:
                     message = 'Ingredients added to shopping list'
                     break;
                 case shlist.DELETE_INGREDIENT:

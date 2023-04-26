@@ -13,24 +13,30 @@ const initialShoppingList: ShoppingListState = {
     fetched: false
 };
 
+function sortIngs(ings: Ingredient[]) {
+    let ingreds = ings.filter(ing => ing.name);
+    console.log(ingreds);
+    ingreds.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+    return ingreds;
+}
+
 export function shoppingListReducer(state=initialShoppingList, action: shlist.ShoppingListAction) {
     switch(action.type) {
         case shlist.ADD_INGREDIENT:
             return {
                 ...state,
-                ingredients: [...state.ingredients, action.payload]
+                ingredients: sortIngs([...state.ingredients, action.payload])
             };
-        case shlist.ADD_INGREDIENTS:
-            const toExclude = action.payload.map(i => i.id);
+        case shlist.SET_UPDATED_INGREDIENTS:
             return {
                 ...state,
-                ingredients: [...state.ingredients.filter(i => !toExclude.includes(i.id)), ...action.payload],
+                ingredients: sortIngs(action.payload),
                 isSubmitting: false
             }
         case shlist.UPDATE_INGREDIENT:
             return {
                 ...state,
-                ingredients: state.ingredients.map(i => i.id === action.payload.id ? action.payload : i)
+                ingredients: sortIngs(state.ingredients.map(i => i.id === action.payload.id ? action.payload : i))
             }
         case shlist.DELETE_INGREDIENT:
             return {
@@ -41,7 +47,7 @@ export function shoppingListReducer(state=initialShoppingList, action: shlist.Sh
         case shlist.FETCH_INGREDIENTS:
             return {
                 ...state,
-                ingredients: action.payload,
+                ingredients: sortIngs(action.payload),
                 fetched: true
             }
         case shlist.CLEAR_INGREDIENTS:
