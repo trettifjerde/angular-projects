@@ -67,18 +67,19 @@ export class RecipesEffects {
             }
         }),
         map((action: recipeActions.RecipesAction) => {
-            if (action.type === recipeActions.DELETE_RECIPE)
-                return setToast({toast: {message: 'Recipe deleted', isError: false}})
-            
-            return setSubmitting({status: false});
+            switch(action.type) {
+                case recipeActions.ADD_RECIPE:
+                    return setToast({toast: {message: 'Recipe added', isError: false}});
+                case recipeActions.UPDATE_RECIPE:
+                    return setToast({toast: {message: 'Recipe updated', isError: false}})
+                case recipeActions.DELETE_RECIPE:
+                    return setToast({toast: {message: 'Recipe deleted', isError: false}})
+                default:
+                    return setSubmitting({status: false})
+            }
         })
     ));
-
-    updateCache = createEffect(() => this.actions$.pipe(
-        ofType(recipeActions.UPDATE_RECIPE),
-        map((action: recipeActions.UpdateRecipe) => new recipeActions.UpdateCache(action.payload))
-    ))
-
+    
     startNavigation = createEffect(() => this.actions$.pipe(
         ofType(routerActions.ROUTER_REQUEST),
         switchMap((action: routerActions.RouterRequestAction) => {
