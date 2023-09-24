@@ -7,7 +7,7 @@ export interface GeneralState {
     isSubmitting: boolean
 }
 
-const initialState = {
+const initialState : GeneralState = {
     toast: null,
     isSubmitting: false
 };
